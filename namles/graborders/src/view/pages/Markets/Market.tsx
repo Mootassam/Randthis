@@ -161,7 +161,7 @@ function Market() {
 
             <div className="marquee">
               <span>
-                Dear users,the Wappier platform is back to the best and normal,continue to earn as much as you can from the platform
+                Dear users,the Nowspeed platform is back to the best and normal,continue to earn as much as you can from the platform
               </span>
             </div>
             <NewsTicker text="" />

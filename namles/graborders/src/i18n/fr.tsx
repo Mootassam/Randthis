@@ -43,7 +43,7 @@ const fr = {
   },
 
   app: {
-    title: 'Wappier',
+    title: 'Nowspeed',
   },
 
   api: {

@@ -47,7 +47,7 @@ function TabBottomNavigator() {
         >
           {item.path === "/grap" ? (
             <div className="grap__cirlce">
-           <img src="images/grap/wappier.png" alt=""  />
+           <img src="images/grap/Nowspeed.png" alt=""  />
 
            <p className={`text__link ${isActive(item.path) && "active"}`}>
                 Starting

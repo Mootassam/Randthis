@@ -52,7 +52,7 @@ function Signin() {
        
       </div>    
       <div className="auth__header header__signup ">
-        <img src="/images/wappier.png" alt="" srcset="" />
+        <img src="/images/home/logo.webp" alt="" />
         <h1 className="auth__title"> Welcome Back!</h1>
         <span className="auth__description __v2">
         Sign in to your marketing account

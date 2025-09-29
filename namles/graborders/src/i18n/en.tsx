@@ -43,7 +43,7 @@ const en = {
   },
 
   app: {
-    title: "Wappier",
+    title: "Nowspeed",
   },
 
   api: {
