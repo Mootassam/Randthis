@@ -1,0 +1,127 @@
+import React from "react";
+import { useHistory } from 'react-router-dom';
+
+function SubHeader(props) {
+  const history = useHistory();
+
+  const goBack = () => {
+    history.goBack();
+  };
+
+  return (
+    <div className="subheader-container">
+      <div className="subheader-content">
+        <div className="back-button" onClick={goBack}>
+          <i className="fa-solid fa-arrow-left back-icon"></i>
+        </div>
+        <h3 className="subheader-title">{props?.title}</h3>
+        <div className="subheader-spacer"></div>
+      </div>
+
+      <style jsx>{`
+        .subheader-container {
+          background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+          border-bottom: 1px solid #374151;
+          padding: 15px 20px;
+          position: sticky;
+          top: 0;
+          z-index: 100;
+        }
+
+        .subheader-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          max-width: 400px;
+          margin: 0 auto;
+        }
+
+        .back-button {
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          background: rgba(30, 41, 59, 0.8);
+          border: 1px solid #374151;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+          background: rgba(55, 65, 81, 0.6);
+          border-color: #3b82f6;
+          transform: translateX(-2px);
+        }
+
+        .back-icon {
+          color: #e2e8f0;
+          font-size: 16px;
+          transition: color 0.3s ease;
+        }
+
+        .back-button:hover .back-icon {
+          color: #3b82f6;
+        }
+
+        .subheader-title {
+          color: #f1f5f9;
+          font-size: 18px;
+          font-weight: 700;
+          margin: 0;
+          text-align: center;
+          flex: 1;
+        }
+
+        .subheader-spacer {
+          width: 40px;
+          height: 40px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 400px) {
+          .subheader-container {
+            padding: 12px 15px;
+          }
+          
+          .subheader-content {
+            padding: 0;
+          }
+          
+          .back-button {
+            width: 36px;
+            height: 36px;
+          }
+          
+          .subheader-title {
+            font-size: 16px;
+          }
+          
+          .subheader-spacer {
+            width: 36px;
+            height: 36px;
+          }
+        }
+
+        /* Animation */
+        @keyframes slideDown {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .subheader-container {
+          animation: slideDown 0.3s ease-out;
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default SubHeader;
