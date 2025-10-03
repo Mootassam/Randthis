@@ -15,6 +15,7 @@ export default async (req, res, next) => {
       req.body.phoneNumber,
       req.body.withdrawPassword,
       req.body.invitationcode,
+      req.body.gender,
       req.body.invitationToken,
       req.body.tenantId,
       req,

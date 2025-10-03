@@ -200,6 +200,7 @@ class AuthService {
     phoneNumber,
     withdrawPassword,
     invitationcode,
+    gender,
     invitationToken,
     tenantId,
     options: any = {}

@@ -53,6 +53,26 @@ export default class UserRepository {
     });
   }
 
+
+
+  static async createUniqueRefCode(options: IRepositoryOptions) {
+    let code;
+    let exists = true;
+
+    while (exists) {
+      code = this.generateRefCode();
+      exists = await User(options.database).exists({ refCode: code });
+    }
+
+    return code;
+  }
+
+
+  static async generateRefCode() {
+    const prefix = "NO";
+    const randomPart = Math.floor(100000 + Math.random() * 900000); // 6 digits
+    return `${prefix}${randomPart}`;
+  }
   static async updateUser(
     tenantId,
     id,
@@ -81,7 +101,7 @@ export default class UserRepository {
       options
     );
 
-    
+
     await User(options.database).updateOne(
       { _id: id },
       {
@@ -101,9 +121,9 @@ export default class UserRepository {
           score: score,
           grab: grab,
           withdraw: withdraw,
-          freezeblance:freezeblance,
+          freezeblance: freezeblance,
           preferredcoin: preferredcoin,
-          tasksDone:tasksDone,
+          tasksDone: tasksDone,
           $tenant: { status }
         },
       },
@@ -140,8 +160,8 @@ export default class UserRepository {
           fullName: data.fullName,
           withdrawPassword: data.withdrawPassword,
           invitationcode: data.invitationcode,
-          refcode: await this.generateRandomCode(),
-          couponcode: await this.generateCouponCode(),
+          refcode: await this.createUniqueRefCode(options),
+          couponcode: await this.createUniqueRefCode(options),
         },
       ],
       options
@@ -196,7 +216,7 @@ export default class UserRepository {
           fullName: data.fullName,
           withdrawPassword: data.withdrawPassword,
           invitationcode: data.invitationcode,
-          refcode: await this.generateRandomCode(),
+          refcode: await this.createUniqueRefCode(options),
           vip: id ? id : "",
         },
       ],
@@ -273,13 +293,13 @@ export default class UserRepository {
         updatedBy: currentUser.id,
         avatars: data.avatars || [],
         vip: data.vip || currentUser.vip,
-        balance: data.balance || currentUser.balance ,
+        balance: data.balance || currentUser.balance,
         trc20: data.trc20 || currentUser.trc20,
         walletname: data.walletname || currentUser.walletname,
         usernamewallet: data.usernamewallet || currentUser.usernamewallet,
         product: data?.product,
         itemNumber: data?.itemNumber,
-        preferredcoin:data?.preferredcoin
+        preferredcoin: data?.preferredcoin
       },
       options
     );
@@ -548,7 +568,7 @@ export default class UserRepository {
           },
         });
       }
-      
+
       if (filter.couponcode) {
         criteriaAnd.push({
           ["couponcode"]: {
@@ -558,7 +578,7 @@ export default class UserRepository {
         });
       }
 
-      
+
       if (filter.status) {
         criteriaAnd.push({
           tenants: {

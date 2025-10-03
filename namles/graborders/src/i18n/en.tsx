@@ -2553,7 +2553,7 @@ const en = {
 
   user: {
     fields: {
-      genre: "Genre",
+      genre: "Gender",
       username: "Username",
       walletName: "wallet Name",
       id: "Id",
