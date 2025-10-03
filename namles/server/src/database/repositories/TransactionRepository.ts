@@ -13,12 +13,6 @@ class TransactionRepository {
   static async create(data, options: IRepositoryOptions) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
     const currentUser = MongooseRepository.getCurrentUser(options);
-
-    if (data.type === "withdraw") {
-      this.NewSolde(data, options);
-    }
-
-    
     const [record] = await Transaction(options.database).create(
       [
         {
@@ -41,35 +35,8 @@ class TransactionRepository {
     return this.findById(record.id, options);
   }
 
-  static async NewSolde(data, options) {
-    try {
-      // Assuming MongooseRepository.getCurrentUser is a synchronous function
-      const currentUser = MongooseRepository.getCurrentUser(options);
+  
 
-      const oldAmount = parseFloat(currentUser.balance);
-      if (isNaN(oldAmount)) {
-        throw new Error405("Invalid balance for the current user");
-      }
-
-      const requestAmount = parseFloat(data.amount);
-      if (isNaN(requestAmount)) {
-        throw new Error405("Invalid request amount");
-      }
-
-      const id = currentUser.id;
-      const newBalance = oldAmount - requestAmount;
-
-      const values = {
-        balances: newBalance,
-        ...data.vip,
-      };
-
-      await UserRepository.updateSolde(id, values, options);
-    } catch (error) {
-      console.error("Error updating balance:", error);
-      throw error; // Rethrow the error to propagate it further if needed
-    }
-  }
 
   static async update(id, data, options: IRepositoryOptions) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);

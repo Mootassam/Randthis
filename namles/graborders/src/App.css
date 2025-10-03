@@ -272,6 +272,8 @@ td {
   top: 0;
   position: relative;
   z-index: 999;
+  max-width: 400px;
+  margin: auto;
 }
 
 .logo__header {

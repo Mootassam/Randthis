@@ -7,7 +7,7 @@ function SubHeader(props) {
   const goBack = () => {
     history.goBack();
   };
-
+  let count =  3;
   return (
     <div className="subheader-container">
       <div className="subheader-content">
@@ -15,10 +15,19 @@ function SubHeader(props) {
           <i className="fa-solid fa-arrow-left back-icon"></i>
         </div>
         <h3 className="subheader-title">{props?.title}</h3>
-        <div className="subheader-spacer"></div>
+        <div className="notification-container">
+          <div className="notification-icons">
+            <i className="fa-solid fa-bell"></i>
+            {count > 0 && (
+              <div className="notification-badge">
+                {count}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .subheader-container {
           background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
           border-bottom: 1px solid #374151;
@@ -41,7 +50,7 @@ function SubHeader(props) {
           height: 40px;
           border-radius: 10px;
           background: rgba(30, 41, 59, 0.8);
-          border: 1px solid #374151;
+       
           display: flex;
           align-items: center;
           justify-content: center;
@@ -74,9 +83,60 @@ function SubHeader(props) {
           flex: 1;
         }
 
-        .subheader-spacer {
+        .notification-container {
           width: 40px;
           height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .notification-icons {
+          position: relative;
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          background: rgba(30, 41, 59, 0.8);
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .notification-icons:hover {
+          background: rgba(55, 65, 81, 0.6);
+          border-color: #3b82f6;
+          transform: translateY(-2px);
+        }
+
+        .notification-icons i {
+          color: #e2e8f0;
+          font-size: 16px;
+          transition: color 0.3s ease;
+        }
+
+        .notification-icons:hover i {
+          color: #3b82f6;
+        }
+
+        .notification-badge {
+          position: absolute;
+          top: -5px;
+          right: -5px;
+          background: #ef4444;
+          color: white;
+          border-radius: 50%;
+          width: 18px;
+          height: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 10px;
+          font-weight: 700;
+          border: 2px solid #0f172a;
+          animation: pulse 2s infinite;
         }
 
         /* Responsive Design */
@@ -98,13 +158,24 @@ function SubHeader(props) {
             font-size: 16px;
           }
           
-          .subheader-spacer {
+          .notification-container {
             width: 36px;
             height: 36px;
           }
+          
+          .notification-icons {
+            width: 32px;
+            height: 32px;
+          }
+          
+          .notification-badge {
+            width: 16px;
+            height: 16px;
+            font-size: 9px;
+          }
         }
 
-        /* Animation */
+        /* Animations */
         @keyframes slideDown {
           from {
             opacity: 0;
@@ -113,6 +184,18 @@ function SubHeader(props) {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+
+        @keyframes pulse {
+          0% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.1);
+          }
+          100% {
+            transform: scale(1);
           }
         }
 

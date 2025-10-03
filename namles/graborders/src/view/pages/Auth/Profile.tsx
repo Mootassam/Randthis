@@ -49,24 +49,24 @@ function Profile() {
     }
   };
 
- const menuItems = {
-  financial: [
-    { icon: "fa-solid fa-dollar-sign", name: "Recharge", action: () => setRecharge(true) },
-    { icon: "fa-solid fa-money-check", name: "Withdraw", action: () => goto("/withdraw") }
-  ],
-  details: [
-    { icon: "fa-solid fa-headphones", name: "Contact us", url: "/online" },
-    { icon: "fa-solid fa-user", name: "Profile", url: "/myprofile" },
-    { icon: "fa-solid fa-wallet", name: "Update withdrawal details", url: "/wallet" }
-  ],
-  other: [
-    { icon: "fa-solid fa-arrow-right-arrow-left", name: "Transaction", url: "/transacation" },
-    { icon: "fa-solid fa-clock-rotate-left", name: "Tasks History", url: "/order" },
-    { icon: "fa-solid fa-lock", name: "Security", url: "/security" },
-    { icon: "fa-solid fa-bell", name: "Notifications", url: "/notifications" }, // ✅ new
-    { icon: "fa-solid fa-language", name: "Languages", url: "/languages" }       // ✅ new
-  ]
-};
+  const menuItems = {
+    financial: [
+      { icon: "fa-solid fa-dollar-sign", name: "Recharge", action: () => setRecharge(true) },
+      { icon: "fa-solid fa-money-check", name: "Withdraw", action: () => goto("/withdraw") }
+    ],
+    details: [
+      { icon: "fa-solid fa-headphones", name: "Contact us", url: "/online" },
+      { icon: "fa-solid fa-user", name: "Profile", url: "/myprofile" },
+      { icon: "fa-solid fa-wallet", name: "Update withdrawal details", url: "/wallet" }
+    ],
+    other: [
+      { icon: "fa-solid fa-arrow-right-arrow-left", name: "Transaction", url: "/transacation" },
+      { icon: "fa-solid fa-clock-rotate-left", name: "Tasks History", url: "/order" },
+      { icon: "fa-solid fa-lock", name: "Security", url: "/security" },
+      { icon: "fa-solid fa-bell", name: "Notifications", url: "/notifications" }, // ✅ new
+      { icon: "fa-solid fa-language", name: "Languages", url: "/languages" }       // ✅ new
+    ]
+  };
 
 
   return (
