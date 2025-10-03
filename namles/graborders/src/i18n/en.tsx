@@ -2488,7 +2488,7 @@ const en = {
       title: "Profile",
       success: "Profile successfully updated",
       vip: "Congratulations on subscribing",
-      wallet:"Withdrawal settings completed.",
+      wallet: "Withdrawal settings completed.",
     },
     createAnAccount: "Create an account",
     rememberMe: "Remember me",
@@ -2553,10 +2553,11 @@ const en = {
 
   user: {
     fields: {
+      genre: "Genre",
       username: "Username",
       walletName: "wallet Name",
       id: "Id",
-      confirmPassword:"confirm Password",
+      confirmPassword: "confirm Password",
       avatars: "Avatar",
       invitationcode: "Invitation Code",
       email: "Email",
@@ -2629,6 +2630,11 @@ const en = {
         BTC: "BTC",
 
       },
+      genre: {
+        male: "male",
+        female: "female",
+
+      }
     },
     invite: "Invite",
     validations: {

@@ -121,6 +121,24 @@ const screenRoutes = [
     permissionRequired: permissions.categoryRead,
     exact: true,
   },
+
+
+   {
+    path: "/notifications",
+    loader: () => import("src/view/pages/notification/Notification"),
+    permissionRequired: permissions.categoryRead,
+    exact: true,
+  },
+
+    {
+    path: "/languages",
+    loader: () => import("src/view/pages/language/Language"),
+    permissionRequired: permissions.categoryRead,
+    exact: true,
+  },
+
+
+  
 ];
 const publicRoutes = [
   {

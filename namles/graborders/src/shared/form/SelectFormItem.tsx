@@ -148,7 +148,6 @@ function SelectFormItem(props) {
         </label>
       )}
 
-      <br />
 
       <Select
         className="w-100"

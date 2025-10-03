@@ -244,6 +244,7 @@ function Market() {
               )}
             </div>
           </div>
+
         </div>
 
         {selectedItem && Modal && (
@@ -314,8 +315,9 @@ function Market() {
           /* Speaker/Announcement Styles */
           .advertise__speaker {
             background: #FFFFFF;
-            margin: 15px;
             padding: 12px 16px;
+            max-width: 370px;
+            margin: 15px auto 0 auto;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -411,7 +413,7 @@ function Market() {
           .content__header {
             background: #FFFFFF;
             border-radius: 20px;
-            padding: 24px;
+      
             border: 1px solid #E2E8F0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
           }
@@ -802,9 +804,7 @@ function Market() {
               padding: 0 12px 15px;
             }
 
-            .content__header {
-              padding: 20px;
-            }
+          
 
             .vip-level-content {
               flex-direction: column;

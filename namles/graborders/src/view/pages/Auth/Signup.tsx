@@ -10,6 +10,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import InputFormItem from "src/shared/form/InputFormItem";
 import selectors from "src/modules/auth/authSelectors";
 import ButtonIcon from "src/shared/ButtonIcon";
+import SelectFormItem from "src/shared/form/SelectFormItem";
+import userEnumerators from "src/modules/user/userEnumerators";
 const schema = yup.object().shape({
   email: yupFormSchemas.string(i18n("user.fields.username"), {
     required: true,
@@ -85,10 +87,10 @@ function Signup() {
   };
   return (
     <div className="auth__page">
-      <div className="auth__header header__signup ">
+      <div className=" header__signup ">
         <h1 className="auth__title"> Create Account</h1>
         <span className="auth__description __v2">
-        Sign up for a Marketing account.        </span>
+          Sign up for a Marketing account.        </span>
       </div>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -129,7 +131,19 @@ function Signup() {
               placeholder={i18n("user.fields.confirmPassword")}
               className="auth__input"
             />
-
+            <SelectFormItem
+              name="genre"
+              placeholder={i18n("user.fields.genre")}
+              options={userEnumerators.genre.map(
+                (value) => ({
+                  value,
+                  label: i18n(
+                    `user.enumerators.genre.${value}`,
+                  ),
+                }),
+              )}
+              required={true}
+            />
             <InputFormItem
               type="text"
               name="invitationcode"

@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap");
 
+
 * {
   padding: 0;
   margin: 0;
@@ -38,7 +39,7 @@ body {
   overflow-x: hidden;
   /* background-color: rgb(0 0 29 / 1); */
 
-  background-color: rgb(224 224 224 / 1);
+  background-color: #EDF1F7;
 }
 
 p {
@@ -72,3 +73,10 @@ hr {
   background-color: #10346e !important;
 }
 
+
+
+.w-100 {
+width: 360px;
+
+;
+}
