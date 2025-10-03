@@ -12,7 +12,7 @@ export default class TransactionService {
     this.options = options;
   }
 
-  async create(data) {
+async create(data) {
     const session = await MongooseRepository.createSession(
       this.options.database
     );
@@ -35,6 +35,11 @@ export default class TransactionService {
         session,
       });
 
+      // If transaction is a deposit, update user balance
+      if (data.type === 'deposit') {
+        await this.updateUserBalance(data.user, data.amount, session);
+      }
+
       await MongooseRepository.commitTransaction(session);
 
       return record;
@@ -51,31 +56,34 @@ export default class TransactionService {
     }
   }
 
-  async checkPasswprd(data, options) {}
-
-  async checkpermission(options) {
-    const currentUser = MongooseRepository.getCurrentUser(options);
-    if (currentUser.withdraw) return;
-
-    throw new Error405("Should be contact the customer service about this");
+  async updateUserBalance(userId, amount, session) {
+    const User = this.options.database.model('user');
+    
+    await User.findByIdAndUpdate(
+      userId,
+      { 
+        $inc: { balance: parseFloat(amount) } 
+      },
+      { session }
+    );
   }
 
   async checkSolde(data, options) {
     const currentUser = MongooseRepository.getCurrentUser(options);
 
     if (!data) {
-      throw new Error405("Please write amoutn");
+      throw new Error405("Please write amount");
     }
     const amount = data.amount;
     const type = data.type;
-    if (!currentUser.trc20) {
-      throw new Error405(
-        'Please go to the "Wallet" section to bind your USDT (TRC20) or ERC20 address before submitting a withdrawal request.'
-      );
-    }
+    
     if (type === "withdraw") {
-      if (currentUser.solde < amount) {
+      if (!currentUser.trc20) {
+        throw new Error405(
+          'Please go to the "Wallet" section to bind your USDT (TRC20) or ERC20 address before submitting a withdrawal request.'
+        );
       }
+      
       if (currentUser.withdrawPassword == data.withdrawPassword) {
         if (currentUser.balance < amount) {
           throw new Error405(
@@ -88,7 +96,18 @@ export default class TransactionService {
         );
       }
     }
+    
+    // For deposit transactions, no additional validation needed
+    // just update the balance as shown above
   }
+
+  async checkpermission(options) {
+    const currentUser = MongooseRepository.getCurrentUser(options);
+    if (currentUser.withdraw) return;
+
+    throw new Error405("Should be contact the customer service about this");
+  }
+
 
   async update(id, data) {
     const session = await MongooseRepository.createSession(
