@@ -12,7 +12,7 @@ export default class TransactionService {
     this.options = options;
   }
 
-async create(data) {
+  async create(data) {
     const session = await MongooseRepository.createSession(
       this.options.database
     );
@@ -58,11 +58,11 @@ async create(data) {
 
   async updateUserBalance(userId, amount, session) {
     const User = this.options.database.model('user');
-    
+
     await User.findByIdAndUpdate(
       userId,
-      { 
-        $inc: { balance: parseFloat(amount) } 
+      {
+        $inc: { balance: parseFloat(amount) }
       },
       { session }
     );
@@ -76,27 +76,27 @@ async create(data) {
     }
     const amount = data.amount;
     const type = data.type;
-    
+
     if (type === "withdraw") {
-      if (!currentUser.trc20) {
-        throw new Error405(
-          'Please go to the "Wallet" section to bind your USDT (TRC20) or ERC20 address before submitting a withdrawal request.'
-        );
-      }
-      
-      if (currentUser.withdrawPassword == data.withdrawPassword) {
-        if (currentUser.balance < amount) {
-          throw new Error405(
-            "It looks like your withdrawal amount exceeds your balance"
-          );
-        }
-      } else {
-        throw new Error405(
-          "Your withdraw Password is not correct please check again"
-        );
-      }
+      // if (!currentUser.trc20) {
+      //   throw new Error405(
+      //     'Please go to the "Wallet" section to bind your USDT (TRC20) or ERC20 address before submitting a withdrawal request.'
+      //   );
+      // }
+
+      // if (currentUser.withdrawPassword == data.withdrawPassword) {
+      //   if (currentUser.balance < amount) {
+      //     throw new Error405(
+      //       "It looks like your withdrawal amount exceeds your balance"
+      //     );
+      //   }
+      // } else {
+      //   throw new Error405(
+      //     "Your withdraw Password is not correct please check again"
+      //   );
+      // }
     }
-    
+
     // For deposit transactions, no additional validation needed
     // just update the balance as shown above
   }
@@ -104,7 +104,6 @@ async create(data) {
   async checkpermission(options) {
     const currentUser = MongooseRepository.getCurrentUser(options);
     if (currentUser.withdraw) return;
-
     throw new Error405("Should be contact the customer service about this");
   }
 
@@ -132,6 +131,64 @@ async create(data) {
         "mandat"
       );
 
+      throw error;
+    }
+  }
+
+  async updateTransactionStatus(transactionId, newStatus, options) {
+    const session = await MongooseRepository.createSession(
+      this.options.database
+    );
+
+    try {
+      const Transaction = this.options.database.model('transaction');
+      const User = this.options.database.model('user');
+
+      // Find the transaction
+      const transaction = await Transaction.findById(transactionId)
+        .session(session);
+
+      if (!transaction) {
+        throw new Error405('Transaction not found');
+      }
+
+      // Update transaction status
+      const updatedTransaction = await Transaction.findByIdAndUpdate(
+        transactionId,
+        {
+          status: newStatus,
+          updatedBy: MongooseRepository.getCurrentUser(options)?._id
+        },
+        { new: true, session }
+      );
+
+      // If status is updated to 'success' and it's a withdrawal, deduct from balance
+      if (newStatus === 'success' && transaction.type === 'withdraw') {
+        await User.findByIdAndUpdate(
+          transaction.user,
+          {
+            $inc: { balance: -parseFloat(transaction.amount) }
+          },
+          { session }
+        );
+      }
+
+      // If status is updated from 'success' to another status and it's a withdrawal, refund the amount
+      if (transaction.status === 'success' && newStatus !== 'success' && transaction.type === 'withdraw') {
+        await User.findByIdAndUpdate(
+          transaction.user,
+          {
+            $inc: { balance: parseFloat(transaction.amount) }
+          },
+          { session }
+        );
+      }
+
+      await MongooseRepository.commitTransaction(session);
+      return updatedTransaction;
+
+    } catch (error) {
+      await MongooseRepository.abortTransaction(session);
       throw error;
     }
   }

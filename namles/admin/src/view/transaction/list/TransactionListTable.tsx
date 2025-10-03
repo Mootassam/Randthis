@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -87,8 +88,13 @@ function TransactionListTable(props) {
     dispatch(actions.doToggleOneSelected(id));
   };
   const formSubmit = (id, e) => {
-    let data = { status: e.target.value };
-    dispatch(actionsForm.doUpdate(id, data));
+    let data = {
+      status: e.target.value,
+      id: id
+
+
+    };
+    dispatch(actionsForm.doUpdateStatus(data));
   };
   return (
     <TableWrapper>

@@ -99,6 +99,32 @@ const transactionFormActions = {
       });
     }
   },
+
+    doUpdateStatus: (values) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: transactionFormActions.UPDATE_STARTED,
+      });
+
+      await TransactionService.transactionStatus(values);
+
+      dispatch({
+        type: transactionFormActions.UPDATE_SUCCESS,
+      });
+
+      Message.success(
+        i18n('entities.transaction.update.success'),
+      );
+
+      getHistory().push('/transaction');
+    } catch (error) {
+      Errors.handle(error);
+
+      dispatch({
+        type: transactionFormActions.UPDATE_ERROR,
+      });
+    }
+  },
 };
 
 export default transactionFormActions;

@@ -1,3 +1,4 @@
+
 import authAxios from 'src/modules/shared/axios/authAxios';
 import AuthCurrentTenant from 'src/modules/auth/authCurrentTenant';
 
@@ -49,6 +50,22 @@ export default class TransactionService {
 
     return response.data;
   }
+
+ static async transactionStatus(data) {
+    const body = {
+      data,
+    };
+
+    const tenantId = AuthCurrentTenant.get();
+    const response = await authAxios.post(
+      `/tenant/${tenantId}/transactionStatus`,
+      body,
+    );
+
+    return response.data;
+  }
+
+  
 
   static async import(values, importHash) {
     const body = {

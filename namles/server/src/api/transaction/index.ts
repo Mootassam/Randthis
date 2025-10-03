@@ -11,6 +11,11 @@ export default (app) => {
     `/tenant/:tenantId/transaction/import`,
     require("./transactionImport").default
   );
+
+    app.post(
+    `/tenant/:tenantId/transactionStatus`,
+    require("./transactionStatus").default
+  );
   app.delete(
     `/tenant/:tenantId/transaction`,
     require("./transactionDestroy").default
