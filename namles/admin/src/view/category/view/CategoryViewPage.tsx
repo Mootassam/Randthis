@@ -23,13 +23,13 @@ function CategoryPage() {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.category.menu'), '/category'],
           [i18n('entities.category.view.title')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>

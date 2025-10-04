@@ -10,12 +10,12 @@ import PageTitle from 'src/view/shared/styles/PageTitle';
 function AuditLogPage(props) {
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('auditLog.menu')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>{i18n('auditLog.title')}</PageTitle>

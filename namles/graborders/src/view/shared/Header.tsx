@@ -1,19 +1,14 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { Link } from 'react-router-dom';
 import actions from 'src/modules/notification/list/notificationListActions';
-import selectors from 'src/modules/notification/list/notificationListSelectors';
-import { Link } from "react-router-dom";
+
 
 function Header() {
 
-  const dispatch = useDispatch();
-  const unread = useSelector(selectors.selectUnread);
-  const loading = useSelector(selectors.UnreadLoading);
 
-  useEffect(() => {
-    dispatch(actions.fetchUnreadNotifications())
-  }, [dispatch])
+
+
 
 
   let count = 1; // You can change this value to 1, 3, 4, etc.
@@ -32,9 +27,9 @@ function Header() {
           <div className="notification-container">
             <div className="notification-icon">
               <i className="fa-solid fa-bell"></i>
-              {unread > 0 && (
+              {count > 0 && (
                 <div className="notification-badge">
-                  {unread}
+                  {count}
                 </div>
               )}
             </div>

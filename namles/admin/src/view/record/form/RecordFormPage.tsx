@@ -44,13 +44,13 @@ function CouponsFormPage(props) {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.record.menu'), '/record'],
           [title],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>{title}</PageTitle>

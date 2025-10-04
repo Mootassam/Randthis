@@ -18,13 +18,13 @@ const Importer = importerHoc(
 function UserImportPage(props) {
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('user.menu'), '/user'],
           [i18n('user.importer.title')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>{i18n('user.importer.title')}</PageTitle>

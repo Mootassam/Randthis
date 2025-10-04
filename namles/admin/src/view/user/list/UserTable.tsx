@@ -85,13 +85,149 @@ function UserTable() {
     setTotalTasks(totaltask);
   };
 
-  useEffect(() => {}, [dispatch, tasksdone]);
+  useEffect(() => { }, [dispatch, tasksdone]);
 
   return (
     <>
+      <style>{`
+        .user-table-actions {
+          position: sticky;
+          right: 0;
+          background: white;
+          z-index: 10;
+          min-width: 280px;
+          white-space: nowrap;
+          box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+        }
+        
+        .user-table-actions-content {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: nowrap;
+          padding: 8px;
+        }
+        
+        .user-table-action-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 6px 10px;
+          border: none;
+          border-radius: 6px;
+          font-size: 12px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          text-decoration: none;
+          min-width: auto;
+          white-space: nowrap;
+        }
+        
+        .user-table-action-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .user-table-action-btn.primary {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+        }
+        
+        .user-table-action-btn.success {
+          background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+          color: white;
+        }
+        
+        .user-table-action-btn.warning {
+          background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+          color: white;
+        }
+        
+        .user-table-action-btn.danger {
+          background: linear-gradient(135deg, #ff5858 0%, #f09819 100%);
+          color: white;
+        }
+        
+        .user-table-action-btn.info {
+          background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+          color: #333;
+        }
+        
+        .user-table-action-icon {
+          margin-right: 4px;
+          font-size: 12px;
+        }
+        
+        .user-table-modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0,0,0,0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+        
+        .user-table-modal-content {
+          background: white;
+          padding: 30px;
+          border-radius: 12px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+          position: relative;
+          min-width: 300px;
+          text-align: center;
+        }
+        
+        .user-table-modal-close {
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: none;
+          border: none;
+          font-size: 20px;
+          cursor: pointer;
+          color: #666;
+          transition: color 0.2s;
+        }
+        
+        .user-table-modal-close:hover {
+          color: #333;
+        }
+        
+        .user-table-modal-text {
+          font-size: 18px;
+          font-weight: 600;
+          color: #333;
+          margin: 0;
+        }
+        
+        .user-table-progress {
+          font-size: 24px;
+          font-weight: bold;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .table-responsive {
+          overflow-x: auto;
+        }
+        
+        .user-table-sticky-actions {
+          position: sticky;
+          right: 0;
+          background: inherit;
+        }
+      `}</style>
+
       <TableWrapper>
         <div className="table-responsive">
-          <table className="table table-striped 2">
+          <table className="table table-striped user-table">
             <thead className="thead">
               <tr>
                 <TableColumnHeader className="th-checkbox">
@@ -113,7 +249,7 @@ function UserTable() {
                     </div>
                   )}
                 </TableColumnHeader>
-           
+
                 <TableColumnHeader
                   onSort={doChangeSort}
                   hasRows={hasRows}
@@ -143,7 +279,7 @@ function UserTable() {
                   name={'refcode'}
                   label={i18n('user.fields.refcode')}
                 />
-        <TableColumnHeader
+                <TableColumnHeader
                   onSort={doChangeSort}
                   hasRows={hasRows}
                   sorter={sorter}
@@ -160,9 +296,12 @@ function UserTable() {
                 />
                 <TableColumnHeader
                   className="text-center"
-                  label={i18n('user.fields.currentrecord')}
+                  label={i18n('user.fields.country')}
                 />
-                <TableColumnHeader className="th-actions" />
+                <TableColumnHeader
+                  className="user-table-sticky-actions"
+                  label={i18n('common.actions')}
+                />
               </tr>
             </thead>
             <tbody>
@@ -225,44 +364,74 @@ function UserTable() {
                       <UserStatusView value={row.status} />
                     </td>
 
-                    <td>
-                      <button
-                        onClick={() =>
-                          showThecurrentRecord(
-                            row.id,
-                            row?.vip?.dailyorder,
-                          )
-                        }
-                      >
-                        Show{' '}
-                      </button>
+                    <td className="text-center">
+                      <span>United-States <br /> 188.145.30.20</span>
                     </td>
 
-                    <td className="td-actions">
-                      <Link
-                        className="btn btn-link"
-                        to={`/user/${row.id}`}
-                      >
-                        {i18n('common.view')}
-                      </Link>
-                      {hasPermissionToEdit && (
-                        <Link
-                          className="btn btn-link"
-                          to={`/user/${row.id}/edit`}
-                        >
-                          {i18n('common.edit')}
-                        </Link>
-                      )}
-                      {hasPermissionToDestroy && (
+                    <td className="user-table-actions">
+                      <div className="user-table-actions-content">
                         <button
-                          className="btn btn-link"
+                          className="user-table-action-btn primary"
+                          onClick={() => {
+                            /* Add login functionality here */
+                            console.log('Login as:', row.id);
+                          }}
+                        >
+                          <i className="fas fa-sign-in-alt user-table-action-icon" />
+                          Login
+                        </button>
+
+                        <button
+                          className="user-table-action-btn success"
                           onClick={() =>
-                            setRecordIdToDestroy(row.id)
+                            showThecurrentRecord(
+                              row.id,
+                              row?.vip?.dailyorder,
+                            )
                           }
                         >
-                          {i18n('common.destroy')}
+                          <i className="fas fa-tasks user-table-action-icon" />
+                          Tasks
                         </button>
-                      )}
+
+                        <Link
+                          className="user-table-action-btn info"
+                          to="/changePassword"
+                        >
+                          <i className="fas fa-key user-table-action-icon" />
+                          Password
+                        </Link>
+
+                        <Link
+                          className="user-table-action-btn warning"
+                          to={`/user/${row.id}`}
+                        >
+                          <i className="fas fa-eye user-table-action-icon" />
+                          View
+                        </Link>
+
+                        {hasPermissionToEdit && (
+                          <Link
+                            className="user-table-action-btn primary"
+                            to={`/user/${row.id}/edit`}
+                          >
+                            <i className="fas fa-edit user-table-action-icon" />
+                            Edit
+                          </Link>
+                        )}
+
+                        {hasPermissionToDestroy && (
+                          <button
+                            className="user-table-action-btn danger"
+                            onClick={() =>
+                              setRecordIdToDestroy(row.id)
+                            }
+                          >
+                            <i className="fas fa-lock user-table-action-icon" />
+                            Freeze
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -286,13 +455,23 @@ function UserTable() {
           cancelText={i18n('common.no')}
         />
       )}
+
       {!LoadingTasksDone && showTask && (
-        <div className="modal__socore">
-          <div className='score__close' onClick={() => setShowTask(false)}> <i className='fa fa-close font' /></div>
-          <div className="modal__contentscore">
-            <p className="text__score">
+        <div className="user-table-modal-overlay">
+          <div className="user-table-modal-content">
+            <button
+              className="user-table-modal-close"
+              onClick={() => setShowTask(false)}
+            >
+              <i className="fas fa-times" />
+            </button>
+            <h3 className="user-table-modal-text">Task Progress</h3>
+            <div className="user-table-progress">
               {tasksdone} / {totalTask}
-            </p>
+            </div>
+            <div style={{ marginTop: '15px', fontSize: '14px', color: '#666' }}>
+              Tasks Completed
+            </div>
           </div>
         </div>
       )}

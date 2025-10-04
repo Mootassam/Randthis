@@ -9,12 +9,12 @@ import PageTitle from 'src/view/shared/styles/PageTitle';
 function ProfileFormPage() {
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('auth.profile.title')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>{i18n('auth.profile.title')}</PageTitle>

@@ -45,13 +45,13 @@ function TransactionFormPage(props) {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.transaction.menu'), '/transaction'],
           [title],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>{title}</PageTitle>

@@ -11,12 +11,12 @@ import { Col, Container, Row } from 'react-bootstrap';
 function UserPage() {
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('user.menu')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
       <Container fluid={true}>

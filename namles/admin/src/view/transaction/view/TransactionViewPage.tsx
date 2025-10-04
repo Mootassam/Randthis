@@ -23,13 +23,13 @@ function TransactionViewPage() {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.transaction.menu'), '/product'],
           [i18n('entities.transaction.view.title')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>

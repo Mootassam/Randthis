@@ -45,9 +45,9 @@ function TenantFormPage() {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[[i18n('tenant.menu'), '/tenant'], [title]]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>{title}</PageTitle>

@@ -18,13 +18,13 @@ function TransactionImporterPage() {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.transaction.menu'), '/transaction'],
           [i18n('entities.transaction.importer.title')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>

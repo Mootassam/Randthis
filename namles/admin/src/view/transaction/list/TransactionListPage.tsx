@@ -11,12 +11,12 @@ import { Col, Container, Row } from 'react-bootstrap';
 function TransactionListPage(props) {
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.transaction.menu')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
           

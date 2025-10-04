@@ -44,13 +44,13 @@ function PaymentsettingsFormPage(props) {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.paymentsettings.menu'), '/paymentsettings'],
           [title],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>{title}</PageTitle>

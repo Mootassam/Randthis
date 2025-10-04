@@ -23,13 +23,13 @@ function CouponsPage() {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.product.menu'), '/product'],
           [i18n('entities.product.view.title')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>

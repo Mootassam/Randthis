@@ -23,13 +23,13 @@ function PaymentsettingsPage() {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.paymentsettings.menu'), '/paymentsettings'],
           [i18n('entities.paymentsettings.view.title')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>

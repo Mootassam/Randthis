@@ -44,13 +44,13 @@ function CategoryFormPage(props) {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.category.menu'), '/category'],
           [title],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>{title}</PageTitle>

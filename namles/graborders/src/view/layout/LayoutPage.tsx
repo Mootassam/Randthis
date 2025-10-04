@@ -7,7 +7,6 @@ function LayoutPage(props) {
   return (
     <div className="">
       <Header />
-      
       <div className="children__content">{props.children}</div>
       <TabBottomNavigator />
     </div>

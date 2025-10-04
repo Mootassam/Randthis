@@ -9,12 +9,12 @@ import PageTitle from 'src/view/shared/styles/PageTitle';
 function PasswordChangeFormPage(props) {
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('auth.passwordChange.title')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>

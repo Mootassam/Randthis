@@ -10,12 +10,12 @@ import { Col, Container, Row } from 'react-bootstrap';
 function CouponsListPage(props) {
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('entities.record.menu')],
         ]}
-      />
+      /> */}
       <ContentWrapper>
       <Container fluid={true}>
           <Row>

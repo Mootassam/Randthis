@@ -26,13 +26,13 @@ function UserNewPage(props) {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('user.menu'), '/user'],
           [i18n('user.new.title')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>{i18n('user.new.title')}</PageTitle>

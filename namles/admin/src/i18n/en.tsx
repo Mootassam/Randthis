@@ -1,3 +1,4 @@
+
 const en = {
   common: {
     or: 'Or',
@@ -5,6 +6,7 @@ const en = {
     reset: 'Reset',
     save: 'Save',
     search: 'Search',
+    freeze: 'Freeze',
     edit: 'Edit',
     new: 'New',
     export: 'Export to Excel',
@@ -104,7 +106,7 @@ const en = {
         title: 'Vip Name',
         dailyorder: 'Daily Order',
         commissionrate: ' commission',
-        tasksDone:'tasksDone',
+        tasksDone: 'tasksDone',
         levelLimit: 'Level Limit',
         withdrawlimit: 'Withdraw Limit',
         tasksperday: 'Tasks per day',
@@ -113,7 +115,7 @@ const en = {
         levellimit: '',
         setperday: 'sets of data everyday',
         withdrawperday: 'Withdraw per day',
-        photo:"photo"
+        photo: "photo"
       },
 
       new: {
@@ -2634,10 +2636,19 @@ const en = {
   },
 
   user: {
+    sections: {
+      basicInfo: 'Basic Info',
+      accountSettings: 'Account Settings',
+      permissions: 'Permissions',
+      additionalInfo: 'VIP + COMBO',
+
+
+    },
     fields: {
       currentrecord: 'Tasks Done',
       freezeblance: 'Freeze Balance',
       couponcode: 'couponcode',
+
       photo: 'photo',
       id: 'Id',
       avatars: 'Avatar',

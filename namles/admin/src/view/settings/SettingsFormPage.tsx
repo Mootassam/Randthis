@@ -27,12 +27,12 @@ const SettingsFormPage = (props) => {
 
   return (
     <>
-      <Breadcrumb
+      {/* <Breadcrumb
         items={[
           [i18n('dashboard.menu'), '/'],
           [i18n('settings.title')],
         ]}
-      />
+      /> */}
 
       <ContentWrapper>
         <PageTitle>{i18n('settings.title')}</PageTitle>
