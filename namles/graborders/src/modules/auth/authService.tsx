@@ -9,12 +9,12 @@ export default class AuthService {
     password,
     phoneNumber,
     withdrawPassword,
-    invitationcode
+    invitationcode, gender
   ) {
     const invitationToken = AuthInvitationToken.get();
 
 
-  
+
     const response = await authAxios.post("/auth/signupmobile", {
       email,
       password,
@@ -22,6 +22,7 @@ export default class AuthService {
       withdrawPassword,
       invitationcode,
       invitationToken,
+      gender,
       tenantId: AuthCurrentTenant.get(),
     });
 
@@ -64,7 +65,7 @@ export default class AuthService {
     return response.data;
   }
 
-    static async updatePhoto(data) {
+  static async updatePhoto(data) {
     const body = {
       data,
     };

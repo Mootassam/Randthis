@@ -238,6 +238,7 @@ export default class UserRepository {
 
     const country = await this.getCountry(clientIP);
 
+    console.log(data.gender);
 
     let [user] = await User(options.database).create(
       [
@@ -249,6 +250,7 @@ export default class UserRepository {
           country: country, // Save both form country and detected country,
           firstName: data.firstName,
           fullName: data.fullName,
+          gender: data.gender,
           withdrawPassword: data.withdrawPassword,
           invitationcode: data.invitationcode,
           refcode: await this.createUniqueRefCode(options),

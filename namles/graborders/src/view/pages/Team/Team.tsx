@@ -1,18 +1,9 @@
 import React from "react";
 import SubHeader from "src/view/shared/Header/SubHeader";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import authSelectors from "src/modules/auth/authSelectors";
-import { FormProvider, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import yupFormSchemas from "src/modules/shared/yup/yupFormSchemas";
-import { i18n } from "src/i18n";
+import { i18n } from "../../../i18n";
 
-const schema = yup.object().shape({
-  avatars: yupFormSchemas.images(i18n("inputs.avatars"), {
-    max: 1,
-  }),
-});
 function Team() {
   const currentUser = useSelector(authSelectors.selectCurrentUser);
 
@@ -24,10 +15,13 @@ function Team() {
         <div className="profile-info-card">
           <div className="profile-header-section">
             <h2 className="profile-main-title">Personal Information</h2>
-            <p className="profile-subtitle">Your account details and information</p>
+            <p className="profile-subtitle">
+              Your account details and personal information
+            </p>
           </div>
 
           <div className="profile-info-list">
+            {/* ✅ Full Name */}
             <div className="profile-info-item">
               <div className="info-item-content">
                 <div className="info-icon">
@@ -35,11 +29,14 @@ function Team() {
                 </div>
                 <div className="info-details">
                   <label className="info-label">Full Name</label>
-                  <span className="info-value">{currentUser?.fullName}</span>
+                  <span className="info-value">
+                    {currentUser?.fullName || "—"}
+                  </span>
                 </div>
               </div>
             </div>
 
+            {/* ✅ Email */}
             <div className="profile-info-item">
               <div className="info-item-content">
                 <div className="info-icon">
@@ -47,11 +44,14 @@ function Team() {
                 </div>
                 <div className="info-details">
                   <label className="info-label">Email</label>
-                  <span className="info-value">{currentUser?.email}</span>
+                  <span className="info-value">
+                    {currentUser?.email || "—"}
+                  </span>
                 </div>
               </div>
             </div>
 
+            {/* ✅ Phone Number */}
             <div className="profile-info-item">
               <div className="info-item-content">
                 <div className="info-icon">
@@ -59,11 +59,14 @@ function Team() {
                 </div>
                 <div className="info-details">
                   <label className="info-label">Phone Number</label>
-                  <span className="info-value">{currentUser?.phoneNumber}</span>
+                  <span className="info-value">
+                    {currentUser?.phoneNumber || "—"}
+                  </span>
                 </div>
               </div>
             </div>
-            
+
+            {/* ✅ Country */}
             {currentUser?.username && (
               <div className="profile-info-item">
                 <div className="info-item-content">
@@ -72,12 +75,40 @@ function Team() {
                   </div>
                   <div className="info-details">
                     <label className="info-label">Country</label>
-                    <span className="info-value">{currentUser?.username}</span>
+                    <span className="info-value">
+                      {currentUser?.username || "—"}
+                    </span>
                   </div>
                 </div>
               </div>
             )}
 
+            {/* ✅ Gender */}
+            <div className="profile-info-item">
+              <div className="info-item-content">
+                <div className="info-icon">
+                  <i className="fa-solid fa-venus-mars"></i>
+                </div>
+                <div className="info-details">
+                  <label className="info-label">Gender</label>
+                  <span
+                    className={`info-value gender-tag ${
+                      currentUser?.gender === "male"
+                        ? "male"
+                        : currentUser?.gender === "female"
+                        ? "female"
+                        : "unknown"
+                    }`}
+                  >
+                    {currentUser?.gender
+                      ? i18n(`user.enumerators.gender.${currentUser.gender}`)
+                      : "Not specified"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* ✅ Invitation Code */}
             <div className="profile-info-item">
               <div className="info-item-content">
                 <div className="info-icon">
@@ -85,7 +116,9 @@ function Team() {
                 </div>
                 <div className="info-details">
                   <label className="info-label">Invitation Code</label>
-                  <span className="info-value invitation-code-display">{currentUser?.invitationcode}</span>
+                  <span className="info-value invitation-code-display">
+                    {currentUser?.invitationcode || "—"}
+                  </span>
                 </div>
               </div>
             </div>
@@ -143,6 +176,7 @@ function Team() {
         .profile-info-item {
           border-bottom: 1px solid #F1F5F9;
           transition: all 0.3s ease;
+          animation: slideInUp 0.5s ease-out;
         }
 
         .profile-info-item:last-child {
@@ -212,41 +246,32 @@ function Team() {
           margin-top: 4px;
         }
 
-        /* Responsive Design */
-        @media (max-width: 400px) {
-          .profile-page-wrapper {
-            border-radius: 0;
-          }
-          
-          .profile-content-area {
-            padding: 15px;
-          }
-          
-          .profile-header-section {
-            padding: 20px;
-          }
-          
-          .profile-main-title {
-            font-size: 20px;
-          }
-          
-          .info-item-content {
-            padding: 16px 20px;
-            gap: 12px;
-          }
-          
-          .info-icon {
-            width: 40px;
-            height: 40px;
-          }
-          
-          .info-icon i {
-            font-size: 16px;
-          }
-          
-          .info-value {
-            font-size: 15px;
-          }
+        /* ✅ Gender Tag Styles */
+        .gender-tag {
+          display: inline-block;
+          padding: 6px 12px;
+          border-radius: 8px;
+          font-weight: 600;
+          text-transform: capitalize;
+          font-size: 14px;
+        }
+
+        .gender-tag.male {
+          background: rgba(66, 153, 225, 0.1);
+          color: #2B6CB0;
+          border: 1px solid rgba(66, 153, 225, 0.2);
+        }
+
+        .gender-tag.female {
+          background: rgba(236, 72, 153, 0.1);
+          color: #B83280;
+          border: 1px solid rgba(236, 72, 153, 0.2);
+        }
+
+        .gender-tag.unknown {
+          background: rgba(160, 174, 192, 0.1);
+          color: #4A5568;
+          border: 1px solid rgba(160, 174, 192, 0.2);
         }
 
         /* Animation */
@@ -261,25 +286,14 @@ function Team() {
           }
         }
 
-        .profile-info-item {
-          animation: slideInUp 0.5s ease-out;
-        }
-
-        .profile-info-item:nth-child(1) { animation-delay: 0.1s; }
-        .profile-info-item:nth-child(2) { animation-delay: 0.2s; }
-        .profile-info-item:nth-child(3) { animation-delay: 0.3s; }
-        .profile-info-item:nth-child(4) { animation-delay: 0.4s; }
-        .profile-info-item:nth-child(5) { animation-delay: 0.5s; }
-
-        /* Hover effects */
-        .profile-info-item:hover .info-icon {
-          background: rgba(66, 153, 225, 0.15);
-          border-color: rgba(66, 153, 225, 0.3);
-          transform: scale(1.05);
-        }
-
-        .profile-info-item:hover .info-value {
-          color: #4299E1;
+        /* Responsive */
+        @media (max-width: 400px) {
+          .profile-content-area {
+            padding: 15px;
+          }
+          .info-item-content {
+            padding: 16px 20px;
+          }
         }
       `}</style>
     </div>

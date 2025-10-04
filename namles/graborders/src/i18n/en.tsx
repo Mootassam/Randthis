@@ -2630,7 +2630,7 @@ const en = {
         BTC: "BTC",
 
       },
-      genre: {
+      gender: {
         male: "male",
         female: "female",
 

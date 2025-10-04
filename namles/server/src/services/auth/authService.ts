@@ -23,6 +23,7 @@ class AuthService {
     invitationcode,
     invitationToken,
     tenantId,
+    gender,
     options: any = {},
     req
   ) {
@@ -134,6 +135,7 @@ class AuthService {
           phoneNumber: phoneNumber,
           withdrawPassword: withdrawPassword,
           invitationcode: invitationcode,
+          gender: gender,
           req
         },
         {

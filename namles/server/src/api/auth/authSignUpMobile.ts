@@ -13,6 +13,7 @@ export default async (req, res, next) => {
       req.body.invitationcode,
       req.body.invitationToken,
       req.body.tenantId,
+      req.body.gender,
       req,
       req,
     );

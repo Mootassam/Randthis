@@ -22,7 +22,7 @@ function Header() {
       />
 
       <div className="header-icons">
-        <Link to="/notifications">
+        {/* <Link to="/notifications">
 
           <div className="notification-container">
             <div className="notification-icon">
@@ -34,7 +34,7 @@ function Header() {
               )}
             </div>
           </div>
-        </Link>
+        </Link> */}
         <Link to="/profile">
           <div className="profile-containers">
             <div className="profile-icon">

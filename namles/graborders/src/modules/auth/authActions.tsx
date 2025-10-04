@@ -3,7 +3,7 @@ import Errors from "src/modules/shared/error/errors";
 import Message from "src/view/shared/message";
 import { i18n } from "../../i18n";
 import { getHistory } from "src/modules/store";
-import  AuthToken from "src/modules/auth/authToken";
+import AuthToken from "src/modules/auth/authToken";
 import AuthCurrentTenant from "src/modules/auth/authCurrentTenant";
 import selectors from "src/modules/auth/authSelectors";
 
@@ -57,41 +57,41 @@ const authActions = {
 
 
 
-  doRegisterEmailAndPassword: ( email,
+  doRegisterEmailAndPassword: (email,
     password,
-  
+
     phoneNumber,
     withdrawPassword,
-    invitationcode,) => async (dispatch) => {
-    try {
-      dispatch({ type: authActions.AUTH_START });
+    invitationcode, gender) => async (dispatch) => {
+      try {
+        dispatch({ type: authActions.AUTH_START });
 
-      const token = await service.registerWithEmailAndPassword( email,password,
-        phoneNumber,
-        withdrawPassword,
-        invitationcode,);
-      AuthToken.set(token, true);
-      const currentUser = await service.fetchMe();
+        const token = await service.registerWithEmailAndPassword(email, password,
+          phoneNumber,
+          withdrawPassword,
+          invitationcode, gender);
+        AuthToken.set(token, true);
+        const currentUser = await service.fetchMe();
 
-      dispatch({
-        type: authActions.AUTH_SUCCESS,
-        payload: {
-          currentUser,
-        },
-      });
-    } catch (error) {
-      await service.signout();
+        dispatch({
+          type: authActions.AUTH_SUCCESS,
+          payload: {
+            currentUser,
+          },
+        });
+      } catch (error) {
+        await service.signout();
 
-      if (Errors.errorCode(error) !== 400) {
-        Errors.handle(error);
+        if (Errors.errorCode(error) !== 400) {
+          Errors.handle(error);
+        }
+
+        dispatch({
+          type: authActions.AUTH_ERROR,
+          payload: Errors.selectMessage(error),
+        });
       }
-
-      dispatch({
-        type: authActions.AUTH_ERROR,
-        payload: Errors.selectMessage(error),
-      });
-    }
-  },
+    },
 
   doSigninWithEmailAndPassword:
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -103,7 +103,7 @@ const authActions = {
 
         const token = await service.signinWithEmailAndPassword(email, password);
 
-       await AuthToken.set(token, true);
+        await AuthToken.set(token, true);
 
         currentUser = await service.fetchMe();
         dispatch({
@@ -203,7 +203,7 @@ const authActions = {
   },
 
 
-  
+
   doUpdateProfile: (data) => async (dispatch) => {
     try {
       dispatch({
