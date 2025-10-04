@@ -368,7 +368,7 @@ function UserTable() {
                     </td>
 
                     <td className="text-center">
-                      <span>United-States <br /> 188.145.30.20</span>
+                      <span>{row.country} <br />{row.ipAddress}</span>
                     </td>
 
                     <td className="user-table-actions">
