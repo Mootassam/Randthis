@@ -1,125 +1,115 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import SubHeader from "src/view/shared/Header/SubHeader";
+import selectors from 'src/modules/notification/list/notificationListSelectors';
+import actions from 'src/modules/notification/list/notificationListActions';
+import actionsForm from 'src/modules/notification/form/notificationFormActions';
 
 function Notifications() {
-  const [filter, setFilter] = useState("all"); // all, deposit, withdraw
+  const [filter, setFilter] = useState("all");
+  const dispatch = useDispatch();
+  const rows = useSelector(selectors.selectRows);
+  const loading = useSelector(selectors.selectLoading);
 
-  // Static notification data
-  const staticNotifications = [
-    {
-      id: 1,
-      type: "deposit",
-      status: "completed",
-      amount: 100.00,
-      date: "2024-01-15T14:30:00Z",
-      reference: "DEP789123",
-      note: "Bank transfer deposit"
-    },
-    {
-      id: 2,
-      type: "withdraw",
-      status: "pending",
-      amount: 50.00,
-      date: "2024-01-15T10:15:00Z",
-      reference: "WD456789",
-      note: "Withdrawal to bank account"
-    },
-    {
-      id: 3,
-      type: "deposit",
-      status: "completed",
-      amount: 200.00,
-      date: "2024-01-14T16:45:00Z",
-      reference: "DEP654321",
-      note: "Credit card deposit"
-    },
-    {
-      id: 4,
-      type: "withdraw",
-      status: "failed",
-      amount: 75.00,
-      date: "2024-01-14T09:20:00Z",
-      reference: "WD987654",
-      note: "Insufficient balance"
-    },
-    {
-      id: 5,
-      type: "deposit",
-      status: "completed",
-      amount: 150.00,
-      date: "2024-01-13T11:30:00Z",
-      reference: "DEP123456",
-      note: "PayPal deposit"
-    },
-    {
-      id: 6,
-      type: "withdraw",
-      status: "completed",
-      amount: 25.00,
-      date: "2024-01-12T15:45:00Z",
-      reference: "WD321654",
-      note: "Withdrawal processed"
-    }
-  ];
+  const asRead =(id)=>{
+    dispatch(actionsForm.doMarkAsRead(id));
+  }
+  useEffect(() => {
+    dispatch(actions.doFetch())
+  }, [dispatch])
 
   // Filter notifications based on selected filter
-  const filteredNotifications = staticNotifications.filter(notification => {
+  const filteredNotifications = rows.filter(notification => {
     if (filter === "deposit") {
-      return notification.type === "deposit";
+      return notification.type.includes("deposit");
     } else if (filter === "withdraw") {
-      return notification.type === "withdraw";
+      return notification.type.includes("withdraw");
     }
-    return notification.type === "deposit" || notification.type === "withdraw";
+    return true;
   });
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case "completed":
-        return "#48BB78"; // green
-      case "pending":
-        return "#ED8936"; // orange
-      case "failed":
-        return "#F56565"; // red
+  // Get notification message based on type
+  const getNotificationMessage = (notification) => {
+    const amount = notification.amount || '0';
+    
+    switch (notification.type) {
+      case "deposit_success":
+        return `Your deposit of $${amount} has been completed successfully.`;
+      case "deposit_canceled":
+        return `Your deposit request for $${amount} has been canceled.`;
+      case "withdraw_success":
+        return `Your withdrawal of $${amount} has been completed successfully.`;
+      case "withdraw_canceled":
+        return `Your withdrawal request for $${amount} has been canceled.`;
+      case "system":
+        return "System notification";
+      case "alert":
+        return "Important alert notification";
       default:
-        return "#A0AEC0"; // gray
+        return "Notification update";
     }
   };
 
-  const getStatusText = (status) => {
-    switch (status) {
-      case "completed":
-        return "Completed";
-      case "pending":
-        return "Pending";
-      case "failed":
-        return "Failed";
-      default:
-        return status;
-    }
-  };
-
-  const getTypeIcon = (type) => {
+  // Get notification title based on type
+  const getNotificationTitle = (type) => {
     switch (type) {
-      case "deposit":
-        return "fa-solid fa-dollar-sign";
-      case "withdraw":
-        return "fa-solid fa-money-check";
+      case "deposit_success":
+        return "Deposit Successful";
+      case "deposit_canceled":
+        return "Deposit Canceled";
+      case "withdraw_success":
+        return "Withdrawal Successful";
+      case "withdraw_canceled":
+        return "Withdrawal Canceled";
+      case "system":
+        return "System Notification";
+      case "alert":
+        return "Important Alert";
+      default:
+        return "Notification";
+    }
+  };
+
+  // Get icon based on notification type
+  const getNotificationIcon = (type) => {
+    switch (type) {
+      case "deposit_success":
+        return "fa-solid fa-circle-check";
+      case "deposit_canceled":
+        return "fa-solid fa-circle-xmark";
+      case "withdraw_success":
+        return "fa-solid fa-circle-check";
+      case "withdraw_canceled":
+        return "fa-solid fa-circle-xmark";
+      case "system":
+        return "fa-solid fa-gear";
+      case "alert":
+        return "fa-solid fa-triangle-exclamation";
       default:
         return "fa-solid fa-bell";
     }
   };
 
-  const getTypeColor = (type) => {
+  // Get background color based on notification type
+  const getNotificationColor = (type) => {
     switch (type) {
-      case "deposit":
-        return "#4299E1"; // blue
-      case "withdraw":
-        return "#ED8936"; // orange
+      case "deposit_success":
+      case "withdraw_success":
+        return "#48BB78"; // Green for success
+      case "deposit_canceled":
+      case "withdraw_canceled":
+        return "#F56565"; // Red for canceled
+      case "system":
+        return "#4299E1"; // Blue for system
+      case "alert":
+        return "#ED8936"; // Orange for alert
       default:
-        return "#A0AEC0"; // gray
+        return "#A0AEC0"; // Gray for default
     }
   };
+
+  // Get time icon and text
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -130,6 +120,13 @@ function Notifications() {
       hour: '2-digit',
       minute: '2-digit'
     });
+  };
+
+  // Mark notification as read
+  const markAsRead = (notificationId) => {
+    // You can dispatch an action here to update the notification status
+    console.log("Mark as read:", notificationId);
+    // dispatch(actions.doMarkAsRead(notificationId));
   };
 
   return (
@@ -143,20 +140,30 @@ function Notifications() {
           className={`filter-tab ${filter === "all" ? "active" : ""}`}
           onClick={() => setFilter("all")}
         >
+          <i className="fa-solid fa-bell"></i>
           All
         </button>
         <button
           className={`filter-tab ${filter === "deposit" ? "active" : ""}`}
           onClick={() => setFilter("deposit")}
         >
+          <i className="fa-solid fa-arrow-down"></i>
           Deposit
         </button>
         <button
           className={`filter-tab ${filter === "withdraw" ? "active" : ""}`}
           onClick={() => setFilter("withdraw")}
         >
+          <i className="fa-solid fa-arrow-up"></i>
           Withdraw
         </button>
+      </div>
+
+      {/* Unread Count */}
+      <div className="unread-indicator">
+        <span className="unread-count">
+          {rows.filter(n => n.status === 'unread').length} unread
+        </span>
       </div>
 
       {/* Notifications List */}
@@ -168,42 +175,63 @@ function Notifications() {
             <p>You don't have any {filter !== "all" ? filter : ""} notifications yet.</p>
           </div>
         ) : (
-          filteredNotifications.map((notification) => (
-            <div key={notification.id} className="notification-item">
-              <div className="notification-icon">
-                <i 
-                  className={getTypeIcon(notification.type)} 
-                  style={{ color: getTypeColor(notification.type) }}
-                ></i>
-              </div>
-              
-              <div className="notification-content">
-                <div className="notification-header">
-                  <span className="notification-title">
-                    {notification.type === "deposit" ? "Deposit" : "Withdrawal"} Request
-                  </span>
-                  <span 
-                    className="notification-status"
-                    style={{ color: getStatusColor(notification.status) }}
-                  >
-                    {getStatusText(notification.status)}
-                  </span>
+          filteredNotifications.map((notification) => {
+            const iconColor = getNotificationColor(notification.type);
+            const isUnread = notification.status === 'unread';
+            
+            return (
+              <div 
+                key={notification.id} 
+                className={`notification-item ${isUnread ? 'unread' : 'read'}`}
+                onClick={() => isUnread && asRead(notification.id)}
+              >
+                {/* Unread indicator dot */}
+                {isUnread && <div className="unread-dot"></div>}
+                
+                <div 
+                  className="notification-icon"
+                  style={{ backgroundColor: `${iconColor}15`, borderColor: `${iconColor}30` }}
+                >
+                  <i
+                    className={getNotificationIcon(notification.type)}
+                    style={{ color: iconColor }}
+                  ></i>
                 </div>
-                
-                <div className="notification-details">
-                  <span className="notification-amount">
-                    {notification.amount?.toFixed(2)} USD
-                  </span>
-                  <span className="notification-date">
-                    {formatDate(notification.date)}
-                  </span>
+
+                <div className="notification-content">
+                  <div className="notification-header">
+                    <span className="notification-title">
+                      {getNotificationTitle(notification.type)}
+                    </span>
+                  
+                  </div>
+
+                  <p className="notification-message">
+                    {getNotificationMessage(notification)}
+                  </p>
+
+                  <div className="notification-footer">
+                    <div className="notification-amount">
+                      <i className="fa-solid fa-coins"></i>
+                      <span>{notification.amount} USDT</span>
+                    </div>
+                    <div className="notification-full-date">
+                      {formatDate(notification.createdAt)}
+                    </div>
+                  </div>
                 </div>
-                
-                
-              
+
+                {/* Read status icon */}
+                <div className="read-status">
+                  {isUnread ? (
+                    <i className="fa-regular fa-circle unread-icon"></i>
+                  ) : (
+                    <i className="fa-solid fa-circle-check read-icon"></i>
+                  )}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
@@ -211,63 +239,35 @@ function Notifications() {
         .notifications-container {
           max-width: 400px;
           margin: 0 auto;
-          background: #EDF1F7;
+          background: #F8FAFC;
           min-height: 100vh;
           color: #2D3748;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        .page-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 20px;
-          background: #FFFFFF;
-          border-bottom: 1px solid #E2E8F0;
-        }
-
-        .back-button {
-          color: #4A5568;
-          font-size: 18px;
-          text-decoration: none;
-          padding: 8px;
-          border-radius: 8px;
-          transition: all 0.2s ease;
-        }
-
-        .back-button:hover {
-          background: #F7FAFC;
-          color: #2D3748;
-        }
-
-        .page-title {
-          font-size: 18px;
-          font-weight: 600;
-          color: #1A202C;
-          margin: 0;
-        }
-
-        .header-placeholder {
-          width: 34px;
-        }
-
         .filter-tabs {
           display: flex;
+          background: #FFFFFF;
           border-bottom: 1px solid #E2E8F0;
-          gap: 8px;
+          gap: 4px;
+          padding: 12px 16px;
         }
 
         .filter-tab {
           flex: 1;
-          padding: 12px 16px;
+          padding: 10px 12px;
           border: none;
           background: #F7FAFC;
           color: #718096;
-          border-radius: 10px;
-          font-size: 14px;
+          border-radius: 8px;
+          font-size: 13px;
           font-weight: 500;
           cursor: pointer;
           transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
         }
 
         .filter-tab.active {
@@ -281,38 +281,94 @@ function Notifications() {
           color: #4A5568;
         }
 
+        .filter-tab i {
+          font-size: 12px;
+        }
+
+        .unread-indicator {
+          padding: 8px 16px;
+          background: #FFFFFF;
+          border-bottom: 1px solid #E2E8F0;
+        }
+
+        .unread-count {
+          font-size: 13px;
+          font-weight: 600;
+          color: #4299E1;
+          background: #EBF8FF;
+          padding: 4px 12px;
+          border-radius: 12px;
+          border: 1px solid #BEE3F8;
+        }
+
         .notifications-list {
-          padding: 20px;
+          padding: 16px;
         }
 
         .notification-item {
           display: flex;
           align-items: flex-start;
-          gap: 15px;
-          padding: 20px;
+          gap: 12px;
+          padding: 16px;
           background: #FFFFFF;
           border-radius: 12px;
           margin-bottom: 12px;
           border: 1px solid #E2E8F0;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
           transition: all 0.2s ease;
+          position: relative;
+          cursor: pointer;
         }
 
-        .notification-item:hover {
+        /* Unread notification styles */
+        .notification-item.unread {
+          background: linear-gradient(135deg, #FFFFFF 0%, #F0FFF4 100%);
+          border-left: 4px solid #48BB78;
+          border-right: 1px solid #E2E8F0;
+          border-top: 1px solid #E2E8F0;
+          border-bottom: 1px solid #E2E8F0;
+          box-shadow: 0 4px 12px rgba(72, 187, 120, 0.1);
+        }
+
+        .notification-item.unread:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(72, 187, 120, 0.15);
+        }
+
+        /* Read notification styles */
+        .notification-item.read {
+          background: #FFFFFF;
+          opacity: 0.8;
+          border: 1px solid #E2E8F0;
+        }
+
+        .notification-item.read:hover {
+          opacity: 1;
           transform: translateY(-1px);
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
+        .unread-dot {
+          position: absolute;
+          top: 12px;
+          left: 12px;
+          width: 8px;
+          height: 8px;
+          background: #48BB78;
+          border-radius: 50%;
+          animation: pulse 2s infinite;
+        }
+
         .notification-icon {
-          width: 44px;
-          height: 44px;
-          border-radius: 12px;
-          background: #F7FAFC;
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 18px;
+          font-size: 16px;
           flex-shrink: 0;
+          border: 1px solid;
         }
 
         .notification-content {
@@ -323,8 +379,8 @@ function Notifications() {
         .notification-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          margin-bottom: 8px;
+          align-items: flex-start;
+          margin-bottom: 6px;
         }
 
         .notification-title {
@@ -333,47 +389,91 @@ function Notifications() {
           color: #1A202C;
         }
 
-        .notification-status {
-          font-size: 12px;
-          font-weight: 600;
-          text-transform: uppercase;
-        }
-
-        .notification-details {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 6px;
-        }
-
-        .notification-amount {
-          font-size: 16px;
+        /* Unread title is bolder */
+        .notification-item.unread .notification-title {
           font-weight: 700;
           color: #2D3748;
         }
 
-        .notification-date {
-          font-size: 12px;
+        .notification-time {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 11px;
           color: #718096;
         }
 
-        .notification-reference {
-          font-size: 12px;
-          color: #718096;
-          margin-bottom: 4px;
-          font-family: monospace;
+        .notification-time i {
+          font-size: 10px;
         }
 
-        .notification-note {
+        .notification-message {
           font-size: 13px;
           color: #4A5568;
-          font-style: italic;
+          line-height: 1.4;
+          margin: 0 0 10px 0;
+        }
+
+        /* Unread message is darker */
+        .notification-item.unread .notification-message {
+          color: #2D3748;
+          font-weight: 500;
+        }
+
+        .notification-footer {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 8px;
+          border-top: 1px solid #F1F5F9;
+        }
+
+        .notification-amount {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #2D3748;
+        }
+
+        .notification-amount i {
+          color: #D69E2E;
+          font-size: 12px;
+        }
+
+        .notification-full-date {
+          font-size: 11px;
+          color: #A0AEC0;
+        }
+
+        .read-status {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          height: 20px;
+          flex-shrink: 0;
+        }
+
+        .unread-icon {
+          color: #48BB78;
+          font-size: 12px;
+          animation: pulse 2s infinite;
+        }
+
+        .read-icon {
+          color: #A0AEC0;
+          font-size: 12px;
         }
 
         .empty-state {
           text-align: center;
           padding: 60px 20px;
           color: #718096;
+          background: #FFFFFF;
+          border-radius: 12px;
+          border: 1px solid #E2E8F0;
         }
 
         .empty-state i {
@@ -396,21 +496,52 @@ function Notifications() {
           color: #718096;
         }
 
+        /* Pulse animation for unread items */
+        @keyframes pulse {
+          0% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.7;
+            transform: scale(1.05);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
         /* Responsive adjustments */
         @media (max-width: 400px) {
           .notifications-container {
             max-width: 100%;
           }
           
-          .page-header,
           .filter-tabs,
           .notifications-list {
-            padding: 15px;
+            padding: 12px;
           }
           
           .notification-item {
-            padding: 15px;
+            padding: 14px;
           }
+        }
+
+        /* Animation for new notifications */
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .notification-item {
+          animation: slideIn 0.3s ease-out;
         }
       `}</style>
     </div>

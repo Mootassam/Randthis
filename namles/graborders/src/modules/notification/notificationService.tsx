@@ -1,8 +1,8 @@
-
 import authAxios from 'src/modules/shared/axios/authAxios';
 import AuthCurrentTenant from 'src/modules/auth/authCurrentTenant';
+import { log } from 'console';
 
-export default class TransactionService {
+export default class notificationService {
   static async update(id, data) {
     const body = {
       id,
@@ -12,7 +12,7 @@ export default class TransactionService {
     const tenantId = AuthCurrentTenant.get();
 
     const response = await authAxios.put(
-      `/tenant/${tenantId}/transaction/${id}`,
+      `/tenant/${tenantId}/notification/${id}`,
       body,
     );
 
@@ -27,7 +27,7 @@ export default class TransactionService {
     const tenantId = AuthCurrentTenant.get();
 
     const response = await authAxios.delete(
-      `/tenant/${tenantId}/transaction`,
+      `/tenant/${tenantId}/notification`,
       {
         params,
       },
@@ -45,7 +45,7 @@ export default class TransactionService {
 
     const tenantId = AuthCurrentTenant.get();
     const response = await authAxios.get(
-      `/tenant/${tenantId}/transaction/byUser`,
+      `/tenant/${tenantId}/notification/byUser`,
       {
         params,
       },
@@ -64,10 +64,23 @@ export default class TransactionService {
     const tenantId = AuthCurrentTenant.get();
 
     const response = await authAxios.post(
-      `/tenant/${tenantId}/transaction`,
+      `/tenant/${tenantId}/notification`,
       body,
     );
 
+    return response.data;
+  }
+
+  static async asRead(data) {
+    const body = {
+      data,
+    };
+    const tenantId = AuthCurrentTenant.get();
+    const response = await authAxios.post(
+      `/tenant/${tenantId}/makeAsRead`,
+      body,
+    );
+    
     return response.data;
   }
 
@@ -80,7 +93,7 @@ export default class TransactionService {
     const tenantId = AuthCurrentTenant.get();
 
     const response = await authAxios.post(
-      `/tenant/${tenantId}/transaction/import`,
+      `/tenant/${tenantId}/notification/import`,
       body,
     );
 
@@ -91,10 +104,21 @@ export default class TransactionService {
     const tenantId = AuthCurrentTenant.get();
 
     const response = await authAxios.get(
-      `/tenant/${tenantId}/transaction/${id}`,
+      `/tenant/${tenantId}/notification/${id}`,
     );
 
     return response.data;
+  }
+
+  static async countUnread() {
+    const tenantId = AuthCurrentTenant.get();
+
+    const response = await authAxios.get(
+      `/tenant/${tenantId}/countUnreadByUser/`,
+    );
+
+
+    return response.data.unread;
   }
 
   static async list(filter, orderBy, limit, offset) {
@@ -108,7 +132,7 @@ export default class TransactionService {
     const tenantId = AuthCurrentTenant.get();
 
     const response = await authAxios.get(
-      `/tenant/${tenantId}/transaction`,
+      `/tenant/${tenantId}/notification`,
       {
         params,
       },
@@ -124,7 +148,7 @@ export default class TransactionService {
     };
     const tenantId = AuthCurrentTenant.get();
     const response = await authAxios.get(
-      `/tenant/${tenantId}/transaction/autocomplete`,
+      `/tenant/${tenantId}/notification/autocomplete`,
       {
         params,
       },

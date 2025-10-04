@@ -10,241 +10,212 @@ export default class TransactionService {
   options: IServiceOptions;
 
   constructor(options) {
+
     this.options = options;
   }
 
-  async create(data) {
-    const session = await MongooseRepository.createSession(
-      this.options.database
-    );
+ async create(data) {
+  const session = await MongooseRepository.createSession(
+    this.options.database
+  );
 
-    try {
-      await this.checkSolde(data, { ...this.options });
+  try {
+    await this.checkSolde(data, { ...this.options });
 
-      const values = {
-        status: data.status,
-        datetransaction: data.datetransaction,
-        user: data.user,
-        type: data.type,
-        amount: data.amount,
-        photo: data.photo,
-      };
+    const values = {
+      status: data.status,
+      datetransaction: data.datetransaction,
+      user: data.user,
+      type: data.type,
+      amount: data.amount,
+      photo: data.photo,
+    };
 
-      const record = await TransactionRepository.create(values, {
-        ...this.options,
-        session,
-      });
+    const record = await TransactionRepository.create(values, {
+      ...this.options,
+      session,
+    });
 
-      // Create notification for transaction creation
+    // For deposit transactions, create deposit_success notification
+    if (data.type === 'deposit') {
+      await this.updateUserBalance(data.user, data.amount, session, 'inc');
+
       await this.createNotification(
-        record.user,
+        data.user,
         record._id,
-        data.type,
-        'created',
+        'deposit_success', // Changed to deposit_success
         data.amount,
         { ...this.options, session }
       );
-
-      // For deposit transactions, update user balance
-      if (data.type === 'deposit') {
-        await this.updateUserBalance(data.user, data.amount, session, 'inc');
-
-        // Create notification for deposit success
-        await this.createNotification(
-          data.user,
-          record._id,
-          'deposit',
-          'completed',
-          data.amount,
-          { ...this.options, session }
-        );
-      }
-
-      // For withdrawal transactions, deduct balance immediately
-      if (data.type === 'withdraw') {
-        await this.updateUserBalance(data.user, data.amount, session, 'dec');
-
-        // Create notification for withdrawal submission
-        await this.createNotification(
-          data.user,
-          record._id,
-          'withdraw',
-          'submitted',
-          data.amount,
-          { ...this.options, session }
-        );
-      }
-
-      await MongooseRepository.commitTransaction(session);
-
-      return record;
-    } catch (error) {
-      await MongooseRepository.abortTransaction(session);
-
-      MongooseRepository.handleUniqueFieldError(
-        error,
-        this.options.language,
-        "mandat"
-      );
-
-      throw error;
-    }
-  }
-
-  async updateUserBalance(userId, amount, session, operation = 'inc') {
-    const User = this.options.database.model('user');
-    const update = operation === 'inc'
-      ? { $inc: { balance: parseFloat(amount) } }
-      : { $inc: { balance: -parseFloat(amount) } };
-
-    await User.findByIdAndUpdate(userId, update, { session });
-  }
-
-  async createNotification(userId, transactionId, type, action, amount, options) {
-    const currentUser = MongooseRepository.getCurrentUser(options);
-    const currentTenant = MongooseRepository.getCurrentTenant(options);
-
-    let title, message;
-
-    switch (action) {
-      case 'created':
-        title = `${type.charAt(0).toUpperCase() + type.slice(1)} Request Created`;
-        message = `Your ${type} request for $${amount} has been submitted and is under review.`;
-        break;
-      case 'submitted':
-        title = `Withdrawal Submitted`;
-        message = `Your withdrawal request for $${amount} has been submitted successfully.`;
-        break;
-      case 'completed':
-        title = `Deposit Completed`;
-        message = `Your deposit of $${amount} has been completed successfully.`;
-        break;
-      case 'success':
-        title = `Transaction Approved`;
-        message = `Your ${type} of $${amount} has been approved and completed.`;
-        break;
-      case 'canceled':
-        title = `Transaction Canceled`;
-        message = `Your ${type} request for $${amount} has been canceled.`;
-        break;
-      default:
-        title = `Transaction Update`;
-        message = `Your transaction status has been updated.`;
     }
 
-    await Notification(options.database).create([{
-      title,
-      message,
-      type,
-      status: 'unread',
-      user: userId,
-      transaction: transactionId,
-      amount: amount.toString(),
-      tenant: currentTenant.id,
-      createdBy: currentUser.id,
-    }], options);
-  }
-
-  async checkSolde(data, options) {
-    const currentUser = MongooseRepository.getCurrentUser(options);
-
-    if (!data) {
-      throw new Error405("Please write amount");
+    // For withdrawal transactions, deduct balance but DON'T create notification
+    if (data.type === 'withdraw') {
+      await this.updateUserBalance(data.user, data.amount, session, 'dec');
+      // No notification created for withdrawal on creation
     }
-    const amount = data.amount;
-    const type = data.type;
 
-    if (type === "withdraw") {
-      if (!currentUser.trc20) {
-        throw new Error405(
-          'Please go to the "Wallet" section to bind your USDT (TRC20) or ERC20 address before submitting a withdrawal request.'
-        );
-      }
+    await MongooseRepository.commitTransaction(session);
 
-      if (currentUser.withdrawPassword == data.withdrawPassword) {
-        if (currentUser.balance < amount) {
-          throw new Error405(
-            "It looks like your withdrawal amount exceeds your balance"
-          );
-        }
-      } else {
-        throw new Error405(
-          "Your withdraw Password is not correct please check again"
-        );
-      }
-    }
-  }
+    return record;
+  } catch (error) {
+    await MongooseRepository.abortTransaction(session);
 
-  async updateTransactionStatus(transactionId, newStatus, options) {
-    const session = await MongooseRepository.createSession(
-      this.options.database
+    MongooseRepository.handleUniqueFieldError(
+      error,
+      this.options.language,
+      "mandat"
     );
 
-    try {
-      const Transaction = this.options.database.model('transaction');
-      const User = this.options.database.model('user');
+    throw error;
+  }
+}
 
-      // Find the transaction with user data
-      const transaction = await Transaction.findById(transactionId)
-        .populate('user')
-        .session(session);
+async updateUserBalance(userId, amount, session, operation = 'inc') {
+  const User = this.options.database.model('user');
+  const update = operation === 'inc'
+    ? { $inc: { balance: parseFloat(amount) } }
+    : { $inc: { balance: -parseFloat(amount) } };
 
-      if (!transaction) {
-        throw new Error405('Transaction not found');
-      }
+  await User.findByIdAndUpdate(userId, update, { session });
+}
 
-      const oldStatus = transaction.status;
-      const amount = parseFloat(transaction.amount);
+async createNotification(userId, transactionId, type, amount, options) {
+  const currentUser = MongooseRepository.getCurrentUser(options);
+  const currentTenant = MongooseRepository.getCurrentTenant(options);
 
-      // Update transaction status
-      const updatedTransaction = await Transaction.findByIdAndUpdate(
-        transactionId,
-        {
-          status: newStatus,
-          updatedBy: MongooseRepository.getCurrentUser(options).id
-        },
-        { new: true, session }
+  await Notification(options.database).create([{
+    type, // Now using the type directly (deposit_success, withdraw_success, etc.)
+    status: 'unread',
+    user: userId,
+    transaction: transactionId,
+    amount: amount.toString(),
+    tenant: currentTenant.id,
+    createdBy: currentUser.id,
+  }], options);
+}
+
+async checkSolde(data, options) {
+  const currentUser = MongooseRepository.getCurrentUser(options);
+
+  if (!data) {
+    throw new Error405("Please write amount");
+  }
+  const amount = data.amount;
+  const type = data.type;
+
+  if (type === "withdraw") {
+    if (!currentUser.trc20) {
+      throw new Error405(
+        'Please go to the "Wallet" section to bind your USDT (TRC20) or ERC20 address before submitting a withdrawal request.'
       );
+    }
 
-      // Create notification for status update
+    if (currentUser.withdrawPassword == data.withdrawPassword) {
+      if (currentUser.balance < amount) {
+        throw new Error405(
+          "It looks like your withdrawal amount exceeds your balance"
+        );
+      }
+    } else {
+      throw new Error405(
+        "Your withdraw Password is not correct please check again"
+      );
+    }
+  }
+}
+
+async updateTransactionStatus(transactionId, newStatus, options) {
+  const session = await MongooseRepository.createSession(
+    this.options.database
+  );
+
+  try {
+    const Transaction = this.options.database.model('transaction');
+    const User = this.options.database.model('user');
+
+    // Find the transaction with user data
+    const transaction = await Transaction.findById(transactionId)
+      .populate('user')
+      .session(session);
+
+    if (!transaction) {
+      throw new Error405('Transaction not found');
+    }
+
+    const oldStatus = transaction.status;
+    const amount = parseFloat(transaction.amount);
+
+    // Update transaction status
+    const updatedTransaction = await Transaction.findByIdAndUpdate(
+      transactionId,
+      {
+        status: newStatus,
+        updatedBy: MongooseRepository.getCurrentUser(options).id
+      },
+      { new: true, session }
+    );
+
+    // Create notification based on transaction type and new status
+    if (transaction.type === 'withdraw' && newStatus === 'success') {
+      // Only create withdraw_success notification for successful withdrawals
       await this.createNotification(
         transaction.user._id,
         transactionId,
-        transaction.type,
-        newStatus,
+        'withdraw_success', // Created only when withdrawal is successful
         transaction.amount,
         { ...this.options, session }
       );
+    } else if (transaction.type === 'withdraw' && newStatus === 'canceled') {
+      // Create withdraw_canceled notification for canceled withdrawals
+      await this.createNotification(
+        transaction.user._id,
+        transactionId,
+        'withdraw_canceled',
+        transaction.amount,
+        { ...this.options, session }
+      );
+    } else if (transaction.type === 'deposit' && newStatus === 'canceled') {
+      // Create deposit_canceled notification for canceled deposits
+      await this.createNotification(
+        transaction.user._id,
+        transactionId,
+        'deposit_canceled',
+        transaction.amount,
+        { ...this.options, session }
+      );
+    }
+    // Note: deposit_success is already created in the create method
 
-      // Handle withdrawal transactions - only return money if canceled
-      if (transaction.type === 'withdraw') {
-        // Case: Status changed to 'canceled' - return the amount
-        if (newStatus === 'canceled') {
-          await User.findByIdAndUpdate(
-            transaction.user._id,
-            { $inc: { balance: amount } },
-            { session }
-          );
-        }
-
-        // Case: Status changed from 'canceled' to 'success' - deduct again
-        else if (oldStatus === 'canceled' && newStatus === 'success') {
-          await User.findByIdAndUpdate(
-            transaction.user._id,
-            { $inc: { balance: -amount } },
-            { session }
-          );
-        }
+    // Handle withdrawal transactions - only return money if canceled
+    if (transaction.type === 'withdraw') {
+      // Case: Status changed to 'canceled' - return the amount
+      if (newStatus === 'canceled') {
+        await User.findByIdAndUpdate(
+          transaction.user._id,
+          { $inc: { balance: amount } },
+          { session }
+        );
       }
 
-      await MongooseRepository.commitTransaction(session);
-      return updatedTransaction;
-
-    } catch (error) {
-      await MongooseRepository.abortTransaction(session);
-      throw error;
+      // Case: Status changed from 'canceled' to 'success' - deduct again
+      else if (oldStatus === 'canceled' && newStatus === 'success') {
+        await User.findByIdAndUpdate(
+          transaction.user._id,
+          { $inc: { balance: -amount } },
+          { session }
+        );
+      }
     }
+
+    await MongooseRepository.commitTransaction(session);
+    return updatedTransaction;
+
+  } catch (error) {
+    await MongooseRepository.abortTransaction(session);
+    throw error;
   }
+}
 
   async checkpermission(options) {
     const currentUser = MongooseRepository.getCurrentUser(options);

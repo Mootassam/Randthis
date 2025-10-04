@@ -4,16 +4,16 @@ import AuditLogRepository from "./auditLogRepository";
 import Error404 from "../../errors/Error404";
 import { IRepositoryOptions } from "./IRepositoryOptions";
 import FileRepository from "./fileRepository";
-import Transaction from "../models/transaction";
 import Error400 from "../../errors/Error400";
 import UserRepository from "./userRepository";
 import Error405 from "../../errors/Error405";
+import Notification from "../models/notification";
 
-class TransactionRepository {
+class NotificationRepository {
   static async create(data, options: IRepositoryOptions) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
     const currentUser = MongooseRepository.getCurrentUser(options);
-    const [record] = await Transaction(options.database).create(
+    const [record] = await Notification(options.database).create(
       [
         {
           ...data,
@@ -35,14 +35,32 @@ class TransactionRepository {
     return this.findById(record.id, options);
   }
 
-  
+
+  static async markAsRead(id, options: IRepositoryOptions) {
+  const currentUser = MongooseRepository.getCurrentUser(options);
+  const currentTenant = MongooseRepository.getCurrentTenant(options);
+
+  return MongooseRepository.wrapWithSessionIfExists(
+    Notification(options.database).findByIdAndUpdate(
+      id,
+      {
+        status: "read",
+        updatedBy: currentUser.id,
+      },
+      { new: true } // Return the updated document
+    ),
+    options
+  );
+}
+
+
 
 
   static async update(id, data, options: IRepositoryOptions) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
 
     let record = await MongooseRepository.wrapWithSessionIfExists(
-      Transaction(options.database).findById(id),
+      Notification(options.database).findById(id),
       options
     );
 
@@ -50,7 +68,7 @@ class TransactionRepository {
       throw new Error404();
     }
 
-    await Transaction(options.database).updateOne(
+    await Notification(options.database).updateOne(
       { _id: id },
       {
         ...data,
@@ -67,7 +85,7 @@ class TransactionRepository {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
 
     let record = await MongooseRepository.wrapWithSessionIfExists(
-      Transaction(options.database).findById(id),
+      Notification(options.database).findById(id),
       options
     );
 
@@ -75,7 +93,7 @@ class TransactionRepository {
       throw new Error404();
     }
 
-    await Transaction(options.database).deleteOne({ _id: id }, options);
+    await Notification(options.database).deleteOne({ _id: id }, options);
 
     await this._createAuditLog(AuditLogRepository.DELETE, id, record, options);
   }
@@ -84,7 +102,7 @@ class TransactionRepository {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
 
     return MongooseRepository.wrapWithSessionIfExists(
-      Transaction(options.database).countDocuments({
+      Notification(options.database).countDocuments({
         ...filter,
         tenant: currentTenant.id,
       }),
@@ -93,13 +111,24 @@ class TransactionRepository {
   }
 
 
-  
+  static async countUnread(options: IRepositoryOptions): Promise<{ unread: number }> {
+    const currentUser = MongooseRepository.getCurrentUser(options);
 
+    const count = await MongooseRepository.wrapWithSessionIfExists(
+      Notification(options.database).countDocuments({
+        user: currentUser.id,
+        status: "unread",
+      }),
+      options
+    );
+
+    return { unread: count };
+  }
   static async findById(id, options: IRepositoryOptions) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
 
     let record = await MongooseRepository.wrapWithSessionIfExists(
-      Transaction(options.database).findById(id).populate("user"),
+      Notification(options.database).findById(id).populate("user"),
       options
     );
 
@@ -114,7 +143,6 @@ class TransactionRepository {
     options: IRepositoryOptions
   ) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
-
     let criteriaAnd: any = [];
 
     criteriaAnd.push({
@@ -160,8 +188,8 @@ class TransactionRepository {
         });
       }
 
-      if (filter.datetransaction) {
-        const [start, end] = filter.datetransaction;
+      if (filter.dateNotification) {
+        const [start, end] = filter.dateNotification;
 
         if (start !== undefined && start !== null && start !== "") {
           criteriaAnd.push({
@@ -181,20 +209,22 @@ class TransactionRepository {
       }
     }
 
+
+
+
     const sort = MongooseQueryUtils.sort(orderBy || "createdAt_DESC");
 
     const skip = Number(offset || 0) || undefined;
     const limitEscaped = Number(limit || 0) || undefined;
     const criteria = criteriaAnd.length ? { $and: criteriaAnd } : null;
 
-    let rows = await Transaction(options.database)
+    let rows = await Notification(options.database)
       .find(criteria)
       .skip(skip)
-      .limit(limitEscaped)
       .sort(sort)
       .populate("user");
 
-    const count = await Transaction(options.database).countDocuments(criteria);
+    const count = await Notification(options.database).countDocuments(criteria);
 
     rows = await Promise.all(rows.map(this._fillFileDownloadUrls));
 
@@ -256,8 +286,8 @@ class TransactionRepository {
         });
       }
 
-      if (search.datetransaction) {
-        const [start, end] = search.datetransaction;
+      if (search.dateNotification) {
+        const [start, end] = search.dateNotification;
 
         if (start !== undefined && start !== null && start !== "") {
           criteriaAnd.push({
@@ -283,14 +313,14 @@ class TransactionRepository {
     const limitEscaped = Number(limit || 0) || undefined;
     const criteria = criteriaAnd.length ? { $and: criteriaAnd } : null;
 
-    let rows = await Transaction(options.database)
+    let rows = await Notification(options.database)
       .find(criteria)
       // .skip(skip)
       // .limit(limitEscaped)
       .sort(sort)
       .populate("user");
 
-    const count = await Transaction(options.database).countDocuments(criteria);
+    const count = await Notification(options.database).countDocuments(criteria);
 
     rows = await Promise.all(rows.map(this._fillFileDownloadUrls));
 
@@ -327,7 +357,7 @@ class TransactionRepository {
 
     const criteria = { $and: criteriaAnd };
 
-    const records = await Transaction(options.database)
+    const records = await Notification(options.database)
       .find(criteria)
       .limit(limitEscaped)
       .sort(sort);
@@ -341,7 +371,7 @@ class TransactionRepository {
   static async _createAuditLog(action, id, data, options: IRepositoryOptions) {
     await AuditLogRepository.log(
       {
-        entityName: Transaction(options.database).modelName,
+        entityName: Notification(options.database).modelName,
         entityId: id,
         action,
         values: data,
@@ -362,4 +392,4 @@ class TransactionRepository {
   }
 }
 
-export default TransactionRepository;
+export default NotificationRepository;

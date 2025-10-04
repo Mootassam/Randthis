@@ -1,13 +1,26 @@
-import React from "react";
+import { log } from "console";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from 'react-router-dom';
-
+import actions from 'src/modules/notification/list/notificationListActions';
+import selectors from 'src/modules/notification/list/notificationListSelectors';
+import { Link } from "react-router-dom";
 function SubHeader(props) {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const unread = useSelector(selectors.selectUnread);
+  const loading = useSelector(selectors.UnreadLoading);
+
+
+  useEffect(() => {
+    dispatch(actions.fetchUnreadNotifications())
+  }, [dispatch])
 
   const goBack = () => {
     history.goBack();
   };
-  let count =  3;
+
+
   return (
     <div className="subheader-container">
       <div className="subheader-content">
@@ -15,16 +28,18 @@ function SubHeader(props) {
           <i className="fa-solid fa-arrow-left back-icon"></i>
         </div>
         <h3 className="subheader-title">{props?.title}</h3>
-        <div className="notification-container">
-          <div className="notification-icons">
-            <i className="fa-solid fa-bell"></i>
-            {count > 0 && (
-              <div className="notification-badge">
-                {count}
-              </div>
-            )}
+        <Link to="/notifications">
+          <div className="notification-container">
+            <div className="notification-icons">
+              <i className="fa-solid fa-bell"></i>
+              {unread > 0 && !loading && (
+                <div className="notification-badge">
+                  {unread}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
 
       <style>{`

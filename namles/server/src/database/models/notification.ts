@@ -10,19 +10,16 @@ export default (database) => {
 
   const NotificationSchema = new Schema(
     {
-      title: {
-        type: String,
-        required: true,
-        maxlength: 255,
-      },
-      message: {
-        type: String,
-        required: true,
-        maxlength: 1000,
-      },
       type: {
         type: String,
-        enum: ["deposit", "withdraw", "system", "alert"],
+        enum: [
+          "deposit_success", 
+          "deposit_canceled", 
+          "withdraw_success", 
+          "withdraw_canceled", 
+          "system", 
+          "alert"
+        ],
         required: true,
       },
       status: {
@@ -41,6 +38,7 @@ export default (database) => {
       },
       amount: {
         type: String,
+        required: true,
       },
       tenant: {
         type: Schema.Types.ObjectId,
