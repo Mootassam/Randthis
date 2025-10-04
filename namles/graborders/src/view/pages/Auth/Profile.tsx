@@ -7,7 +7,19 @@ import authSelectors from "src/modules/auth/authSelectors";
 import actions from "src/modules/record/list/recordListActions";
 import selectors from "src/modules/record/list/recordListSelectors";
 import Message from "src/view/shared/message";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FormProvider, useForm } from "react-hook-form";
+import * as yup from "yup";
+import yupFormSchemas from "src/modules/shared/yup/yupFormSchemas";
+import { i18n } from "../../../i18n";
+import ImagesFormItem from "src/shared/form/ImagesFormItems";
+import Storage from "src/security/storage";
 
+const schema = yup.object().shape({
+  avatars: yupFormSchemas.images(i18n("inputs.avatars"), {
+    max: 1,
+  }),
+});
 function Profile() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -27,7 +39,19 @@ function Profile() {
   const doSignout = () => {
     dispatch(authActions.doSignout());
   };
+  const [initialValues] = useState(() => {
+    const record = currentUser || {};
 
+    return {
+      avatars: record.avatars || [],
+    };
+  });
+
+  const form = useForm({
+    resolver: yupResolver(schema),
+    mode: "all",
+    defaultValues: initialValues,
+  });
   const goto = (param) => {
     history.push(param);
   };
@@ -76,11 +100,15 @@ function Profile() {
         <div className="header-background"></div>
         <div className="profile-card">
           <div className="profile-top">
-            <div className="profile-avatar">
-              <div className="avatar-placeholder">
-                <i className="fa-solid fa-user-circle"></i>
-              </div>
-            </div>
+            <FormProvider {...form}>
+              <form>
+                <ImagesFormItem
+                  name="avatars"
+                  storage={Storage.values.userAvatarsProfiles}
+                  max={1}
+                />
+              </form>
+            </FormProvider>
             <div className="profile-info">
               <div className="user-name">{currentUser?.fullName}</div>
               <div className="invitation-code">

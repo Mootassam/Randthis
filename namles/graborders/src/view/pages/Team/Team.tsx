@@ -2,7 +2,17 @@ import React from "react";
 import SubHeader from "src/view/shared/Header/SubHeader";
 import { useDispatch, useSelector } from "react-redux";
 import authSelectors from "src/modules/auth/authSelectors";
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import yupFormSchemas from "src/modules/shared/yup/yupFormSchemas";
+import { i18n } from "src/i18n";
 
+const schema = yup.object().shape({
+  avatars: yupFormSchemas.images(i18n("inputs.avatars"), {
+    max: 1,
+  }),
+});
 function Team() {
   const currentUser = useSelector(authSelectors.selectCurrentUser);
 

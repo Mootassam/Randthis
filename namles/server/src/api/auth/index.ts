@@ -63,7 +63,7 @@ export default (app) => {
 
 
   app.put(
-    `/auth/profile/mobile`,
+    `/auth/`,
     require('./authUpdateProfileMobile').default,
   );
 

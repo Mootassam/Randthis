@@ -64,6 +64,16 @@ export default class AuthService {
     return response.data;
   }
 
+    static async updatePhoto(data) {
+    const body = {
+      data,
+    };
+
+    const response = await authAxios.put("/auth/profile", body);
+
+    return response.data;
+  }
+
 
   static async updateProfileMobile(data) {
     const body = {
