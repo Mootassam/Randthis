@@ -147,7 +147,7 @@ class CategoryRepository {
     { filter, limit = 0, offset = 0, orderBy = "" },
     options: IRepositoryOptions
   ) {
-    
+
     const currentTenant = MongooseRepository.getCurrentTenant(options);
 
     let criteriaAnd: any = [];
@@ -256,6 +256,27 @@ class CategoryRepository {
     );
 
     return { rows, count };
+  }
+
+
+  static async findAll(
+    options: IRepositoryOptions
+  ) {
+
+
+    let criteriaAnd: any = [];
+
+    const sort = MongooseQueryUtils.sort("createdAt_DESC");
+
+
+    let rows = await Category(options.database).find({})
+
+
+    rows = await Promise.all(
+      rows.map(this._mapRelationshipsAndFillDownloadUrl)
+    );
+
+    return { rows };
   }
 
   static async findAllAutocomplete(search, limit, options: IRepositoryOptions) {

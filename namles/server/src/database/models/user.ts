@@ -47,6 +47,7 @@ export default (database) => {
       withdraw: {
         type: Boolean,
         default: false,
+        
       },
 
       balance: {
@@ -101,7 +102,9 @@ export default (database) => {
       itemNumber: {
         type: Number,
       },
-
+      giftPosition: {
+        type: Number,
+      },
       email: {
         type: String,
         maxlength: 255,

@@ -34,7 +34,7 @@ export default class CategoryService {
   }
 
   async findAll() {
-    const record = await CategoryRepository.findContact(this.options);
+    const record = await CategoryRepository.findAll(this.options);
     return record;
   }
 
@@ -96,6 +96,12 @@ export default class CategoryService {
   async findAndCountAll(args) {
     return CategoryRepository.findAndCountAll(args, this.options);
   }
+
+
+  async findAndAll(args) {
+    return CategoryRepository.findAll(this.options);
+  }
+
 
   async import(data, importHash) {
     if (!importHash) {

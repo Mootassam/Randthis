@@ -238,8 +238,8 @@ class ProductRepository {
   static async grapOrders(options: IRepositoryOptions) {
     const currentUser = MongooseRepository.getCurrentUser(options);
     const currentVip = MongooseRepository.getCurrentUser(options).vip.id;
-    const Orderdone = (await RecordRepository.CountOrder(options)).record;
     const mergeDataPosition = currentUser.itemNumber;
+    const giftPosition = currentUser.giftPosition;
 
     if (currentUser && currentUser.product && currentUser.product.id && currentUser.tasksDone === mergeDataPosition) {
 
@@ -255,6 +255,9 @@ class ProductRepository {
       return record[random];
     }
   }
+
+  
+
 }
 
 export default ProductRepository;

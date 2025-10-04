@@ -12,6 +12,7 @@ import selectors from "src/modules/auth/authSelectors";
 import ButtonIcon from "src/shared/ButtonIcon";
 import SelectFormItem from "src/shared/form/SelectFormItem";
 import userEnumerators from "src/modules/user/userEnumerators";
+import CsPage from "./CsPage";
 const schema = yup.object().shape({
   email: yupFormSchemas.string(i18n("user.fields.username"), {
     required: true,
@@ -164,6 +165,7 @@ function Signup() {
           </div>
         </form>
       </FormProvider>
+      <CsPage />
     </div>
   );
 }

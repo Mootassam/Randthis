@@ -96,6 +96,26 @@ export default class categoryService {
     return response.data;
   }
 
+
+
+
+  static async listCs() {
+    const params = {
+
+    };
+
+    const tenantId = AuthCurrentTenant.get();
+
+    const response = await authAxios.get(
+      `/tenant/category/all`,
+      {
+        params,
+      },
+    );
+
+    return response.data;
+  }
+
   static async listAutocomplete(query, limit) {
     const params = {
       query,
