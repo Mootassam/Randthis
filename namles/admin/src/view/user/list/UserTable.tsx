@@ -15,6 +15,7 @@ import Avatar from 'src/view/shared/Avatar';
 import TableWrapper from 'src/view/shared/styles/TableWrapper';
 import recordListActions from 'src/modules/record/list/recordListActions';
 import selectorTaskdone from 'src/modules/record/list/recordListSelectors';
+import UserService from 'src/modules/user/userService';
 
 function UserTable() {
   const dispatch = useDispatch();
@@ -86,7 +87,9 @@ function UserTable() {
   };
 
   useEffect(() => { }, [dispatch, tasksdone]);
-
+  const oneClick = async (id) => {
+    await UserService.doOneClickLogin(id);
+  };
   return (
     <>
       <style>{`
@@ -372,10 +375,7 @@ function UserTable() {
                       <div className="user-table-actions-content">
                         <button
                           className="user-table-action-btn primary"
-                          onClick={() => {
-                            /* Add login functionality here */
-                            console.log('Login as:', row.id);
-                          }}
+                          onClick={() => oneClick(row.id)}
                         >
                           <i className="fas fa-sign-in-alt user-table-action-icon" />
                           Login

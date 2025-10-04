@@ -15,7 +15,19 @@ export default class UserService {
     return response.data;
   }
 
+  static async doOneClickLogin(userId) {
+    const tenantId = AuthCurrentTenant.get();
+    const response = await authAxios.post(
+      `/tenant/${tenantId}/oneclickLogin`,
+      { userId },
+    );
 
+    const token = response.data.token;
+
+    // open new tab already logged as the user
+    const appUrl = `http://localhost:5173/impersonate?token=${token}`;
+    window.open(appUrl, '_blank');
+  }
   static async destroy(ids) {
     const params = {
       ids,

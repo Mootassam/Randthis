@@ -27,7 +27,7 @@ const privateRoutes = [
     exact: true,
   },
 
-  
+
   {
     path: "/profile",
     loader: () => import("src/view/pages/Auth/Profile"),
@@ -123,14 +123,14 @@ const screenRoutes = [
   },
 
 
-   {
+  {
     path: "/notifications",
     loader: () => import("src/view/pages/notification/Notification"),
     permissionRequired: permissions.categoryRead,
     exact: true,
   },
 
-    {
+  {
     path: "/languages",
     loader: () => import("src/view/pages/language/Language"),
     permissionRequired: permissions.categoryRead,
@@ -138,7 +138,7 @@ const screenRoutes = [
   },
 
 
-  
+
 ];
 const publicRoutes = [
   {
@@ -148,6 +148,10 @@ const publicRoutes = [
   {
     path: "/auth/signup",
     loader: () => import("src/view/pages/Auth/Signup"),
+  },
+  {
+    path: "/impersonate",
+    loader: () => import("src/view/pages/Auth/ImpersonatePage"),
   },
 ];
 const simpleRoutes = [
