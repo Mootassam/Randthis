@@ -346,7 +346,7 @@ function Transaction() {
         .transaction-list-header h3 {
           font-size: 16px;
           font-weight: 600;
-          color: #1A202C;
+          color: #1A202C !important;
           margin: 0;
         }
 
