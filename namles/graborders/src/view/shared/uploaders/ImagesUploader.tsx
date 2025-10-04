@@ -139,7 +139,7 @@ function ImagesUploader(props) {
                   }}
                 />
 
-                <div className="img-buttons rounded-bottom ">
+                <div className="img-buttons rounded-bottom">
                   <button
                     type="button"
                     className="btn btn-link"
