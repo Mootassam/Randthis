@@ -396,7 +396,7 @@ function UserTable() {
 
                         <Link
                           className="user-table-action-btn info"
-                          to="/changePassword"
+                          to={`/password-reset/${row.id}`}
                         >
                           <i className="fas fa-key user-table-action-icon" />
                           Password

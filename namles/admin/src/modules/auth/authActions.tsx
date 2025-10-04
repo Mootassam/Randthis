@@ -96,6 +96,34 @@ const authActions = {
     }
   },
 
+
+   doResetPasswords:
+    (userId, newPassword) => async (dispatch) => {
+      try {
+        dispatch({
+          type: authActions.PASSWORD_CHANGE_START,
+        });
+
+        await service.resetPasswprd(userId, newPassword);
+
+        dispatch({
+          type: authActions.PASSWORD_CHANGE_SUCCESS,
+        });
+        await dispatch(authActions.doRefreshCurrentUser());
+        Message.success(
+          i18n('auth.passwordChange.success'),
+        );
+        getHistory().push('/user');
+      } catch (error) {
+        Errors.handle(error);
+
+        dispatch({
+          type: authActions.PASSWORD_CHANGE_ERROR,
+        });
+      }
+    },
+
+    
   doRegisterEmailAndPassword:
     (email, password) => async (dispatch) => {
       try {

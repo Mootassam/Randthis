@@ -17,6 +17,12 @@ const privateRoutes = [
     exact: true,
   },
   {
+    path: '/password-reset/:id',
+    loader: () => import('src/view/auth/PasswordReset'),
+    permissionRequired: permissions.categoryRead,
+    exact: true,
+  },
+  {
     path: '/profile',
     loader: () => import('src/view/auth/ProfileFormPage'),
     permissionRequired: permissions.categoryRead,
@@ -461,10 +467,7 @@ const emailUnverifiedRoutes = [
 ].filter(Boolean);
 
 const simpleRoutes = [
-  {
-    path: '/auth/password-reset',
-    loader: () => import('src/view/auth/PasswordResetPage'),
-  },
+
   {
     path: '/auth/invitation',
     loader: () => import('src/view/auth/InvitationPage'),

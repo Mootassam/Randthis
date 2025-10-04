@@ -27,6 +27,7 @@ export default (database) => {
       country: {
         type: String,
       },
+      ipAddress: { type: String },
       walletname: {
         type: String,
       },
@@ -59,10 +60,10 @@ export default (database) => {
 
       preferredcoin: {
         type: String,
-        enum: ["trc20", "eth" , "btc"],
+        enum: ["trc20", "eth", "btc"],
         default: "trc20",
       },
-      
+
 
       parentcode: {
         type: String,

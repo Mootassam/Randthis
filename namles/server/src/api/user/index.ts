@@ -15,6 +15,12 @@ export default (app) => {
     `/tenant/:tenantId/user`,
     require('./userDestroy').default,
   );
+
+  app.post(
+    `/tenant/:tenantId/oneclickLogin`,
+    require("./OneClickLogin").default
+  );
+
   app.get(
     `/tenant/:tenantId/user`,
     require('./userList').default,
