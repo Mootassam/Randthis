@@ -144,9 +144,9 @@ function Signup() {
   return (
     <div className="auth__page">
       <div className="header__signup">
-        <h1 className="auth__title">Create Account</h1>
+        <h1 className="auth__title">{i18n('pages.auth.signup.createAccount')}</h1>
         <span className="auth__description __v2">
-          Sign up for a Marketing account.
+          {i18n('pages.auth.signup.signupForAccount')}
         </span>
       </div>
 
@@ -191,7 +191,7 @@ function Signup() {
                     <InputFormItem
                       type="tel"
                       name="phoneNumber"
-                      placeholder="Enter your phone number"
+                      placeholder={i18n('pages.auth.signup.phonePlaceholder')}
                       className="auth__input phone-input"
                     />
                   </div>
@@ -203,7 +203,7 @@ function Signup() {
                     <div className="dropdown-search">
                       <input
                         type="text"
-                        placeholder="Search countries..."
+                        placeholder={i18n('pages.auth.signup.searchCountries')}
                         className="search-input"
                         onClick={(e) => e.stopPropagation()}
                       />
@@ -278,11 +278,11 @@ function Signup() {
           <div className="auth__bottom">
             <button className="auth__button" disabled={loading} type="submit">
               <ButtonIcon loading={loading} />
-              <span>Sign up</span>
+              <span>{i18n('pages.auth.signup.signupButton')}</span>
             </button>
 
             <Link to="/auth/signin" className="remove__ligne">
-              <span className="auth__link">Already have an account?</span>
+              <span className="auth__link">{i18n('pages.auth.signup.alreadyHaveAccount')}</span>
             </Link>
           </div>
         </form>

@@ -1,16 +1,13 @@
 import React from "react";
 import SubHeader from "src/view/shared/Header/SubHeader";
+import { i18n } from "../../../i18n";
 
 function Events() {
   return (
     <div>
-      <SubHeader title="Events" path="/" />
+      <SubHeader title={i18n('pages.actions.event')} path="/" />
       <div className="images__events"> 
-
-<img src="/images/events/Events.png" alt=""  />
-<img src="/images/events/Events2.png" alt=""  />
-
-
+        <img src="/images/events/Event.jpg" alt="" />
       </div>
     </div>
   );

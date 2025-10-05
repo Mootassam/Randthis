@@ -1,4 +1,4 @@
-import React ,{useState} from "react";
+import React, { useState } from "react";
 import SubHeader from "src/view/shared/Header/SubHeader";
 import yupFormSchemas from "src/modules/shared/yup/yupFormSchemas";
 import * as yup from "yup";
@@ -10,6 +10,7 @@ import actions from 'src/modules/auth/authActions';
 import InputFormItem from "src/shared/form/InputFormItem";
 import selectors from "src/modules/auth/authSelectors";
 import ButtonIcon from "src/shared/ButtonIcon";
+
 const schema = yup.object().shape({
   oldPassword: yupFormSchemas.string(i18n("user.fields.oldPassword"), {
     required: true,
@@ -49,36 +50,34 @@ function ChangePassword() {
 
   return (
     <div>
-      <SubHeader title="Change password" path="/profile" />
+      <SubHeader title={i18n('pages.changePassword.title')} path="/profile" />
       <div className="app__wallet">
         <div className="wallet__">
-          <h3 className="hall">Change Password</h3>
+          <h3 className="hall">{i18n('pages.changePassword.header')}</h3>
           <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="wallet__form">
                 <div className="form__">
                   <div className="form__group">
                     <div className="label__form">
-                      <span style={{ color: "red" }}>*</span>
-                      <span style={{ fontSize: "13px" }}>Old Password</span>
+                      <span style={{ color: "red" }}>{i18n('pages.changePassword.requiredField')}</span>
+                      <span style={{ fontSize: "13px" }}>{i18n('pages.changePassword.oldPassword')}</span>
                     </div>
                     <div className="input__div">
                       <InputFormItem
                         type="password"
                         name="oldPassword"
                         autoComplete="old-password"
-                        
                         className="input__"
                       />
                     </div>
                   </div>
                   <div className="form__group">
                     <div className="label__form">
-                      <span style={{ color: "red" }}>*</span>
-                      <span style={{ fontSize: "13px" }}>New Password</span>
+                      <span style={{ color: "red" }}>{i18n('pages.changePassword.requiredField')}</span>
+                      <span style={{ fontSize: "13px" }}>{i18n('pages.changePassword.newPassword')}</span>
                     </div>
                     <div className="input__div">
-                     
                       <InputFormItem
                         type="password"
                         name="newPassword"
@@ -89,8 +88,8 @@ function ChangePassword() {
                   </div>
                   <div className="form__group">
                     <div className="label__form">
-                      <span style={{ color: "red" }}>*</span>
-                      <span style={{ fontSize: "13px" }}>Confirm Password</span>
+                      <span style={{ color: "red" }}>{i18n('pages.changePassword.requiredField')}</span>
+                      <span style={{ fontSize: "13px" }}>{i18n('pages.changePassword.confirmPassword')}</span>
                     </div>
                     <div className="input__div">
                       <InputFormItem
@@ -103,15 +102,20 @@ function ChangePassword() {
                   </div>
                 </div>
 
-                <button className="confirm" 
-                     disabled={saveLoading}
-              type="button"
-              onClick={form.handleSubmit(onSubmit)}> <ButtonIcon
-              loading={saveLoading}
-              iconClass="far fa-save"
-            /> &nbsp;Submit</button>
+                <button 
+                  className="confirm" 
+                  disabled={saveLoading}
+                  type="button"
+                  onClick={form.handleSubmit(onSubmit)}
+                >
+                  <ButtonIcon
+                    loading={saveLoading}
+                    iconClass="far fa-save"
+                  /> 
+                  &nbsp;{i18n('pages.changePassword.submit')}
+                </button>
                 <span style={{ fontSize: 13 }}>
-                  <b>Note:</b> &nbsp; Please fill out this information carefully
+                  <b>Note:</b> &nbsp; {i18n('pages.changePassword.note')}
                 </span>
               </div>
             </form>

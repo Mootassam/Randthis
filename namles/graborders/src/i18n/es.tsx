@@ -1,5 +1,6 @@
 import Withdraw from "src/view/pages/withdraw/Withdraw";
 
+
 const es = {
   app: {
     title: "El Cine Luz"
@@ -13,6 +14,786 @@ const es = {
     invitationcode: "Código de invitación",
     walletaddress: "Dirección de billetera"
   },
+
+  pages: {
+    home: {
+      levels: "Niveles VIP",
+      chooseLevel: "Elige tu nivel para maximizar tus ganancias",
+      welcome: "Bienvenido",
+      announcement: "Estimados usuarios, la plataforma Nowspeed ha vuelto a la normalidad y a su mejor estado, continúen ganando tanto como puedan desde la plataforma",
+
+      // Action Buttons
+      services: "Servicios",
+      events: "Eventos",
+      about: "Acerca de",
+      terms: "Términos",
+      certificate: "Certificado",
+      faqs: "Preguntas Frecuentes",
+
+      // VIP Level Cards
+      currentLevel: "Actual",
+      upgrade: "Actualizar",
+      profitNormal: "ganancia en productos normales",
+      profitPremium: "ganancia en productos premium",
+      maxOrders: "Máximo de pedidos por día",
+
+      // Modal
+      modal: {
+        levelDetails: "Detalles del Nivel",
+        levelLimit: "Límite del Nivel",
+        dailyOrders: "Pedidos Diarios",
+        commissionRate: "Tasa de Comisión",
+        cancel: "Cancelar",
+        upgradeNow: "Actualizar Ahora"
+      }
+    },
+
+  tabBottomNavigator: {
+    home: "Inicio",
+    grap: "Capturar",
+    records: "Registros",
+    starting: "Comenzar"
+  },
+    transaction: {
+      title: "Historial de Transacciones",
+      filters: {
+        all: "Todas",
+        withdraw: "Retiro",
+        deposit: "Depósito"
+      },
+      recentTransactions: "Transacciones Recientes",
+      transactionCount: "{0} transacciones",
+      types: {
+        deposit: "Depósito",
+        withdrawal: "Retiro"
+      },
+      status: {
+        completed: "Completado",
+        processing: "Procesando",
+        canceled: "Cancelado"
+      },
+      amount: {
+        deposit: "+${0}",
+        withdraw: "-${0}",
+        canceled: "${0}"
+      }
+    },
+
+    profile: {
+      title: "Perfil",
+      invitationCode: "Código de Invitación",
+      creditScore: "Puntuación de Crédito",
+      balance: "Saldo",
+      todayProfit: "Ganancia de Hoy",
+      frozenAmount: "Monto Congelado",
+      usd: "USD",
+
+      // Menu Sections
+      myFinancial: "Mis Finanzas",
+      myDetails: "Mis Detalles",
+      other: "Otro",
+
+      // Financial Items
+      recharge: "Recargar",
+      withdraw: "Retirar",
+
+      // Details Items
+      contactUs: "Contáctenos",
+      profile: "Perfil",
+      updateWithdrawal: "Actualizar detalles de retiro",
+
+      // Other Items
+      transaction: "Transacción",
+      tasksHistory: "Historial de Tareas",
+      security: "Seguridad",
+      notifications: "Notificaciones",
+      languages: "Idiomas",
+
+      // Buttons
+      logout: "Cerrar Sesión",
+      confirm: "Confirmar",
+      copied: "Copiado",
+
+      // Modals
+      rechargeModal: {
+        title: "Recarga",
+        text: "Por favor contacte al servicio al cliente para recargar"
+      },
+      withdrawModal: {
+        title: "Retiro",
+        text: "Por favor contacte al servicio al cliente para proceder con su retiro."
+      }
+    },
+
+    team: {
+      title: "Perfil",
+      personalInformation: "Información Personal",
+      accountDetails: "Los detalles de tu cuenta e información personal",
+
+      // Info Items
+      fullName: "Nombre Completo",
+      email: "Correo Electrónico",
+      phoneNumber: "Número de Teléfono",
+      country: "País",
+      gender: "Género",
+      invitationCode: "Código de Invitación",
+
+      // Gender Values
+      genderNotSpecified: "No especificado",
+
+      // Placeholders
+      notAvailable: "—"
+    },
+
+    language: {
+      title: "Idioma de la App",
+      selectLanguage: "Seleccionar Idioma",
+      choosePreferred: "Elige tu idioma preferido",
+      searchPlaceholder: "Buscar idiomas...",
+      currentLanguage: "Idioma Actual",
+
+      // Language names (if needed for dynamic content)
+      languages: {
+        english: "Inglés",
+        french: "Francés",
+        russian: "Ruso",
+        german: "Alemán",
+        spanish: "Español"
+      },
+      nativeNames: {
+        english: "English",
+        french: "Français",
+        russian: "Русский",
+        german: "Deutsch",
+        spanish: "Español"
+      }
+    },
+
+    online: {
+      title: "Servicio al Cliente",
+      description: "Si tienes alguna pregunta o encuentras problemas, por favor envíanos un correo electrónico o chatea con nuestro equipo de soporte al cliente en línea.",
+      contactWhatsApp: "Contactar por WhatsApp",
+      contactTelegram: "Contactar por Telegram"
+    },
+
+    notifications: {
+      title: "Notificaciones",
+      filters: {
+        all: "Todas",
+        deposit: "Depósito",
+        withdraw: "Retiro"
+      },
+      unreadCount: "{0} no leídas",
+      emptyState: {
+        title: "No se encontraron notificaciones",
+        description: "Aún no tienes notificaciones {0}."
+      },
+
+      // Notification Types
+      types: {
+        deposit_success: "Depósito Exitoso",
+        deposit_canceled: "Depósito Cancelado",
+        withdraw_success: "Retiro Exitoso",
+        withdraw_canceled: "Retiro Cancelado",
+        system: "Notificación del Sistema",
+        alert: "Alerta Importante",
+        default: "Notificación"
+      },
+
+      // Notification Messages
+      messages: {
+        deposit_success: "Tu depósito de ${0} se ha completado exitosamente.",
+        deposit_canceled: "Tu solicitud de depósito de ${0} ha sido cancelada.",
+        withdraw_success: "Tu retiro de ${0} se ha completado exitosamente.",
+        withdraw_canceled: "Tu solicitud de retiro de ${0} ha sido cancelada.",
+        system: "Notificación del sistema",
+        alert: "Notificación de alerta importante",
+        default: "Actualización de notificación"
+      },
+
+      // Status
+      status: {
+        unread: "no leída",
+        read: "leída"
+      }
+    },
+
+    portfolio: {
+      // Status Tabs
+      completed: "Completados",
+      pending: "Pendientes",
+      canceled: "Cancelados",
+
+      // Order Information
+      orderTime: "Hora del Pedido",
+      orderNumber: "Número de Pedido",
+      totalOrderAmount: "Monto total del pedido",
+      commission: "Comisión",
+      estimatedReturn: "Retorno estimado",
+
+      // Product Details
+      quantity: "X 1",
+      currency: "USD",
+
+      // Status Labels
+      status: {
+        completed: "Completado",
+        pending: "Pendiente",
+        canceled: "Cancelado"
+      }
+    },
+
+    changePassword: {
+      title: "Cambiar Contraseña",
+      header: "Cambiar Contraseña",
+      oldPassword: "Contraseña Antigua",
+      newPassword: "Nueva Contraseña",
+      confirmPassword: "Confirmar Contraseña",
+      submit: "Enviar",
+      note: "Por favor completa esta información cuidadosamente",
+      requiredField: "*"
+    },
+
+    withdraw: {
+      title: "Retiro",
+      withdrawAmount: "Monto del Retiro",
+      withdrawPassword: "Contraseña de Retiro",
+      availableBalance: "Saldo disponible",
+      confirm: "Confirmar",
+      rulesDescription: "Descripción de Reglas",
+      rules: {
+        minimum: "(1) El retiro mínimo es de 100 USD",
+        paymentTime: "(2) El pago se realizará dentro de la próxima hora, después de que se apruebe la solicitud de retiro.",
+        orderCompletion: "(3) El envío incompleto de pedidos diarios está sujeto a ningún retiro, todos los productos deben enviarse para retiro"
+      }
+    },
+
+    wallet: {
+      title: "Billetera",
+      withdrawalMethod: "Información del método de retiro",
+      username: "Nombre de Usuario",
+      walletName: "Nombre de Billetera",
+      choosePreferredCoin: "Elige la moneda preferida",
+      walletAddress: "Dirección de Billetera",
+      withdrawPassword: "Contraseña de Retiro",
+      submit: "Enviar",
+      note: "Por favor ten cuidado al completar esta información",
+      requiredField: "*"
+    },
+
+    grab: {
+      // Header Section
+      greeting: "Hola {0} 👏",
+
+      // Stats Cards
+      totalAmount: "Monto Total",
+      profitsAdded: "Las ganancias se agregarán aquí",
+      todaysCommission: "Comisión de Hoy",
+      commissionEarned: "Comisión Ganada",
+      currency: "USD",
+
+      // Optimization Section
+      startOptimization: "Iniciar Optimización",
+      progressCount: "{0}/{1}",
+
+      // Game Section
+      commissionRate: "Tasa de Comisión",
+      exclusiveChannel: "Canal exclusivo para miembros exclusivos",
+      startButton: "Iniciar",
+      processing: "Procesando...",
+
+      // Notice Section
+      notice: "Aviso",
+      supportHours: "Horario de Soporte en Línea 10:00 - 22:00",
+      contactSupport: "¡Por favor contacta al soporte en línea para tu asistencia!"
+    },
+
+    grapModal: {
+      orderTime: "Hora del Pedido",
+      orderNumber: "Número de Pedido",
+      totalOrderAmount: "Monto total del pedido",
+      commission: "Comisión",
+      estimatedReturn: "Retorno estimado",
+      cancel: "Cancelar",
+      submit: "Enviar",
+      quantity: "X 1",
+      currency: "USD"
+    },
+
+    actions: {
+      event: "Eventos",
+      tc: "Términos y Condiciones",
+      certificate: "Certificado",
+      faq: "Preguntas Frecuentes",
+      company: "Empresa"
+    },
+
+    auth: {
+      signin: {
+        welcomeBack: "¡Bienvenido de nuevo!",
+        signinToAccount: "Inicia sesión en tu cuenta de marketing",
+        signinButton: "Iniciar Sesión",
+        noAccount: "¿No tienes una cuenta?",
+        signupHere: "Regístrate aquí."
+      },
+      signup: {
+        createAccount: "Crear Cuenta",
+        signupForAccount: "Regístrate para una cuenta de marketing",
+        signupButton: "Registrarse",
+        alreadyHaveAccount: "¿Ya tienes una cuenta?",
+        phonePlaceholder: "Ingresa tu número de teléfono",
+        searchCountries: "Buscar países..."
+      }
+    },
+
+    csPage: {
+      customerSupport: "Servicio al Cliente",
+      hereToHelp: "¡Estamos aquí para ayudarte!",
+      howCanWeHelp: "¿Cómo podemos ayudarte hoy?",
+      platformNames: {
+        whatsapp: "WhatsApp",
+        telegram: "Telegram"
+      }
+    },
+  },
+
+  entities: {
+    record: {
+      menu: "Registros",
+      fields: {
+        user: "usuario",
+        product: "producto",
+        number: "Número de registro",
+        status: "estado",
+      },
+      list: {
+        title: "Lista de registros",
+      },
+      view: {
+        title: "Detalle del Registro",
+      },
+      edit: {
+        title: "Editar Registro",
+      },
+      create: {
+        success: "Producto enviado exitosamente.",
+      },
+      update: {
+        success: "Producto enviado exitosamente.",
+      },
+      destroy: {
+        success: "Registro eliminado exitosamente",
+      },
+      destroyAll: {
+        success: "Registro eliminado exitosamente",
+      },
+      enumerators: {
+        status: {
+          pending: "Pendiente",
+          completed: "Completado",
+          canceled: "Cancelado",
+        },
+      },
+    },
+
+    category: {
+      name: "categoría",
+      label: "Categorías",
+      menu: "Categorías",
+      exporterFileName: "categoria_exportacion",
+      list: {
+        menu: "Categorías",
+        title: "Categorías",
+      },
+      create: {
+        success: "Categoría guardada exitosamente",
+      },
+      update: {
+        success: "Categoría guardada exitosamente",
+      },
+      destroy: {
+        success: "Categoría eliminada exitosamente",
+      },
+      destroyAll: {
+        success: "Categoría(s) eliminada(s) exitosamente",
+      },
+      edit: {
+        title: "Editar Categoría",
+      },
+      fields: {
+        id: "Id",
+        name: "Nombre",
+        slug: "Slug",
+        photo: "Foto",
+        metaKeywords: "MetaKeywords",
+        metaDescriptions: "MetaDescriptions",
+        status: "Estado",
+        isFeature: "Es Destacado",
+        serialRange: "Serial",
+        serial: "Serial",
+        createdAt: "Creado en",
+        updatedAt: "Actualizado en",
+        createdAtRange: "Creado en",
+      },
+      enumerators: {
+        status: {
+          enable: "Habilitar",
+          disable: "Deshabilitar",
+        },
+      },
+      placeholders: {},
+      hints: {},
+      new: {
+        title: "Nueva Categoría",
+      },
+      view: {
+        title: "Ver Categoría",
+      },
+      importer: {
+        title: "Importar Categorías",
+        fileName: "plantilla_importacion_categoria",
+        hint: "Las columnas de Archivos/Imágenes deben ser las URL de los archivos separadas por espacio.",
+      },
+    },
+
+    product: {
+      name: "producto",
+      label: "Productos",
+      menu: "Productos",
+      exporterFileName: "producto_exportacion",
+      list: {
+        menu: "Productos",
+        title: "Productos",
+      },
+      create: {
+        success: "Producto guardado exitosamente",
+      },
+      update: {
+        success: "Producto guardado exitosamente",
+      },
+      destroy: {
+        success: "Producto eliminado exitosamente",
+      },
+      destroyAll: {
+        success: "Producto(s) eliminado(s) exitosamente",
+      },
+      edit: {
+        title: "Editar Producto",
+      },
+      fields: {
+        id: "Id",
+        name: "Nombre",
+        slug: "Slug",
+        tags: "Etiquetas",
+        video: "Video",
+        specificationName: "Nombre de Especificación",
+        specificationDesciption: "Descripción de Especificación",
+        isSpecification: "Es Especificación",
+        details: "Detalles",
+        photo: "Foto",
+        discountPriceRange: "Precio de Descuento",
+        discountPrice: "Precio Actual",
+        previousPriceRange: "Precio Anterior",
+        previousPrice: "Precio Anterior",
+        stockRange: "Inventario",
+        stock: "Inventario",
+        metaKeywords: "MetaKeywords",
+        metaDesctiption: "Descripción Corta",
+        status: "Estado",
+        isType: "Tipo",
+        dateRange: "Fecha",
+        date: "Fecha",
+        itemType: "Tipo de Artículo",
+        file: "Archivo",
+        link: "Enlace",
+        fileType: "Tipo de Archivo",
+        taxe: "Impuesto",
+        category: "Categoría",
+        subcategory: "Sub Categoría",
+        childcategory: "Categoría Infantil",
+        brand: "Marca",
+        gallery: "Galería",
+        createdAt: "Creado en",
+        updatedAt: "Actualizado en",
+        createdAtRange: "Creado en",
+      },
+      enumerators: {
+        status: {
+          enable: "Habilitar",
+          disable: "Deshabilitar",
+        },
+        itemType: {
+          physical: "Físico",
+          digitale: "Digital",
+        },
+        fileType: {
+          file: "Archivo",
+          link: "Enlace",
+        },
+        isType: {
+          new_arrival: "Nueva Llegada",
+          feature_product: "Producto Destacado",
+          top_pdroduct: "Producto Principal",
+          best_product: "Mejor Producto",
+          flash_deal_product: "Producto de Oferta Flash",
+        },
+      },
+      placeholders: {},
+      hints: {},
+      new: {
+        title: "Nuevo Producto",
+      },
+      view: {
+        title: "Ver Producto",
+      },
+      importer: {
+        title: "Importar Productos",
+        fileName: "plantilla_importacion_producto",
+        hint: "Las columnas de Archivos/Imágenes deben ser las URL de los archivos separadas por espacio.",
+      },
+    },
+    transaction: {
+      name: "transacción",
+      label: "Transacciones",
+      menu: "Transacciones",
+      exporterFileName: "transaccion_exportacion",
+      list: {
+        menu: "Transacciones",
+        title: "Transacciones",
+      },
+      create: {
+        success: "Transacción enviada exitosamente",
+      },
+      update: {
+        success: "Transacción guardada exitosamente",
+      },
+      destroy: {
+        success: "Transacción eliminada exitosamente",
+      },
+      destroyAll: {
+        success: "Transacción(es) eliminada(s) exitosamente",
+      },
+      edit: {
+        title: "Editar Transacción",
+      },
+      fields: {
+        id: "Id",
+        amountRange: "Monto",
+        amount: "Monto",
+        email: "Correo Electrónico",
+        tax: "Impuesto",
+        currencySign: "Signo de Moneda",
+        currencyValue: "Valor de Moneda",
+        orderId: "Id de Pedido",
+        createdAt: "Creado en",
+        updatedAt: "Actualizado en",
+        createdAtRange: "Creado en",
+      },
+      enumerators: {
+        status: {
+          pending: "Pendiente",
+          completed: "Éxito",
+          canceled: "Cancelado",
+        },
+      },
+      placeholders: {},
+      hints: {},
+      new: {
+        title: "Nueva Transacción",
+      },
+      view: {
+        title: "Ver Transacción",
+      },
+      importer: {
+        title: "Importar Transacciones",
+        fileName: "plantilla_importacion_transaccion",
+        hint: "Las columnas de Archivos/Imágenes deben ser las URL de los archivos separadas por espacio.",
+      },
+    },
+
+    order: {
+      name: "pedido",
+      label: "Pedidos",
+      menu: "Pedidos",
+      exporterFileName: "pedido_exportacion",
+      list: {
+        menu: "Pedidos",
+        title: "Pedidos",
+      },
+      create: {
+        success: "Pedido guardado exitosamente",
+      },
+      update: {
+        success: "Pedido guardado exitosamente",
+      },
+      destroy: {
+        success: "Pedido eliminado exitosamente",
+      },
+      destroyAll: {
+        success: "Pedido(s) eliminado(s) exitosamente",
+      },
+      edit: {
+        title: "Editar Pedido",
+      },
+      fields: {
+        id: "Id",
+        userId: "Usuario",
+        cart: "Carrito",
+        shipping: "Envío",
+        discountRange: "Descuento",
+        discount: "Descuento",
+        paymentMethod: "Método de Pago",
+        taxe: "Impuesto",
+        transactionNumber: "Número de Transacción",
+        orderStatus: "Estado del Pedido",
+        createdAt: "Creado en",
+        updatedAt: "Actualizado en",
+        createdAtRange: "Creado en",
+      },
+      enumerators: {
+        orderStatus: {
+          pending: "Pendiente",
+          in_progress: "En Progreso",
+          delivered: "Entregado",
+          canceled: "Cancelado",
+        },
+      },
+      placeholders: {},
+      hints: {},
+      new: {
+        title: "Nuevo Pedido",
+      },
+      view: {
+        title: "Ver Pedido",
+      },
+      importer: {
+        title: "Importar Pedidos",
+        fileName: "plantilla_importacion_pedido",
+        hint: "Las columnas de Archivos/Imágenes deben ser las URL de los archivos separadas por espacio.",
+      },
+    },
+  },
+
+  user: {
+    fields: {
+      genre: "Género",
+      username: "Nombre de usuario",
+      walletName: "Nombre de billetera",
+      id: "Id",
+      confirmPassword: "Confirmar contraseña",
+      avatars: "Avatar",
+      invitationcode: "Código de invitación",
+      email: "Correo electrónico",
+      emails: "Correo(s) electrónico(s)",
+      erc20: "Dirección de billetera ERC20",
+      trc20: "Dirección de billetera TRC20",
+      fullName: "Nombre",
+      balance: "Saldo",
+      firstName: "Nombre",
+      lastName: "Apellido",
+      status: "Estado",
+      phoneNumber: "Número de teléfono",
+      withdrawPassword: "Contraseña de retiro",
+      sector: "Sector",
+      employer: "Empleador",
+      profession: "Profesión",
+      address: "Dirección",
+      birthDate: "Fecha de nacimiento",
+      maritalStatus: "Estado civil",
+      facebookLink: "Enlace de Facebook",
+      sponsor: "Patrocinador",
+      role: "Rol",
+      createdAt: "Creado en",
+      updatedAt: "Actualizado en",
+      roleUser: "Rol/Usuario",
+      roles: "Roles",
+      createdAtRange: "Creado en",
+      password: "Contraseña",
+      oldPassword: "Contraseña anterior",
+      newPassword: "Nueva contraseña",
+      newPasswordConfirmation: "Confirmación de nueva contraseña",
+      rememberMe: "Recordarme",
+    },
+    sector: {
+      AGRO_ALIMENTAIRE: "Industria alimentaria",
+      ASSURANCES: "Seguros",
+      AUDIOVISUEL: "Audiovisual",
+      BANCAIRE: "Bancario",
+      CHIMIE: "Química",
+      COMPOSANTS_AUTOMOBILES: "Componentes automotrices",
+      DISTRIBUTION: "Distribución",
+      DISTRIBUTION_AUTOMOBILE: "Distribución automotriz",
+      DIVERS: "Varios",
+      FINANCIER: "Financiero",
+      HOLDING: "Holding",
+      IMMOBILIER: "Bienes raíces",
+      INDUSTRIEL: "Industrial",
+      LEASING: "Arrendamiento",
+      LOGISTIQUE_TRANSPORT: "Logística y transporte",
+      PHARMACEUTIQUE: "Farmacéutico",
+      SANTÉ: "Salud",
+      TOURSIME: "Turismo",
+      INFORMATION_TECHNOLOGY: "Tecnología de la información",
+    },
+    maritalStatus: {
+      célébataire: "Soltero",
+      marié: "Casado",
+    },
+    status: {
+      active: "Activo",
+      invited: "Invitado",
+      "empty-permissions": "Esperando permisos",
+      inactive: "Inactivo",
+    },
+
+    enumerators: {
+      status: {
+        USDT: "USD",
+        ETH: "ETH",
+        BTC: "BTC",
+      },
+      gender: {
+        male: "masculino",
+        female: "femenino",
+      }
+    },
+    invite: "Invitar",
+    validations: {
+      // eslint-disable-next-line
+      email: "El correo electrónico ${value} no es válido",
+    },
+    title: "Usuarios",
+    menu: "Usuarios",
+    doAddSuccess: "Usuario(s) guardado(s) exitosamente",
+    doUpdateSuccess: "Usuario guardado exitosamente",
+    exporterFileName: "usuarios_exportacion",
+    doDestroySuccess: "Usuario eliminado exitosamente",
+    doDestroyAllSelectedSuccess: "Usuarios eliminados exitosamente",
+    edit: {
+      title: "Editar Usuario",
+    },
+    new: {
+      title: "Invitar Usuario(s)",
+      titleModal: "Invitar Usuario",
+      emailsHint:
+        "Separe múltiples direcciones de correo electrónico usando el carácter coma.",
+    },
+    view: {
+      title: "Ver Usuario",
+      activity: "Actividad",
+    },
+    importer: {
+      title: "Importar Usuarios",
+      fileName: "plantilla_importacion_usuarios",
+      hint: "Las columnas de Archivos/Imágenes deben ser las URL de los archivos separadas por espacio. Las relaciones deben ser el ID de los registros referenciados separados por espacio. Los roles deben ser los ids de roles separados por espacio.",
+    },
+    errors: {
+      userAlreadyExists: "Ya existe un usuario con este correo electrónico",
+      userNotFound: "Usuario no encontrado",
+      revokingOwnPermission: `No puede revocar su propio permiso de administrador`,
+    },
+  },
+
   buttons: {
     login: "Iniciar sesión",
     registerNow: "Regístrate ahora",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { getLanguages, getLanguageCode } from '../../i18n';
+import { getLanguages, getLanguageCode, i18n } from '../../i18n';
 import actions from 'src/modules/layout/layoutActions';
 
 function I18nSelect() {
@@ -8,11 +8,12 @@ function I18nSelect() {
   };
 
   return (
+    
     <div className="i18n-container">
       <div className="language-header">
         <i className="fa-solid fa-language"></i>
-        <h2>Select Language</h2>
-        <p>Choose your preferred language</p>
+        <h2>{i18n('pages.language.selectLanguage')}</h2>
+        <p>{i18n('pages.language.choosePreferred')}</p>
       </div>
 
       <div className="languages-grid">

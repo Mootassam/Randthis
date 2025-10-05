@@ -55,9 +55,9 @@ function Signin() {
       </div>
       <div className="auth__header header__signup ">
         <img src="/images/home/logo.webp" alt="" />
-        <h1 className="auth__title"> Welcome Back!</h1>
+        <h1 className="auth__title">{i18n('pages.auth.signin.welcomeBack')}</h1>
         <span className="auth__description __v2">
-          Sign in to your marketing account
+          {i18n('pages.auth.signin.signinToAccount')}
         </span>
       </div>
 
@@ -86,10 +86,15 @@ function Signin() {
           <div className="auth__bottom">
             <button className="auth__button" disabled={loading} type="submit">
               <ButtonIcon loading={loading} />
-              <span>Sign in</span>
+              <span>{i18n('pages.auth.signin.signinButton')}</span>
             </button>
             <Link to="/auth/signup" className="remove__ligne">
-              <span className="auth__link">Don't have an account? <span className="signup__link">Sign up here.</span> </span>
+              <span className="auth__link">
+                {i18n('pages.auth.signin.noAccount')}{" "}
+                <span className="signup__link">
+                  {i18n('pages.auth.signin.signupHere')}
+                </span>
+              </span>
             </Link>
           </div>
         </form>

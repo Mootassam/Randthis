@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Dates from 'src/view/shared/utils/Dates';
+import { i18n } from "../../../i18n";
 
 function PrizeModal(props) {
     const { items, number, hideModal, submit } = props;
@@ -54,7 +55,7 @@ function PrizeModal(props) {
 
             <div className="prize-modal-container">
                 <div className={`prize-modal-content ${getGlowClass()}`}>
-                    
+
                     {/* Close Button */}
                     <div className="close-button" onClick={hideModal}>
                         <i className="fa fa-times"></i>
@@ -63,7 +64,7 @@ function PrizeModal(props) {
                     {/* Header with Crown */}
                     <div className="prize-header">
                         <div className="crown-icon">👑</div>
-                        <h2 className="prize-title">CONGRATULATIONS!</h2>
+                        <h2 className="prize-title">{i18n('pages.prizeModal.congratulations')}</h2>
                         <div className="crown-icon">👑</div>
                     </div>
 
@@ -77,16 +78,16 @@ function PrizeModal(props) {
                                     <div className="wheel-segment">💰</div>
                                     <div className="wheel-segment">🏆</div>
                                 </div>
-                                <div className="spinning-text">Spinning...</div>
+                                <div className="spinning-text">{i18n('pages.prizeModal.spinning')}</div>
                             </div>
                         ) : (
                             <div className="prize-reveal">
-                                <div className="prize-badge">PRIZE WON!</div>
+                                <div className="prize-badge">{i18n('pages.prizeModal.prizeWon')}</div>
                                 <div className="prize-item">
                                     <div className="prize-image-frame">
                                         {items?.photo && items?.photo[0]?.downloadUrl && (
-                                            <img 
-                                                src={items?.photo[0]?.downloadUrl} 
+                                            <img
+                                                src={items?.photo[0]?.downloadUrl}
                                                 alt={items?.title}
                                                 className="prize-img"
                                             />
@@ -98,7 +99,7 @@ function PrizeModal(props) {
                                     <div className="prize-details">
                                         <h3 className="prize-name">{items?.title}</h3>
                                         <div className="prize-amount-glow">
-                                            {items?.amount} USD
+                                            {items?.amount} {i18n('pages.prizeModal.currency')}
                                         </div>
                                     </div>
                                 </div>
@@ -106,21 +107,18 @@ function PrizeModal(props) {
                         )}
                     </div>
 
-                    {/* Order Information */}
-           
-
                     {/* Prize Breakdown */}
                     <div className="prize-breakdown">
-                        <div className="breakdown-header">💰 Prize Breakdown</div>
+                        <div className="breakdown-header">{i18n('pages.prizeModal.prizeBreakdown')}</div>
                         <div className="breakdown-grid">
                             <div className="breakdown-item">
-                                <span>Total Amount</span>
-                                <span className="amount-gold">{items?.amount} USD</span>
+                                <span>{i18n('pages.prizeModal.totalAmount')}</span>
+                                <span className="amount-gold">{items?.amount} {i18n('pages.prizeModal.currency')}</span>
                             </div>
                             <div className="breakdown-item highlight">
-                                <span>Your Winnings</span>
+                                <span>{i18n('pages.prizeModal.yourWinnings')}</span>
                                 <span className="winning-amount">
-                                    {items?.amount} USD
+                                    {items?.amount} {i18n('pages.prizeModal.currency')}
                                 </span>
                             </div>
                         </div>
@@ -128,20 +126,19 @@ function PrizeModal(props) {
 
                     {/* Action Buttons */}
                     <div className="prize-actions">
-                        <button 
-                            className="btn-claim-glow" 
+                        <button
+                            className="btn-claim-glow"
                             onClick={submit}
                             disabled={isSpinning}
                         >
-                            🎊 CLAIM PRIZE 🎊
+                            {i18n('pages.prizeModal.claimPrize')}
                         </button>
-                  
                     </div>
 
                     {/* Celebration Message */}
                     {showPrize && (
                         <div className="celebration-message">
-                            🥳 Amazing! You've won a fantastic prize! 🥳
+                            {i18n('pages.prizeModal.celebrationMessage')}
                         </div>
                     )}
                 </div>

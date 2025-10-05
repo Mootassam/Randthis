@@ -11,6 +11,7 @@ import InputFormItem from "src/shared/form/InputFormItem";
 import selector from "src/modules/auth/authSelectors";
 import SelectFormItem from "src/shared/form/SelectFormItem";
 import userEnumerators from "src/modules/user/userEnumerators";
+
 const schema = yup.object().shape({
   preferredcoin: yupFormSchemas.enumerator(i18n("user.fields.status"), {
     options: userEnumerators.wallet,
@@ -26,6 +27,7 @@ const schema = yup.object().shape({
     }
   ),
 });
+
 function Wallet() {
   const dispatch = useDispatch();
   const currentUser = useSelector(selector.selectCurrentUser);
@@ -33,18 +35,19 @@ function Wallet() {
   const [initialValues] = useState(() => {
     return {
       trc20: "" || currentUser.trc20,
-      // withdrawPassword: "" || currentUser.withdrawPassword,
       walletname: "" || currentUser.walletname,
       usernamewallet: "" || currentUser.usernamewallet,
       balance: currentUser?.balance,
       preferredcoin: currentUser?.preferredcoin
     };
   });
+  
   const form = useForm({
     resolver: yupResolver(schema),
     mode: "onSubmit",
     defaultValues: initialValues,
   });
+  
   const onSubmit = ({
     preferredcoin,
     withdrawPassword,
@@ -52,7 +55,6 @@ function Wallet() {
     walletname,
     usernamewallet,
   }) => {
-
     const values = {
       trc20: trc20,
       walletname: walletname,
@@ -63,20 +65,21 @@ function Wallet() {
     };
     dispatch(actions.doUpdateProfileWallet(values));
   };
+  
   return (
     <div>
-      <SubHeader title="Wallet" path="/profile" />
+      <SubHeader title={i18n('pages.wallet.title')} path="/profile" />
       <div className="app__wallet">
         <div className="wallet__">
-          <h3 className="hall">Withdrawal method information</h3>
+          <h3 className="hall">{i18n('pages.wallet.withdrawalMethod')}</h3>
           <FormProvider {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
               <div className="wallet__form">
                 <div className="form__">
                   <div className="form__group">
                     <div className="label__form">
-                      <span style={{ color: "red" }}>*</span>
-                      <span style={{ fontSize: "13px" }}>Username</span>
+                      <span style={{ color: "red" }}>{i18n('pages.wallet.requiredField')}</span>
+                      <span style={{ fontSize: "13px" }}>{i18n('pages.wallet.username')}</span>
                     </div>
                     <div className="input__div">
                       <InputFormItem
@@ -90,8 +93,8 @@ function Wallet() {
 
                   <div className="form__group">
                     <div className="label__form">
-                      <span style={{ color: "red" }}>*</span>
-                      <span style={{ fontSize: "13px" }}>Wallet Name</span>
+                      <span style={{ color: "red" }}>{i18n('pages.wallet.requiredField')}</span>
+                      <span style={{ fontSize: "13px" }}>{i18n('pages.wallet.walletName')}</span>
                     </div>
                     <div className="input__div">
                       <InputFormItem
@@ -105,9 +108,9 @@ function Wallet() {
 
                   <div className="form__group">
                     <div className="label__form">
-                      <span style={{ color: "red" }}>*</span>
+                      <span style={{ color: "red" }}>{i18n('pages.wallet.requiredField')}</span>
                       <span style={{ fontSize: "13px" }}>
-                        Choose preferred coin:
+                        {i18n('pages.wallet.choosePreferredCoin')}:
                       </span>
                     </div>
                     <div className="input__div">
@@ -124,8 +127,8 @@ function Wallet() {
 
                   <div className="form__group">
                     <div className="label__form">
-                      <span style={{ color: "red" }}>*</span>
-                      <span style={{ fontSize: "13px" }}>Wallet Address</span>
+                      <span style={{ color: "red" }}>{i18n('pages.wallet.requiredField')}</span>
+                      <span style={{ fontSize: "13px" }}>{i18n('pages.wallet.walletAddress')}</span>
                     </div>
                     <div className="input__div">
                       <InputFormItem
@@ -136,11 +139,12 @@ function Wallet() {
                       />
                     </div>
                   </div>
+                  
                   <div className="form__group">
                     <div className="label__form">
-                      <span style={{ color: "red" }}>*</span>
+                      <span style={{ color: "red" }}>{i18n('pages.wallet.requiredField')}</span>
                       <span style={{ fontSize: "13px" }}>
-                        Withdraw Password
+                        {i18n('pages.wallet.withdrawPassword')}
                       </span>
                     </div>
                     <div className="input__div">
@@ -155,11 +159,10 @@ function Wallet() {
                 </div>
 
                 <button className="confirm" type="submit">
-                  Submit
+                  {i18n('pages.wallet.submit')}
                 </button>
                 <span style={{ fontSize: 13 }}>
-                  <b>Note:</b> &nbsp; Please be careful when filling out this
-                  information.
+                  <b>Note:</b> &nbsp; {i18n('pages.wallet.note')}
                 </span>
               </div>
             </form>

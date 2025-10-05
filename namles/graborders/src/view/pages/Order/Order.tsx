@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import actions from "src/modules/record/list/recordListActions";
@@ -7,6 +6,7 @@ import LoadingModal from "src/shared/LoadingModal";
 import Calcule from "src/view/shared/utils/Calcule";
 import Dates from "src/view/shared/utils/Dates";
 import Nodata from "src/view/shared/Nodata";
+import { i18n } from "../../../i18n";
 
 function Portfolio() {
   const [active, setActive] = useState("completed");
@@ -15,49 +15,26 @@ function Portfolio() {
   const loading = useSelector(selectors.selectLoading);
   const total = useSelector(selectors.selectTotal);
   const selectHasRows = useSelector(selectors.selectHasRows);
-  // const [limit, setLimit] = useState<number>(10);
-  // const count = useSelector(selectors.selectCount);
 
   useEffect(() => {
     const values = {
       status: active,
     };
-
-
     dispatch(actions.doFetch(values, values));
   }, [dispatch, active]);
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll);
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, []);
-
-  // const handleScroll = () => {
-  //   if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-  //     if (count >= limit) {
-  //       const values = {
-  //         "status": active
-  //       };
-  //       setLimit(prevLimit => prevLimit + 10);
-  //       dispatch(actions.doFetch(values, values, limit + 10));
-  //     } else {
-  //       return;
-  //     }
-  //   }
-  // };
 
   const All = () => (
     <>
       {record.map((item, index) => (
         <div className="single__product" key={`${item.id}-${index}`}>
           <div className="order__time">
-            <div>Order Time: {Dates.currentDate(item?.date)}</div>
-            <div>Order Number: {item.number}</div>
+            <div>{i18n('pages.portfolio.orderTime')}: {Dates.currentDate(item?.date)}</div>
+            <div>{i18n('pages.portfolio.orderNumber')}: {item.number}</div>
           </div>
           <div className={`badge__ ${item?.status}`}>
-            <label>{item?.status}</label>
+            <label>
+              {i18n(`pages.portfolio.status.${item?.status}`)}
+            </label>
           </div>
           <div className="product__image">
             <div className="image__">
@@ -69,37 +46,30 @@ function Portfolio() {
               <div className="detail__name">{item?.product?.title}</div>
               <div className="detail__price">
                 <div>{item?.product?.amount}</div>
-                <div>X 1</div>
+                <div>{i18n('pages.portfolio.quantity')}</div>
               </div>
             </div>
           </div>
           <div className="bottom__cadre">
             <div className="cadre__detail">
-              <div>Total order amount</div>
-              <div>{item?.product?.amount} USD</div>
+              <div>{i18n('pages.portfolio.totalOrderAmount')}</div>
+              <div>{item?.product?.amount} {i18n('pages.portfolio.currency')}</div>
             </div>
             <div className="cadre__detail">
-              <div>Commission</div>
+              <div>{i18n('pages.portfolio.commission')}</div>
               <div>
-
-
-                {item && item?.product.type === "prizes" ? '0' :
-                  item?.product?.commission
-                }
-
-                % </div>
+                {item && item?.product.type === "prizes" ? '0' : item?.product?.commission}% 
+              </div>
             </div>
             <div className="cadre__detail">
-              <div>Estimated return</div>
+              <div>{i18n('pages.portfolio.estimatedReturn')}</div>
               <div>
                 {item && item?.product.type === "prizes" ? item?.product?.amount :
                   Calcule.calcule__total(
                     item?.product?.amount,
                     item?.product?.commission
                   )
-                }
-
-                USD
+                } {i18n('pages.portfolio.currency')}
               </div>
             </div>
           </div>
@@ -119,26 +89,25 @@ function Portfolio() {
           margin: 'auto'
         }}
       >
-
         <div className="order__list">
           <div className="list__actions">
             <div
               onClick={() => setActive("completed")}
               className={active === "completed" ? `active__order` : ""}
             >
-              <span>Completed</span>
+              <span>{i18n('pages.portfolio.completed')}</span>
             </div>
             <div
               onClick={() => setActive("pending")}
               className={active === "pending" ? `active__order` : ""}
             >
-              <span>Pending</span>
+              <span>{i18n('pages.portfolio.pending')}</span>
             </div>
             <div
               onClick={() => setActive("canceled")}
               className={active === "canceled" ? `active__order` : ""}
             >
-              <span>Canceled</span>
+              <span>{i18n('pages.portfolio.canceled')}</span>
             </div>
           </div>
         </div>

@@ -1,6 +1,9 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./styles/style.css";
+import { i18n } from "../../i18n";
+
+
 function TabBottomNavigator() {
   const location = useLocation();
 
@@ -10,33 +13,20 @@ function TabBottomNavigator() {
     {
       icon: "fas fa-home",
       path: "/",
-      name: "Home",
+      name: i18n('pages.tabBottomNavigator.home'),
     },
-
     {
       icon: "fas fa-exchange-alt",
       path: "/grap",
-      name: "Grap",
+      name: i18n('pages.tabBottomNavigator.grap'),
     },
     {
       icon: "fa-solid fa-clipboard-list",
       path: "/Order",
-      name: "Records",
+      name: i18n('pages.tabBottomNavigator.records'),
     },
-
-
-    // {
-    //   icon: "fa-solid fa-headphones",
-    //   path: "/Online",
-    //   name: "CS",
-    // },
-
-    // {
-    //   icon: "fas fa-user",
-    //   path: "/profile",
-    //   name: "Account",
-    // },
   ];
+
   return (
     <div className="tabbottomNavigator">
       {tabs.map((item, index) => (
@@ -47,10 +37,9 @@ function TabBottomNavigator() {
         >
           {item.path === "/grap" ? (
             <div className="grap__cirlce">
-           <img src="images/grap/Nowspeed.png" alt=""  />
-
-           <p className={`text__link ${isActive(item.path) && "active"}`}>
-                Starting
+              <img src="images/grap/Nowspeed.png" alt="" />
+              <p className={`text__link ${isActive(item.path) && "active"}`}>
+                {i18n('pages.tabBottomNavigator.starting')}
               </p>
             </div>
           ) : (

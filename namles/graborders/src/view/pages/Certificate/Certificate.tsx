@@ -4,6 +4,7 @@ import actions from "src/modules/company/list/companyListActions";
 import selectors from "src/modules/company/list/companyListSelectors";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingModal from "src/shared/LoadingModal";
+import { i18n } from "../../../i18n";
 
 function Tc() {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ function Tc() {
 
   return (
     <div>
-      <SubHeader title="Certificate" path="/" />
+      <SubHeader title={i18n('pages.actions.certificate')} path="/" />
       <div className="detaill__company" style={{ whiteSpace: "pre-line" }}>
         <img src="/images/Certificate.png" />
       </div>

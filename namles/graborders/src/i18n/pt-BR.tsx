@@ -13,7 +13,791 @@ const ptBR = {
     walletaddress: "Endereço da carteira"
 
   },
+ 
 
+
+
+  pages: {
+    home: {
+      levels: "Níveis VIP",
+      chooseLevel: "Escolha seu nível para maximizar seus ganhos",
+      welcome: "Bem-vindo",
+      announcement: "Caros usuários, a plataforma Nowspeed está de volta ao melhor e normal, continuem a ganhar o máximo possível da plataforma",
+
+      // Action Buttons
+      services: "Serviços",
+      events: "Eventos",
+      about: "Sobre",
+      terms: "T&C",
+      certificate: "Certificado",
+      faqs: "FAQ",
+
+      // VIP Level Cards
+      currentLevel: "Atual",
+      upgrade: "Atualizar",
+      profitNormal: "lucro em produtos normais",
+      profitPremium: "lucro em produtos premium",
+      maxOrders: "Máximo de pedidos por dia",
+
+      // Modal
+      modal: {
+        levelDetails: "Detalhes do Nível",
+        levelLimit: "Limite do Nível",
+        dailyOrders: "Pedidos Diários",
+        commissionRate: "Taxa de Comissão",
+        cancel: "Cancelar",
+        upgradeNow: "Atualizar Agora"
+      }
+    },
+
+ tabBottomNavigator: {
+    home: "Início",
+    grap: "Capturar",
+    records: "Registros",
+    starting: "Iniciar"
+  },
+    transaction: {
+      title: "Histórico de Transações",
+      filters: {
+        all: "Todas",
+        withdraw: "Saque",
+        deposit: "Depósito"
+      },
+      recentTransactions: "Transações Recentes",
+      transactionCount: "{0} transações",
+      types: {
+        deposit: "Depósito",
+        withdrawal: "Saque"
+      },
+      status: {
+        completed: "Concluído",
+        processing: "Processando",
+        canceled: "Cancelado"
+      },
+      amount: {
+        deposit: "+${0}",
+        withdraw: "-${0}",
+        canceled: "${0}"
+      }
+    },
+
+    profile: {
+      title: "Perfil",
+      invitationCode: "Código de Convite",
+      creditScore: "Pontuação de Crédito",
+      balance: "Saldo",
+      todayProfit: "Lucro de Hoje",
+      frozenAmount: "Valor Congelado",
+      usd: "USD",
+
+      // Menu Sections
+      myFinancial: "Minhas Finanças",
+      myDetails: "Meus Detalhes",
+      other: "Outro",
+
+      // Financial Items
+      recharge: "Recarregar",
+      withdraw: "Sacar",
+
+      // Details Items
+      contactUs: "Contate-nos",
+      profile: "Perfil",
+      updateWithdrawal: "Atualizar detalhes de saque",
+
+      // Other Items
+      transaction: "Transação",
+      tasksHistory: "Histórico de Tarefas",
+      security: "Segurança",
+      notifications: "Notificações",
+      languages: "Idiomas",
+
+      // Buttons
+      logout: "Sair",
+      confirm: "Confirmar",
+      copied: "Copiado",
+
+      // Modals
+      rechargeModal: {
+        title: "Recarregar",
+        text: "Por favor, entre em contato com o serviço ao cliente para recarregar"
+      },
+      withdrawModal: {
+        title: "Saque",
+        text: "Por favor, entre em contato com o serviço ao cliente para proceder com seu saque."
+      }
+    },
+
+    team: {
+      title: "Perfil",
+      personalInformation: "Informações Pessoais",
+      accountDetails: "Seus detalhes da conta e informações pessoais",
+
+      // Info Items
+      fullName: "Nome Completo",
+      email: "E-mail",
+      phoneNumber: "Número de Telefone",
+      country: "País",
+      gender: "Gênero",
+      invitationCode: "Código de Convite",
+
+      // Gender Values
+      genderNotSpecified: "Não especificado",
+
+      // Placeholders
+      notAvailable: "—"
+    },
+
+    language: {
+      title: "Idioma do App",
+      selectLanguage: "Selecionar Idioma",
+      choosePreferred: "Escolha seu idioma preferido",
+      searchPlaceholder: "Pesquisar idiomas...",
+      currentLanguage: "Idioma Atual",
+
+      // Language names (if needed for dynamic content)
+      languages: {
+        english: "Inglês",
+        french: "Francês",
+        russian: "Russo",
+        german: "Alemão",
+        spanish: "Espanhol"
+      },
+      nativeNames: {
+        english: "English",
+        french: "Français",
+        russian: "Русский",
+        german: "Deutsch",
+        spanish: "Español"
+      }
+    },
+
+    online: {
+      title: "Serviço ao Cliente",
+      description: "Se você tiver alguma dúvida ou encontrar problemas, por favor envie-nos um e-mail ou converse com nossa equipe de suporte ao cliente online.",
+      contactWhatsApp: "Contatar no WhatsApp",
+      contactTelegram: "Contatar no Telegram"
+    },
+
+    notifications: {
+      title: "Notificações",
+      filters: {
+        all: "Todas",
+        deposit: "Depósito",
+        withdraw: "Saque"
+      },
+      unreadCount: "{0} não lidas",
+      emptyState: {
+        title: "Nenhuma notificação encontrada",
+        description: "Você ainda não tem notificações {0}."
+      },
+
+      // Notification Types
+      types: {
+        deposit_success: "Depósito Bem-sucedido",
+        deposit_canceled: "Depósito Cancelado",
+        withdraw_success: "Saque Bem-sucedido",
+        withdraw_canceled: "Saque Cancelado",
+        system: "Notificação do Sistema",
+        alert: "Alerta Importante",
+        default: "Notificação"
+      },
+
+      // Notification Messages
+      messages: {
+        deposit_success: "Seu depósito de ${0} foi concluído com sucesso.",
+        deposit_canceled: "Sua solicitação de depósito de ${0} foi cancelada.",
+        withdraw_success: "Seu saque de ${0} foi concluído com sucesso.",
+        withdraw_canceled: "Sua solicitação de saque de ${0} foi cancelada.",
+        system: "Notificação do sistema",
+        alert: "Notificação de alerta importante",
+        default: "Atualização de notificação"
+      },
+
+      // Status
+      status: {
+        unread: "não lida",
+        read: "lida"
+      }
+    },
+
+    portfolio: {
+      // Status Tabs
+      completed: "Concluídos",
+      pending: "Pendentes",
+      canceled: "Cancelados",
+
+      // Order Information
+      orderTime: "Hora do Pedido",
+      orderNumber: "Número do Pedido",
+      totalOrderAmount: "Valor total do pedido",
+      commission: "Comissão",
+      estimatedReturn: "Retorno estimado",
+
+      // Product Details
+      quantity: "X 1",
+      currency: "USD",
+
+      // Status Labels
+      status: {
+        completed: "Concluído",
+        pending: "Pendente",
+        canceled: "Cancelado"
+      }
+    },
+
+    changePassword: {
+      title: "Alterar Senha",
+      header: "Alterar Senha",
+      oldPassword: "Senha Antiga",
+      newPassword: "Nova Senha",
+      confirmPassword: "Confirmar Senha",
+      submit: "Enviar",
+      note: "Por favor, preencha estas informações com cuidado",
+      requiredField: "*"
+    },
+
+    withdraw: {
+      title: "Saque",
+      withdrawAmount: "Valor do Saque",
+      withdrawPassword: "Senha de Saque",
+      availableBalance: "Saldo disponível",
+      confirm: "Confirmar",
+      rulesDescription: "Descrição das Regras",
+      rules: {
+        minimum: "(1) O saque mínimo é de 100 USD",
+        paymentTime: "(2) O pagamento será feito dentro da próxima hora, após a aprovação do pedido de saque.",
+        orderCompletion: "(3) O envio incompleto de pedidos diários está sujeito a nenhum saque, todos os produtos devem ser enviados para saque"
+      }
+    },
+
+    wallet: {
+      title: "Carteira",
+      withdrawalMethod: "Informações do método de saque",
+      username: "Nome de Usuário",
+      walletName: "Nome da Carteira",
+      choosePreferredCoin: "Escolha a moeda preferida",
+      walletAddress: "Endereço da Carteira",
+      withdrawPassword: "Senha de Saque",
+      submit: "Enviar",
+      note: "Por favor, tenha cuidado ao preencher estas informações",
+      requiredField: "*"
+    },
+
+    grab: {
+      // Header Section
+      greeting: "Olá {0} 👏",
+
+      // Stats Cards
+      totalAmount: "Valor Total",
+      profitsAdded: "Os lucros serão adicionados aqui",
+      todaysCommission: "Comissão de Hoje",
+      commissionEarned: "Comissão Ganha",
+      currency: "USD",
+
+      // Optimization Section
+      startOptimization: "Iniciar Otimização",
+      progressCount: "{0}/{1}",
+
+      // Game Section
+      commissionRate: "Taxa de Comissão",
+      exclusiveChannel: "Canal exclusivo para membros exclusivos",
+      startButton: "Iniciar",
+      processing: "Processando...",
+
+      // Notice Section
+      notice: "Aviso",
+      supportHours: "Horário de Suporte Online 10:00 - 22:00",
+      contactSupport: "Por favor, entre em contato com o suporte online para sua assistência!"
+    },
+
+    grapModal: {
+      orderTime: "Hora do Pedido",
+      orderNumber: "Número do Pedido",
+      totalOrderAmount: "Valor total do pedido",
+      commission: "Comissão",
+      estimatedReturn: "Retorno estimado",
+      cancel: "Cancelar",
+      submit: "Enviar",
+      quantity: "X 1",
+      currency: "USD"
+    },
+
+    actions: {
+      event: "Eventos",
+      tc: "Termos e Condições",
+      certificate: "Certificado",
+      faq: "Perguntas Frequentes",
+      company: "Empresa"
+    },
+
+    auth: {
+      signin: {
+        welcomeBack: "Bem-vindo de volta!",
+        signinToAccount: "Entre na sua conta de marketing",
+        signinButton: "Entrar",
+        noAccount: "Não tem uma conta?",
+        signupHere: "Cadastre-se aqui."
+      },
+      signup: {
+        createAccount: "Criar Conta",
+        signupForAccount: "Cadastre-se para uma conta de marketing",
+        signupButton: "Cadastrar",
+        alreadyHaveAccount: "Já tem uma conta?",
+        phonePlaceholder: "Digite seu número de telefone",
+        searchCountries: "Pesquisar países..."
+      }
+    },
+
+    csPage: {
+      customerSupport: "Serviço ao Cliente",
+      hereToHelp: "Estamos aqui para ajudá-lo!",
+      howCanWeHelp: "Como podemos ajudá-lo hoje?",
+      platformNames: {
+        whatsapp: "WhatsApp",
+        telegram: "Telegram"
+      }
+    },
+  },
+
+
+
+  entities: {
+    record: {
+      menu: "Registros",
+      fields: {
+        user: "usuário",
+        product: "produto",
+        number: "número do registro",
+        status: "status",
+      },
+      list: {
+        title: "Lista de registros",
+      },
+      view: {
+        title: "Detalhe do Registro",
+      },
+      edit: {
+        title: "Editar Registro",
+      },
+      create: {
+        success: "Produto enviado com sucesso.",
+      },
+      update: {
+        success: "Produto enviado com sucesso.",
+      },
+      destroy: {
+        success: "Registro excluído com sucesso",
+      },
+      destroyAll: {
+        success: "Registro excluído com sucesso",
+      },
+      enumerators: {
+        status: {
+          pending: "Pendente",
+          completed: "Concluído",
+          canceled: "Cancelado",
+        },
+      },
+    },
+
+    category: {
+      name: "categoria",
+      label: "Categorias",
+      menu: "Categorias",
+      exporterFileName: "exportacao_categoria",
+      list: {
+        menu: "Categorias",
+        title: "Categorias",
+      },
+      create: {
+        success: "Categoria salva com sucesso",
+      },
+      update: {
+        success: "Categoria salva com sucesso",
+      },
+      destroy: {
+        success: "Categoria excluída com sucesso",
+      },
+      destroyAll: {
+        success: "Categoria(s) excluída(s) com sucesso",
+      },
+      edit: {
+        title: "Editar Categoria",
+      },
+      fields: {
+        id: "Id",
+        name: "Nome",
+        slug: "Slug",
+        photo: "Foto",
+        metaKeywords: "Palavras-chave Meta",
+        metaDescriptions: "Descrições Meta",
+        status: "Status",
+        isFeature: "É Destaque",
+        serialRange: "Serial",
+        serial: "Serial",
+        createdAt: "Criado em",
+        updatedAt: "Atualizado em",
+        createdAtRange: "Criado em",
+      },
+      enumerators: {
+        status: {
+          enable: "Ativar",
+          disable: "Desativar",
+        },
+      },
+      placeholders: {},
+      hints: {},
+      new: {
+        title: "Nova Categoria",
+      },
+      view: {
+        title: "Ver Categoria",
+      },
+      importer: {
+        title: "Importar Categorias",
+        fileName: "modelo_importacao_categoria",
+        hint: "As colunas Arquivos/Imagens devem ser os URLs dos arquivos separados por espaço.",
+      },
+    },
+
+    product: {
+      name: "produto",
+      label: "Produtos",
+      menu: "Produtos",
+      exporterFileName: "exportacao_produto",
+      list: {
+        menu: "Produtos",
+        title: "Produtos",
+      },
+      create: {
+        success: "Produto salvo com sucesso",
+      },
+      update: {
+        success: "Produto salvo com sucesso",
+      },
+      destroy: {
+        success: "Produto excluído com sucesso",
+      },
+      destroyAll: {
+        success: "Produto(s) excluído(s) com sucesso",
+      },
+      edit: {
+        title: "Editar Produto",
+      },
+      fields: {
+        id: "Id",
+        name: "Nome",
+        slug: "Slug",
+        tags: "Tags",
+        video: "Vídeo",
+        specificationName: "Nome da Especificação",
+        specificationDesciption: "Descrição da Especificação",
+        isSpecification: "É Especificação",
+        details: "Detalhes",
+        photo: "Foto",
+        discountPriceRange: "Preço com Desconto",
+        discountPrice: "Preço Atual",
+        previousPriceRange: "Preço Anterior",
+        previousPrice: "Preço Anterior",
+        stockRange: "Estoque",
+        stock: "Estoque",
+        metaKeywords: "Palavras-chave Meta",
+        metaDesctiption: "Descrição Curta",
+        status: "Status",
+        isType: "Tipo",
+        dateRange: "Data",
+        date: "Data",
+        itemType: "Tipo de Item",
+        file: "Arquivo",
+        link: "Link",
+        fileType: "Tipo de Arquivo",
+        taxe: "Imposto",
+        category: "Categoria",
+        subcategory: "Subcategoria",
+        childcategory: "Sub-subcategoria",
+        brand: "Marca",
+        gallery: "Galeria",
+        createdAt: "Criado em",
+        updatedAt: "Atualizado em",
+        createdAtRange: "Criado em",
+      },
+      enumerators: {
+        status: {
+          enable: "Ativar",
+          disable: "Desativar",
+        },
+        itemType: {
+          physical: "físico",
+          digitale: "Digital",
+        },
+        fileType: {
+          file: "Arquivo",
+          link: "Link",
+        },
+        isType: {
+          new_arrival: "Novo Lançamento",
+          feature_product: "Produto em Destaque",
+          top_pdroduct: "Produto Popular",
+          best_product: "Melhor Produto",
+          flash_deal_product: "Produto em Promoção Relâmpago",
+        },
+      },
+      placeholders: {},
+      hints: {},
+      new: {
+        title: "Novo Produto",
+      },
+      view: {
+        title: "Ver Produto",
+      },
+      importer: {
+        title: "Importar Produtos",
+        fileName: "modelo_importacao_produto",
+        hint: "As colunas Arquivos/Imagens devem ser os URLs dos arquivos separados por espaço.",
+      },
+    },
+    transaction: {
+      name: "transação",
+      label: "Transações",
+      menu: "Transações",
+      exporterFileName: "exportacao_transacao",
+      list: {
+        menu: "Transações",
+        title: "Transações",
+      },
+      create: {
+        success: "Transação enviada com sucesso",
+      },
+      update: {
+        success: "Transação salva com sucesso",
+      },
+      destroy: {
+        success: "Transação excluída com sucesso",
+      },
+      destroyAll: {
+        success: "Transação(ões) excluída(s) com sucesso",
+      },
+      edit: {
+        title: "Editar Transação",
+      },
+      fields: {
+        id: "Id",
+        amountRange: "Valor",
+        amount: "Valor",
+        email: "Email",
+        tax: "Imposto",
+        currencySign: "Símbolo da Moeda",
+        currencyValue: "Valor da Moeda",
+        orderId: "ID do Pedido",
+        createdAt: "Criado em",
+        updatedAt: "Atualizado em",
+        createdAtRange: "Criado em",
+      },
+      enumerators: {
+        status: {
+          pending: "Pendente",
+          completed: "Sucesso",
+          canceled: "Cancelado",
+        },
+      },
+      placeholders: {},
+      hints: {},
+      new: {
+        title: "Nova Transação",
+      },
+      view: {
+        title: "Ver Transação",
+      },
+      importer: {
+        title: "Importar Transações",
+        fileName: "modelo_importacao_transacao",
+        hint: "As colunas Arquivos/Imagens devem ser os URLs dos arquivos separados por espaço.",
+      },
+    },
+
+    order: {
+      name: "pedido",
+      label: "Pedidos",
+      menu: "Pedidos",
+      exporterFileName: "exportacao_pedido",
+      list: {
+        menu: "Pedidos",
+        title: "Pedidos",
+      },
+      create: {
+        success: "Pedido salvo com sucesso",
+      },
+      update: {
+        success: "Pedido salvo com sucesso",
+      },
+      destroy: {
+        success: "Pedido excluído com sucesso",
+      },
+      destroyAll: {
+        success: "Pedido(s) excluído(s) com sucesso",
+      },
+      edit: {
+        title: "Editar Pedido",
+      },
+      fields: {
+        id: "Id",
+        userId: "Usuário",
+        cart: "Carrinho",
+        shipping: "Envio",
+        discountRange: "Desconto",
+        discount: "Desconto",
+        paymentMethod: "Método de Pagamento",
+        taxe: "Imposto",
+        transactionNumber: "Número da Transação",
+        orderStatus: "Status do Pedido",
+        createdAt: "Criado em",
+        updatedAt: "Atualizado em",
+        createdAtRange: "Criado em",
+      },
+      enumerators: {
+        orderStatus: {
+          pending: "Pendente",
+          in_progress: "Em Andamento",
+          delivered: "Entregue",
+          canceled: "Cancelado",
+        },
+      },
+      placeholders: {},
+      hints: {},
+      new: {
+        title: "Novo Pedido",
+      },
+      view: {
+        title: "Ver Pedido",
+      },
+      importer: {
+        title: "Importar Pedidos",
+        fileName: "modelo_importacao_pedido",
+        hint: "As colunas Arquivos/Imagens devem ser os URLs dos arquivos separados por espaço.",
+      },
+    },
+  },
+
+
+  user: {
+    fields: {
+      genre: "Gênero",
+      username: "Nome de usuário",
+      walletName: "Nome da carteira",
+      id: "Id",
+      confirmPassword: "Confirmar senha",
+      avatars: "Avatar",
+      invitationcode: "Código de convite",
+      email: "E-mail",
+      emails: "E-mail(s)",
+      erc20: "Endereço da carteira ERC20",
+      trc20: "Endereço da carteira TRC20",
+      fullName: "Nome",
+      balance: "Saldo",
+      firstName: "Primeiro nome",
+      lastName: "Sobrenome",
+      status: "Status",
+      phoneNumber: "Número de telefone",
+      withdrawPassword: "Senha de saque",
+      sector: "Setor",
+      employer: "Empregador",
+      profession: "Profissão",
+      address: "Endereço",
+      birthDate: "Data de nascimento",
+      maritalStatus: "Estado civil",
+      facebookLink: "Link do Facebook",
+      sponsor: "Patrocinador",
+      role: "Função",
+      createdAt: "Criado em",
+      updatedAt: "Atualizado em",
+      roleUser: "Função/Usuário",
+      roles: "Funções",
+      createdAtRange: "Criado em",
+      password: "Senha",
+      oldPassword: "Senha antiga",
+      newPassword: "Nova senha",
+      newPasswordConfirmation: "Confirmação da nova senha",
+      rememberMe: "Lembrar de mim",
+    },
+    sector: {
+      AGRO_ALIMENTAIRE: "Indústria alimentícia",
+      ASSURANCES: "Seguros",
+      AUDIOVISUEL: "Audiovisual",
+      BANCAIRE: "Bancário",
+      CHIMIE: "Química",
+      COMPOSANTS_AUTOMOBILES: "Componentes automotivos",
+      DISTRIBUTION: "Distribuição",
+      DISTRIBUTION_AUTOMOBILE: "Distribuição automotiva",
+      DIVERS: "Diversos",
+      FINANCIER: "Financeiro",
+      HOLDING: "Holding",
+      IMMOBILIER: "Imobiliário",
+      INDUSTRIEL: "Industrial",
+      LEASING: "Leasing",
+      LOGISTIQUE_TRANSPORT: "Logística e transporte",
+      PHARMACEUTIQUE: "Farmacêutico",
+      SANTÉ: "Saúde",
+      TOURSIME: "Turismo",
+      INFORMATION_TECHNOLOGY: "Tecnologia da informação",
+    },
+    maritalStatus: {
+      célébataire: "Solteiro",
+      marié: "Casado",
+    },
+    status: {
+      active: "Ativo",
+      invited: "Convidado",
+      "empty-permissions": "Aguardando permissões",
+      inactive: "Inativo",
+    },
+
+    enumerators: {
+      status: {
+        USDT: "USD",
+        ETH: "ETH",
+        BTC: "BTC",
+      },
+      gender: {
+        male: "masculino",
+        female: "feminino",
+      }
+    },
+    invite: "Convidar",
+    validations: {
+      // eslint-disable-next-line
+      email: "O e-mail ${value} é inválido",
+    },
+    title: "Usuários",
+    menu: "Usuários",
+    doAddSuccess: "Usuário(s) salvo(s) com sucesso",
+    doUpdateSuccess: "Usuário salvo com sucesso",
+    exporterFileName: "usuarios_exportacao",
+    doDestroySuccess: "Usuário excluído com sucesso",
+    doDestroyAllSelectedSuccess: "Usuários excluídos com sucesso",
+    edit: {
+      title: "Editar Usuário",
+    },
+    new: {
+      title: "Convidar Usuário(s)",
+      titleModal: "Convidar Usuário",
+      emailsHint:
+        "Separe múltiplos endereços de e-mail usando o caractere de vírgula.",
+    },
+    view: {
+      title: "Visualizar Usuário",
+      activity: "Atividade",
+    },
+    importer: {
+      title: "Importar Usuários",
+      fileName: "modelo_importacao_usuarios",
+      hint: "As colunas de Arquivos/Imagens devem ser os URLs dos arquivos separados por espaço. Os relacionamentos devem ser o ID dos registros referenciados separados por espaço. As funções devem ser os ids de funções separados por espaço.",
+    },
+    errors: {
+      userAlreadyExists: "Já existe um usuário com este e-mail",
+      userNotFound: "Usuário não encontrado",
+      revokingOwnPermission: `Você não pode revogar sua própria permissão de administrador`,
+    },
+  },
   buttons: {
     login: "Entrar",
     registerNow: "Registrar Agora",
@@ -45,7 +829,7 @@ const ptBR = {
     canceled: "Cancelado",
     notransaction: "Nenhuma transação até agora!",
     createdtime: "Data de Criação",
-    creationtime:"Hora de criação",
+    creationtime: "Hora de criação",
     orderNumber: "Número do Pedido",
     orderamount: "Valor do Pedido",
     income: "Rendimento",

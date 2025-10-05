@@ -20,6 +20,7 @@ const schema = yup.object().shape({
     max: 1,
   }),
 });
+
 function Profile() {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -39,6 +40,7 @@ function Profile() {
   const doSignout = () => {
     dispatch(authActions.doSignout());
   };
+
   const [initialValues] = useState(() => {
     const record = currentUser || {};
 
@@ -52,6 +54,7 @@ function Profile() {
     mode: "all",
     defaultValues: initialValues,
   });
+
   const goto = (param) => {
     history.push(param);
   };
@@ -60,7 +63,7 @@ function Profile() {
     const referenceCode = referenceCodeRef.current.innerText;
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(referenceCode)
-        .then(() => Message.success("Copied"))
+        .then(() => Message.success(i18n('pages.profile.copied')))
         .catch((error) => console.error("Error copying to clipboard:", error));
     } else {
       const textArea = document.createElement("textarea");
@@ -69,29 +72,68 @@ function Profile() {
       textArea.select();
       document.execCommand("copy");
       document.body.removeChild(textArea);
-      Message.success("Copied");
+      Message.success(i18n('pages.profile.copied'));
     }
   };
 
   const menuItems = {
     financial: [
-      { icon: "fa-solid fa-dollar-sign", name: "Recharge", action: () => setRecharge(true) },
-      { icon: "fa-solid fa-money-check", name: "Withdraw", action: () => goto("/withdraw") }
+      {
+        icon: "fa-solid fa-dollar-sign",
+        name: i18n('pages.profile.recharge'),
+        action: () => setRecharge(true)
+      },
+      {
+        icon: "fa-solid fa-money-check",
+        name: i18n('pages.profile.withdraw'),
+        action: () => goto("/withdraw")
+      }
     ],
     details: [
-      { icon: "fa-solid fa-headphones", name: "Contact us", url: "/online" },
-      { icon: "fa-solid fa-user", name: "Profile", url: "/myprofile" },
-      { icon: "fa-solid fa-wallet", name: "Update withdrawal details", url: "/wallet" }
+      {
+        icon: "fa-solid fa-headphones",
+        name: i18n('pages.profile.contactUs'),
+        url: "/online"
+      },
+      {
+        icon: "fa-solid fa-user",
+        name: i18n('pages.profile.profile'),
+        url: "/myprofile"
+      },
+      {
+        icon: "fa-solid fa-wallet",
+        name: i18n('pages.profile.updateWithdrawal'),
+        url: "/wallet"
+      }
     ],
     other: [
-      { icon: "fa-solid fa-arrow-right-arrow-left", name: "Transaction", url: "/transacation" },
-      { icon: "fa-solid fa-clock-rotate-left", name: "Tasks History", url: "/order" },
-      { icon: "fa-solid fa-lock", name: "Security", url: "/security" },
-      { icon: "fa-solid fa-bell", name: "Notifications", url: "/notifications" }, // ✅ new
-      { icon: "fa-solid fa-language", name: "Languages", url: "/languages" }       // ✅ new
+      {
+        icon: "fa-solid fa-arrow-right-arrow-left",
+        name: i18n('pages.profile.transaction'),
+        url: "/transacation"
+      },
+      {
+        icon: "fa-solid fa-clock-rotate-left",
+        name: i18n('pages.profile.tasksHistory'),
+        url: "/order"
+      },
+      {
+        icon: "fa-solid fa-lock",
+        name: i18n('pages.profile.security'),
+        url: "/security"
+      },
+      {
+        icon: "fa-solid fa-bell",
+        name: i18n('pages.profile.notifications'),
+        url: "/notifications"
+      },
+      {
+        icon: "fa-solid fa-language",
+        name: i18n('pages.profile.languages'),
+        url: "/languages"
+      }
     ]
   };
-
 
   return (
     <div className="profile-container">
@@ -112,7 +154,7 @@ function Profile() {
             <div className="profile-info">
               <div className="user-name">{currentUser?.fullName}</div>
               <div className="invitation-code">
-                <span>Invitation Code: </span>
+                <span>{i18n('pages.profile.invitationCode')}</span>
                 <span ref={referenceCodeRef} className="code-text">
                   {currentUser?.refcode}
                 </span>
@@ -126,7 +168,7 @@ function Profile() {
 
           {/* Credit Score */}
           <div className="credit-score">
-            <div className="score-label">Credit Score</div>
+            <div className="score-label">{i18n('pages.profile.creditScore')}</div>
             <div className="score-bar-container">
               <div className="score-bar">
                 <div
@@ -141,21 +183,21 @@ function Profile() {
           {/* Stats */}
           <div className="stats-grid">
             <div className="stat-item">
-              <div className="stat-label">Balance</div>
+              <div className="stat-label">{i18n('pages.profile.balance')}</div>
               <div className="stat-amount">
-                {currentUser?.balance?.toFixed(2) || 0.0} USD
+                {currentUser?.balance?.toFixed(2) || 0.0} {i18n('pages.profile.usd')}
               </div>
             </div>
             <div className="stat-divider"></div>
             <div className="stat-item">
-              <div className="stat-label">Today Profit</div>
-              <div className="stat-amount">{totalperday} USD</div>
+              <div className="stat-label">{i18n('pages.profile.todayProfit')}</div>
+              <div className="stat-amount">{totalperday} {i18n('pages.profile.usd')}</div>
             </div>
             <div className="stat-divider"></div>
             <div className="stat-item">
-              <div className="stat-label">Frozen Amount</div>
+              <div className="stat-label">{i18n('pages.profile.frozenAmount')}</div>
               <div className="stat-amount">
-                {currentUser?.freezeblance?.toFixed(2)} USD
+                {currentUser?.freezeblance?.toFixed(2)} {i18n('pages.profile.usd')}
               </div>
             </div>
           </div>
@@ -166,7 +208,7 @@ function Profile() {
       <div className="menu-sections">
         {/* Financial Section */}
         <div className="menu-section">
-          <div className="section-title">My Financial</div>
+          <div className="section-title">{i18n('pages.profile.myFinancial')}</div>
           <div className="section-items">
             {menuItems.financial.map((item, index) => (
               <div
@@ -186,7 +228,7 @@ function Profile() {
 
         {/* Details Section */}
         <div className="menu-section">
-          <div className="section-title">My Details</div>
+          <div className="section-title">{i18n('pages.profile.myDetails')}</div>
           <div className="section-items">
             {menuItems.details.map((item, index) => (
               <Link key={index} to={item.url} className="menu-link">
@@ -204,7 +246,7 @@ function Profile() {
 
         {/* Other Section */}
         <div className="menu-section">
-          <div className="section-title">Other</div>
+          <div className="section-title">{i18n('pages.profile.other')}</div>
           <div className="section-items">
             {menuItems.other.map((item, index) => (
               <Link key={index} to={item.url} className="menu-link">
@@ -224,7 +266,7 @@ function Profile() {
       {/* Logout Button */}
       <div className="logout-button" onClick={doSignout}>
         <i className="fa-solid fa-arrow-right-from-bracket"></i>
-        Logout
+        {i18n('pages.profile.logout')}
       </div>
 
       {/* Recharge Modal */}
@@ -232,20 +274,20 @@ function Profile() {
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <div className="modal-title">Recharge</div>
+              <div className="modal-title">{i18n('pages.profile.rechargeModal.title')}</div>
               <i
                 className="fa fa-close modal-close"
                 onClick={() => setRecharge(false)}
               />
             </div>
             <p className="modal-text">
-              Please contact customer service to recharge
+              {i18n('pages.profile.rechargeModal.text')}
             </p>
             <div
               className="modal-confirm"
               onClick={() => goto("/Online")}
             >
-              Confirm
+              {i18n('pages.profile.confirm')}
             </div>
           </div>
         </div>
@@ -256,24 +298,25 @@ function Profile() {
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <div className="modal-title">Withdrawal</div>
+              <div className="modal-title">{i18n('pages.profile.withdrawModal.title')}</div>
               <i
                 className="fa fa-close modal-close"
                 onClick={() => setDeposit(false)}
               />
             </div>
             <p className="modal-text">
-              Please contact customer service to proceed with your withdrawal.
+              {i18n('pages.profile.withdrawModal.text')}
             </p>
             <div
               className="modal-confirm"
               onClick={() => goto("/Online")}
             >
-              Confirm
+              {i18n('pages.profile.confirm')}
             </div>
           </div>
         </div>
       )}
+
 
       <style>{`.profile-container {
   max-width: 400px;

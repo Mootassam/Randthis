@@ -15,6 +15,7 @@ import authActions from "src/modules/auth/authActions";
 import GrapModal from "./GrapModal";
 import productListActions from "src/modules/product/list/productListActions";
 import PrizeModal from "./PrizeModal";
+import { i18n } from "../../../i18n";
 
 const Grappage = () => {
   const [randomImages, setRandomImages] = useState(Array(8).fill(""));
@@ -26,7 +27,6 @@ const Grappage = () => {
   const [number] = useState(Dates.Number());
   const currentUser = useSelector(authSelectors.selectCurrentUser);
   const totalperday = useSelector(recordSelector.selectTotalPerday);
-
 
   const displayRandomImage = () => {
     const updateImage = async (index) => {
@@ -73,8 +73,6 @@ const Grappage = () => {
     return cleanup;
   }, [dispatch]);
 
-
-
   const submit = async () => {
     const values = {
       number: number,
@@ -83,7 +81,6 @@ const Grappage = () => {
       user: currentUser.id,
     };
     await dispatch(recordActions.doCreate(values));
-
   };
 
   const disableButton = currentUser.balance <= 0 || !currentUser.grab || currentUser.tasksDone >= currentUser.vip.dailyorder;
@@ -96,7 +93,7 @@ const Grappage = () => {
           <div className="greeting-content">
             <img src="/images/user.png" alt="User" className="user-avatar" />
             <span className="greeting-text">
-              Hi <b>{currentUser.fullName}</b> 👏
+              {i18n('pages.grab.greeting', currentUser.fullName)}
             </span>
           </div>
           <div className="vip-badge">
@@ -113,13 +110,13 @@ const Grappage = () => {
               <img src="/images/wallet.png" alt="Wallet" />
             </div>
             <div className="stat-info">
-              <div className="stat-title">Total Amount</div>
-              <div className="stat-subtitle">Profits will be added here</div>
+              <div className="stat-title">{i18n('pages.grab.totalAmount')}</div>
+              <div className="stat-subtitle">{i18n('pages.grab.profitsAdded')}</div>
             </div>
           </div>
           <div className="stat-amount">
             <div className="amount-value">{currentUser.balance.toFixed(2)}</div>
-            <div className="amount-currency">USD</div>
+            <div className="amount-currency">{i18n('pages.grab.currency')}</div>
           </div>
         </div>
 
@@ -129,13 +126,13 @@ const Grappage = () => {
               <img src="/images/T.png" alt="Commission" />
             </div>
             <div className="stat-info">
-              <div className="stat-title">Today's Commission</div>
-              <div className="stat-subtitle">Commission Earned</div>
+              <div className="stat-title">{i18n('pages.grab.todaysCommission')}</div>
+              <div className="stat-subtitle">{i18n('pages.grab.commissionEarned')}</div>
             </div>
           </div>
           <div className="stat-amount">
             <div className="amount-value">{totalperday}</div>
-            <div className="amount-currency">USD</div>
+            <div className="amount-currency">{i18n('pages.grab.currency')}</div>
           </div>
         </div>
       </div>
@@ -143,9 +140,9 @@ const Grappage = () => {
       {/* Optimization Section */}
       <div className="optimization-section">
         <div className="optimization-header">
-          <span>Start Optimization</span>
+          <span>{i18n('pages.grab.startOptimization')}</span>
           <span className="progress-count">
-            {currentUser?.tasksDone}/{currentUser?.vip?.dailyorder}
+            {i18n('pages.grab.progressCount', currentUser?.tasksDone, currentUser?.vip?.dailyorder)}
           </span>
         </div>
       </div>
@@ -156,12 +153,12 @@ const Grappage = () => {
           <div className="vip-info">
             <div className="vip-title">{record?.vip?.title}</div>
             <div className="commission-rate">
-              <span className="rate-label">Commission Rate: </span>
+              <span className="rate-label">{i18n('pages.grab.commissionRate')}: </span>
               <span className="rate-value">{record?.vip?.comisionrate}%</span>
             </div>
           </div>
           <div className="channel-info">
-            <span>Exclusive channel for exclusive members</span>
+            <span>{i18n('pages.grab.exclusiveChannel')}</span>
           </div>
         </div>
 
@@ -184,7 +181,7 @@ const Grappage = () => {
                     disabled={disableButton}
                   >
                     <span className="button-text">
-                      {loading ? "Processing..." : "Start"}
+                      {loading ? i18n('pages.grab.processing') : i18n('pages.grab.startButton')}
                     </span>
                   </button>
                 ) : (
@@ -204,18 +201,18 @@ const Grappage = () => {
         </div>
 
         <div className="channel-footer">
-          <span>Exclusive channel for exclusive members</span>
+          <span>{i18n('pages.grab.exclusiveChannel')}</span>
         </div>
       </div>
 
       {/* Notice Section */}
       <div className="notice-section">
         <div className="notice-header">
-          <b>Notice:</b>
+          <b>{i18n('pages.grab.notice')}:</b>
         </div>
         <ul className="notice-list">
-          <li>Online Support Hours 10:00 - 22:00</li>
-          <li>Please contact online support for your assistance!</li>
+          <li>{i18n('pages.grab.supportHours')}</li>
+          <li>{i18n('pages.grab.contactSupport')}</li>
         </ul>
       </div>
 
@@ -228,6 +225,7 @@ const Grappage = () => {
       {Modal && (
         <GrapModal items={items} number={number} hideModal={hideModal} submit={submit} />
       )}
+
 
       <style>{`
         .grappage-container {

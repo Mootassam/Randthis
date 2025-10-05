@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Dates from "src/view/shared/utils/Dates";
 import LoadingModal from "src/shared/LoadingModal";
 import Nodata from "src/view/shared/Nodata";
+import { i18n } from "../../../i18n";
 
 function Transaction() {
   const [active, setActive] = useState("withdraw");
@@ -68,9 +69,18 @@ function Transaction() {
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      success: { class: 'status-completed', text: 'Completed' },
-      pending: { class: 'status-pending', text: 'Processing' },
-      canceled: { class: 'status-canceled', text: 'Canceled' },
+      success: {
+        class: 'status-completed',
+        text: i18n('pages.transaction.status.completed')
+      },
+      pending: {
+        class: 'status-pending',
+        text: i18n('pages.transaction.status.processing')
+      },
+      canceled: {
+        class: 'status-canceled',
+        text: i18n('pages.transaction.status.canceled')
+      },
     };
 
     const config = statusConfig[status] || statusConfig.pending;
@@ -91,11 +101,23 @@ function Transaction() {
           ? 'amount-deposit'
           : 'amount-withdraw';
 
+    const amountText = item.status === 'canceled' || item.status === 'failed'
+      ? i18n('pages.transaction.amount.canceled', item?.amount)
+      : item.type === 'deposit'
+        ? i18n('pages.transaction.amount.deposit', item?.amount)
+        : i18n('pages.transaction.amount.withdraw', item?.amount);
+
     return (
       <div className={`transaction-amount ${amountClass}`}>
-        {sign}${item?.amount}
+        {amountText}
       </div>
     );
+  };
+
+  const getTransactionTypeText = (type) => {
+    return type === 'deposit'
+      ? i18n('pages.transaction.types.deposit')
+      : i18n('pages.transaction.types.withdrawal');
   };
 
   const all = (item) => {
@@ -108,7 +130,7 @@ function Transaction() {
         <div className="transaction-content">
           <div className="transaction-header">
             <div className="transaction-type">
-              {item.type === 'deposit' ? 'Deposit' : 'Withdrawal'}
+              {getTransactionTypeText(item.type)}
             </div>
             {getStatusBadge(item.status)}
           </div>
@@ -118,13 +140,11 @@ function Transaction() {
               <i className="fa-regular fa-clock"></i>
               {Dates.Date(item?.createdAt)}
             </div>
-
           </div>
         </div>
 
         <div className="transaction-amount-section">
           {getAmountDisplay(item)}
-
         </div>
       </div>
     );
@@ -132,13 +152,7 @@ function Transaction() {
 
   return (
     <div className="transaction-page-container">
-      <SubHeader title="Transaction History" path="/profile" />
-
-      {/* Summary Cards */}
-      <div className="summary-section">
-
-
-      </div>
+      <SubHeader title={i18n('pages.transaction.title')} path="/profile" />
 
       {/* Filter Tabs */}
       <div className="transaction-filter-section">
@@ -148,21 +162,21 @@ function Transaction() {
             onClick={allTransactions}
           >
             <i className="fa-solid fa-list"></i>
-            <span>All</span>
+            <span>{i18n('pages.transaction.filters.all')}</span>
           </div>
           <div
             onClick={withdraw}
             className={`filter-tab ${active === "withdraw" ? 'filter-tab-active' : ''}`}
           >
             <i className="fa-solid fa-arrow-up"></i>
-            <span>Withdraw</span>
+            <span>{i18n('pages.transaction.filters.withdraw')}</span>
           </div>
           <div
             onClick={deposit}
             className={`filter-tab ${active === "deposit" ? 'filter-tab-active' : ''}`}
           >
             <i className="fa-solid fa-arrow-down"></i>
-            <span>Deposit</span>
+            <span>{i18n('pages.transaction.filters.deposit')}</span>
           </div>
         </div>
       </div>
@@ -173,8 +187,10 @@ function Transaction() {
 
         {!loading && record && record.length > 0 && (
           <div className="transaction-list-header">
-            <h3 className="recent">Recent Transactions</h3>
-            <div className="transaction-count">{record.length} transactions</div>
+            <h3 className="recent">{i18n('pages.transaction.recentTransactions')}</h3>
+            <div className="transaction-count">
+              {i18n('pages.transaction.transactionCount', record.length)}
+            </div>
           </div>
         )}
 
@@ -187,7 +203,8 @@ function Transaction() {
         {!loading && !selectHasRows && <Nodata />}
       </div>
 
-      <style jsx>{`
+
+      <style>{`
         .transaction-page-container {
           max-width: 400px;
           margin: 0 auto;

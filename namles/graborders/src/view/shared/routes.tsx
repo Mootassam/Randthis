@@ -1,10 +1,11 @@
+
 import Permissions from "src/security/permissions";
 const permissions = Permissions.values;
 
 const privateRoutes = [
   {
     path: "/",
-    loader: () => import("src/view/pages/Markets/Market"),
+    loader: () => import("src/view/pages/Markets/Home"),
     permissionRequired: permissions.categoryRead,
     exact: true,
   },

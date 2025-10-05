@@ -1,5 +1,6 @@
 import React from 'react'
 import Dates from 'src/view/shared/utils/Dates';
+import { i18n } from "../../../i18n";
 
 function GrapModal(props) {
     const { items, number, hideModal, submit } = props;
@@ -8,6 +9,7 @@ function GrapModal(props) {
         const total = (parseFloat(comission) / 100) * parseFloat(price);
         return total.toFixed(3);
     };
+    
     return (
         <div className="modal-overlay">
             <div className="product-modal">
@@ -17,11 +19,9 @@ function GrapModal(props) {
                     </div>
 
                     <div className="order-info">
-                        <div>Order Time: {Dates.current()}</div>
-                        <div>Order Number: N{number}</div>
+                        <div>{i18n('pages.grapModal.orderTime')}: {Dates.current()}</div>
+                        <div>{i18n('pages.grapModal.orderNumber')}: N{number}</div>
                     </div>
-
-
 
                     <div className="product-display">
                         <div className="product-image">
@@ -32,25 +32,25 @@ function GrapModal(props) {
                         <div className="product-details">
                             <div className="product-name">{items?.title}</div>
                             <div className="product-quantity">
-                                <div>{items?.amount} USD</div>
-                                <div>X 1</div>
+                                <div>{items?.amount} {i18n('pages.grapModal.currency')}</div>
+                                <div>{i18n('pages.grapModal.quantity')}</div>
                             </div>
                         </div>
                     </div>
 
                     <div className="order-summary">
                         <div className="summary-row">
-                            <span>Total order amount</span>
-                            <span>{items?.amount} USD</span>
+                            <span>{i18n('pages.grapModal.totalOrderAmount')}</span>
+                            <span>{items?.amount} {i18n('pages.grapModal.currency')}</span>
                         </div>
                         <div className="summary-row">
-                            <span>Commission</span>
+                            <span>{i18n('pages.grapModal.commission')}</span>
                             <span>{items?.commission}%</span>
                         </div>
                         <div className="summary-row">
-                            <span>Estimated return</span>
+                            <span>{i18n('pages.grapModal.estimatedReturn')}</span>
                             <span>
-                                {calcule__total(items?.amount, items?.commission)} USD
+                                {calcule__total(items?.amount, items?.commission)} {i18n('pages.grapModal.currency')}
                             </span>
                         </div>
                     </div>
@@ -59,10 +59,10 @@ function GrapModal(props) {
                         <div className="action-divider"></div>
                         <div className="action-buttons">
                             <button className="cancel-button" onClick={hideModal}>
-                                Cancel
+                                {i18n('pages.grapModal.cancel')}
                             </button>
                             <button className="submit-button" onClick={submit}>
-                                Submit
+                                {i18n('pages.grapModal.submit')}
                             </button>
                         </div>
                     </div>

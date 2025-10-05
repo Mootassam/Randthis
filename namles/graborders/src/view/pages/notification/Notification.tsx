@@ -5,6 +5,7 @@ import SubHeader from "src/view/shared/Header/SubHeader";
 import selectors from 'src/modules/notification/list/notificationListSelectors';
 import actions from 'src/modules/notification/list/notificationListActions';
 import actionsForm from 'src/modules/notification/form/notificationFormActions';
+import { i18n } from "../../../i18n";
 
 function Notifications() {
   const [filter, setFilter] = useState("all");
@@ -12,9 +13,10 @@ function Notifications() {
   const rows = useSelector(selectors.selectRows);
   const loading = useSelector(selectors.selectLoading);
 
-  const asRead =(id)=>{
+  const asRead = (id) => {
     dispatch(actionsForm.doMarkAsRead(id));
   }
+
   useEffect(() => {
     dispatch(actions.doFetch())
   }, [dispatch])
@@ -35,19 +37,19 @@ function Notifications() {
     
     switch (notification.type) {
       case "deposit_success":
-        return `Your deposit of $${amount} has been completed successfully.`;
+        return i18n('pages.notifications.messages.deposit_success', amount);
       case "deposit_canceled":
-        return `Your deposit request for $${amount} has been canceled.`;
+        return i18n('pages.notifications.messages.deposit_canceled', amount);
       case "withdraw_success":
-        return `Your withdrawal of $${amount} has been completed successfully.`;
+        return i18n('pages.notifications.messages.withdraw_success', amount);
       case "withdraw_canceled":
-        return `Your withdrawal request for $${amount} has been canceled.`;
+        return i18n('pages.notifications.messages.withdraw_canceled', amount);
       case "system":
-        return "System notification";
+        return i18n('pages.notifications.messages.system');
       case "alert":
-        return "Important alert notification";
+        return i18n('pages.notifications.messages.alert');
       default:
-        return "Notification update";
+        return i18n('pages.notifications.messages.default');
     }
   };
 
@@ -55,19 +57,19 @@ function Notifications() {
   const getNotificationTitle = (type) => {
     switch (type) {
       case "deposit_success":
-        return "Deposit Successful";
+        return i18n('pages.notifications.types.deposit_success');
       case "deposit_canceled":
-        return "Deposit Canceled";
+        return i18n('pages.notifications.types.deposit_canceled');
       case "withdraw_success":
-        return "Withdrawal Successful";
+        return i18n('pages.notifications.types.withdraw_success');
       case "withdraw_canceled":
-        return "Withdrawal Canceled";
+        return i18n('pages.notifications.types.withdraw_canceled');
       case "system":
-        return "System Notification";
+        return i18n('pages.notifications.types.system');
       case "alert":
-        return "Important Alert";
+        return i18n('pages.notifications.types.alert');
       default:
-        return "Notification";
+        return i18n('pages.notifications.types.default');
     }
   };
 
@@ -109,8 +111,6 @@ function Notifications() {
     }
   };
 
-  // Get time icon and text
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -122,17 +122,10 @@ function Notifications() {
     });
   };
 
-  // Mark notification as read
-  const markAsRead = (notificationId) => {
-    // You can dispatch an action here to update the notification status
-    console.log("Mark as read:", notificationId);
-    // dispatch(actions.doMarkAsRead(notificationId));
-  };
-
   return (
     <div className="notifications-container">
       {/* Header */}
-      <SubHeader title="Notifications" />
+      <SubHeader title={i18n('pages.notifications.title')} />
 
       {/* Filter Tabs */}
       <div className="filter-tabs">
@@ -141,28 +134,28 @@ function Notifications() {
           onClick={() => setFilter("all")}
         >
           <i className="fa-solid fa-bell"></i>
-          All
+          {i18n('pages.notifications.filters.all')}
         </button>
         <button
           className={`filter-tab ${filter === "deposit" ? "active" : ""}`}
           onClick={() => setFilter("deposit")}
         >
           <i className="fa-solid fa-arrow-down"></i>
-          Deposit
+          {i18n('pages.notifications.filters.deposit')}
         </button>
         <button
           className={`filter-tab ${filter === "withdraw" ? "active" : ""}`}
           onClick={() => setFilter("withdraw")}
         >
           <i className="fa-solid fa-arrow-up"></i>
-          Withdraw
+          {i18n('pages.notifications.filters.withdraw')}
         </button>
       </div>
 
       {/* Unread Count */}
       <div className="unread-indicator">
         <span className="unread-count">
-          {rows.filter(n => n.status === 'unread').length} unread
+          {i18n('pages.notifications.unreadCount', rows.filter(n => n.status === 'unread').length)}
         </span>
       </div>
 
@@ -171,8 +164,12 @@ function Notifications() {
         {filteredNotifications.length === 0 ? (
           <div className="empty-state">
             <i className="fa-solid fa-bell-slash"></i>
-            <span>No notifications found</span>
-            <p>You don't have any {filter !== "all" ? filter : ""} notifications yet.</p>
+            <span>{i18n('pages.notifications.emptyState.title')}</span>
+            <p>
+              {i18n('pages.notifications.emptyState.description', 
+                filter !== "all" ? i18n(`pages.notifications.filters.${filter}`) : ""
+              )}
+            </p>
           </div>
         ) : (
           filteredNotifications.map((notification) => {
@@ -203,7 +200,6 @@ function Notifications() {
                     <span className="notification-title">
                       {getNotificationTitle(notification.type)}
                     </span>
-                  
                   </div>
 
                   <p className="notification-message">
@@ -234,6 +230,7 @@ function Notifications() {
           })
         )}
       </div>
+
 
       <style>{`
         .notifications-container {

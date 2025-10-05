@@ -9,14 +9,14 @@ function Team() {
 
   return (
     <div className="profile-page-wrapper">
-      <SubHeader title="Profile" path="/profile" />
+      <SubHeader title={i18n('pages.team.title')} path="/profile" />
 
       <div className="profile-content-area">
         <div className="profile-info-card">
           <div className="profile-header-section">
-            <h2 className="profile-main-title">Personal Information</h2>
+            <h2 className="profile-main-title">{i18n('pages.team.personalInformation')}</h2>
             <p className="profile-subtitle">
-              Your account details and personal information
+              {i18n('pages.team.accountDetails')}
             </p>
           </div>
 
@@ -28,9 +28,9 @@ function Team() {
                   <i className="fa-solid fa-user"></i>
                 </div>
                 <div className="info-details">
-                  <label className="info-label">Full Name</label>
+                  <label className="info-label">{i18n('pages.team.fullName')}</label>
                   <span className="info-value">
-                    {currentUser?.fullName || "—"}
+                    {currentUser?.fullName || i18n('pages.team.notAvailable')}
                   </span>
                 </div>
               </div>
@@ -43,9 +43,9 @@ function Team() {
                   <i className="fa-solid fa-envelope"></i>
                 </div>
                 <div className="info-details">
-                  <label className="info-label">Email</label>
+                  <label className="info-label">{i18n('pages.team.email')}</label>
                   <span className="info-value">
-                    {currentUser?.email || "—"}
+                    {currentUser?.email || i18n('pages.team.notAvailable')}
                   </span>
                 </div>
               </div>
@@ -58,9 +58,9 @@ function Team() {
                   <i className="fa-solid fa-phone"></i>
                 </div>
                 <div className="info-details">
-                  <label className="info-label">Phone Number</label>
+                  <label className="info-label">{i18n('pages.team.phoneNumber')}</label>
                   <span className="info-value">
-                    {currentUser?.phoneNumber || "—"}
+                    {currentUser?.phoneNumber || i18n('pages.team.notAvailable')}
                   </span>
                 </div>
               </div>
@@ -74,9 +74,9 @@ function Team() {
                     <i className="fa-solid fa-globe"></i>
                   </div>
                   <div className="info-details">
-                    <label className="info-label">Country</label>
+                    <label className="info-label">{i18n('pages.team.country')}</label>
                     <span className="info-value">
-                      {currentUser?.username || "—"}
+                      {currentUser?.username || i18n('pages.team.notAvailable')}
                     </span>
                   </div>
                 </div>
@@ -90,19 +90,18 @@ function Team() {
                   <i className="fa-solid fa-venus-mars"></i>
                 </div>
                 <div className="info-details">
-                  <label className="info-label">Gender</label>
+                  <label className="info-label">{i18n('pages.team.gender')}</label>
                   <span
-                    className={`info-value gender-tag ${
-                      currentUser?.gender === "male"
+                    className={`info-value gender-tag ${currentUser?.gender === "male"
                         ? "male"
                         : currentUser?.gender === "female"
-                        ? "female"
-                        : "unknown"
-                    }`}
+                          ? "female"
+                          : "unknown"
+                      }`}
                   >
                     {currentUser?.gender
                       ? i18n(`user.enumerators.gender.${currentUser.gender}`)
-                      : "Not specified"}
+                      : i18n('pages.team.genderNotSpecified')}
                   </span>
                 </div>
               </div>
@@ -115,9 +114,9 @@ function Team() {
                   <i className="fa-solid fa-user-plus"></i>
                 </div>
                 <div className="info-details">
-                  <label className="info-label">Invitation Code</label>
+                  <label className="info-label">{i18n('pages.team.invitationCode')}</label>
                   <span className="info-value invitation-code-display">
-                    {currentUser?.invitationcode || "—"}
+                    {currentUser?.invitationcode || i18n('pages.team.notAvailable')}
                   </span>
                 </div>
               </div>

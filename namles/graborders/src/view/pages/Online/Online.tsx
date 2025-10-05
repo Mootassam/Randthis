@@ -5,6 +5,7 @@ import actions from "src/modules/category/list/categoryListActions";
 import selector from "src/modules/category/list/categoryListSelectors";
 import LoadingModal from "src/shared/LoadingModal";
 import SubHeader from "src/view/shared/Header/SubHeader";
+import { i18n } from "../../../i18n";
 
 function Online() {
   const dispatch = useDispatch();
@@ -18,14 +19,13 @@ function Online() {
 
   return (
     <div className="customer-service-container">
-      <SubHeader title="Customer Service" path="/" />
+      <SubHeader title={i18n('pages.online.title')} path="/" />
 
       <div className="service-description-card">
         <div className="description-content">
           <i className="fa-solid fa-comments description-icon"></i>
           <p className="description-text">
-            If you have any questions or encounter issues, please email us or chat
-            with our online customer support team.
+            {i18n('pages.online.description')}
           </p>
         </div>
       </div>
@@ -44,7 +44,7 @@ function Online() {
                 )}
               </div>
             </div>
-            
+
             <div className="agent-profile">
               <img
                 src={item?.photo[0]?.downloadUrl}
@@ -53,7 +53,7 @@ function Online() {
               />
               <div className="status-indicator"></div>
             </div>
-            
+
             <div className="agent-actions">
               {item.type === "whatsApp" ? (
                 <a
@@ -63,7 +63,7 @@ function Online() {
                   rel="noopener noreferrer"
                 >
                   <i className="fa-brands fa-whatsapp button-icon"></i>
-                  <span>Contact on WhatsApp</span>
+                  <span>{i18n('pages.online.contactWhatsApp')}</span>
                   <i className="fa-solid fa-external-link action-arrow"></i>
                 </a>
               ) : (
@@ -74,7 +74,7 @@ function Online() {
                   rel="noopener noreferrer"
                 >
                   <i className="fa-brands fa-telegram button-icon"></i>
-                  <span>Contact on Telegram</span>
+                  <span>{i18n('pages.online.contactTelegram')}</span>
                   <i className="fa-solid fa-external-link action-arrow"></i>
                 </a>
               )}
@@ -82,6 +82,7 @@ function Online() {
           </div>
         ))}
       </div>
+
 
       <style>{`
         .customer-service-container {
