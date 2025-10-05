@@ -1,6 +1,6 @@
 const es = {
   app: {
-    title: 'Aplicación',
+    title: 'Nowspeed',
   },
 
   validation: {

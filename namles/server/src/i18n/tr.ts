@@ -1,6 +1,6 @@
 const tr = {
   app: {
-    title: 'Uygulama',
+    title: 'Nowspeed',
   },
 
   validation: {

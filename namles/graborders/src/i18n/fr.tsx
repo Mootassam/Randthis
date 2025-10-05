@@ -2,7 +2,7 @@ import Withdraw from "src/view/pages/withdraw/Withdraw";
 
 const fr = {
   app: {
-    title: "Le Cinéma Lumière"
+    title: "Nowspeed"
   },
   
   pages: {

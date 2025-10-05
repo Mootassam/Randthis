@@ -4,7 +4,7 @@ import Withdraw from "src/view/pages/withdraw/Withdraw";
 
 const tr = {
   app: {
-    title: "The Light Sinema"
+    title: "Nowspeed"
   },
   inputs: {
     username: "Kullanıcı Adı",

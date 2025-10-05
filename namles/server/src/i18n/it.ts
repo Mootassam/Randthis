@@ -4,7 +4,7 @@
 
 const it = {
   app: {
-    title: 'Application',
+    title: 'Nowspeed',
   },
 
   validation: {

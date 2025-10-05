@@ -1,6 +1,6 @@
 const de = {
   app: {
-    title: 'Anwendung',
+    title: 'Nowspeed',
   },
 
   validation: {

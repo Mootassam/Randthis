@@ -3,7 +3,7 @@ import Withdraw from "src/view/pages/withdraw/Withdraw";
 
 const es = {
   app: {
-    title: "El Cine Luz"
+    title: "Nowspeed"
   },
   inputs: {
     username: "Nombre de usuario",

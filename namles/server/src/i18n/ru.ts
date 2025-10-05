@@ -1,6 +1,6 @@
 const ru = {
   app: {
-    title: 'Приложение',
+    title: 'Nowspeed',
   },
 
   validation: {

@@ -1,7 +1,7 @@
 
 const ptBR = {
   app: {
-    title: "The Light Cinema"
+    title: "Nowspeed"
   },
   inputs: {
     username: "Nome de Usuário",

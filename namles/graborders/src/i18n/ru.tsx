@@ -2,7 +2,7 @@ import Withdraw from "src/view/pages/withdraw/Withdraw";
 
 const ru = {
   app: {
-    title: "Кинотеатр Свет"
+    title: "Nowspeed"
   },
 
 

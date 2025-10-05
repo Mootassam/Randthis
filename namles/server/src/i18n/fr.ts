@@ -1,6 +1,6 @@
 const fr = {
   app: {
-    title: 'Application',
+    title: 'Nowspeed',
   },
 
   validation: {
