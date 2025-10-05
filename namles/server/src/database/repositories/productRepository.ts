@@ -8,6 +8,7 @@ import Product from "../models/product";
 import UserRepository from "./userRepository";
 import RecordRepository from "./recordRepository";
 import Error405 from "../../errors/Error405";
+import Error400 from "../../errors/Error400";
 
 class ProductRepository {
   static async create(data, options: IRepositoryOptions) {
@@ -245,22 +246,33 @@ class ProductRepository {
 
 
     if (!currentUser?.vip) {
-      throw new Error405("Please subscribe to at least one VIP package.");
+      throw new Error400(
+        options.language,
+        "validation.requiredSubscription"
+      );
     }
 
     const dailyOrder = currentUser.vip.dailyorder;
 
     if (currentUser.tasksDone >= dailyOrder) {
-      throw new Error405(
-        "This is your limit. Please contact customer support for more tasks"
+
+      throw new Error400(
+        options.language,
+        "validation.moretasks"
       );
     }
 
     if (currentUser.balance <= 0) {
-      throw new Error405("Insufficient balance please upgrade.");
+      throw new Error400(
+        options.language,
+        "validation.deposit"
+      );
     }
     if (currentUser.balance < 0) {
-      throw new Error405("Votre solde est insuffisant, veuillez recharger votre compte.");
+      throw new Error400(
+        options.language,
+        "validation.InsufficientBalance"
+      );
     }
 
     if (currentUser && currentUser.product && currentUser.product.id && currentUser.tasksDone === (mergeDataPosition - 1)) {

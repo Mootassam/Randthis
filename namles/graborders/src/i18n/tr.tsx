@@ -757,7 +757,7 @@ const tr = {
 
     enumerators: {
       status: {
-        USDT: "USD",
+        USDT: "USDT",
         ETH: "ETH",
         BTC: "BTC",
       },

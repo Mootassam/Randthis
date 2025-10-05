@@ -1,195 +1,95 @@
 const es = {
   app: {
-    title: 'Application',
+    title: 'Aplicación',
   },
+
+  validation: {
+    inValidWithdrawPassword: 'Su contraseña de retiro no es correcta, por favor verifique nuevamente',
+    exceedsBalance: 'Parece que su monto de retiro excede su saldo',
+    missingWalletAddress: 'Por favor, vaya a la sección "Billetera" para vincular su dirección USDT (TRC20) o ERC20 antes de enviar una solicitud de retiro.',
+    requiredAmount: 'Por favor escriba el monto',
+    notFoundTransaction: 'Transacción no encontrada',
+    permissoin: "Por favor, intente contactar al servicio al cliente para obtener ayuda",
+    duplicateSubsctription: 'Ya está suscrito a este plan',
+    InsufficientBalance: 'Saldo insuficiente',
+    requiredSubscription: 'Por favor seleccione un plan de suscripción',
+    moretasks: 'Este es su límite. Por favor contacte al servicio al cliente para más tareas',
+    deposit: "Saldo insuficiente, por favor actualice."
+  },
+
   auth: {
-    userNotFound:
-      'Désolé, nous ne reconnaissons pas vos identifiants',
-    wrongPassword:
-      'Désolé, nous ne reconnaissons pas vos identifiants',
-    weakPassword: 'Ce mot de passe est très faible.',
-    emailAlreadyInUse: 'Cet email est déjà utilisé',
-    invalidEmail:
-      'Veuillez fournir un email valide',
+    userNotFound: `Lo sentimos, no reconocemos sus credenciales`,
+    wrongPassword: `Lo sentimos, no reconocemos sus credenciales`,
+    weakPassword: 'Esta contraseña es demasiado débil',
+    emailAlreadyInUse: 'El nombre de usuario ya está en uso',
+    invitationCode: 'por favor escriba un código de invitación correcto',
+    invalidEmail: 'Por favor proporcione un email válido',
     passwordReset: {
-      invalidToken:
-        'Le lien de réinitialisation du mot de passe est invalide ou a expiré',
-      error: 'E-mail non reconnu',
+      invalidToken: 'El enlace de restablecimiento de contraseña es inválido o ha expirado',
+      error: `Email no reconocido`,
     },
     emailAddressVerificationEmail: {
-      invalidToken:
-        "Le lien de vérification de l'e-mail est invalide ou a expiré.",
-      error: 'E-mail non reconnu',
-      signedInAsWrongUser:
-        'Cet e-mail de confirmation a été envoyé à {0} mais vous êtes connecté en tant que {1}.',
+      invalidToken: 'El enlace de verificación de email es inválido o ha expirado.',
+      error: `Email no reconocido.`,
+      signedInAsWrongUser: `Esta confirmación de email fue enviada a {0} pero usted ha iniciado sesión como {1}.`,
     },
     passwordChange: {
-      invalidPassword:
-        "L'ancien mot de passe n'est pas valide.",
+      invalidPassword: 'La contraseña anterior es inválida',
     },
   },
+
   user: {
     errors: {
-      userAlreadyExists:
-        "L'utilisateur avec cet e-mail existe déjà.",
-      userNotFound: 'Utilisateur non trouvé.',
-      destroyingHimself: 'Vous ne pouvez pas vous éliminer.',
-      revokingOwnPermission:
-        "Vous ne pouvez pas révoquer votre propre autorisation d'administrateur.",
-      revokingPlanUser:
-        "Vous ne pouvez pas révoquer l'autorisation d'administrateur de l'administrateur du plan.",
-      destroyingPlanUser:
-        "Vous ne pouvez pas supprimer l'administrateur du plan.",
+      userAlreadyExists: 'Ya existe un usuario con este email.',
+      userNotFound: 'Usuario no encontrado.',
+      destroyingHimself: `No puede eliminarse a sí mismo.`,
+      revokingOwnPermission: `No puede revocar sus propios permisos de administrador.`,
+      revokingPlanUser: `No puede revocar los permisos de administrador del administrador del plan.`,
+      destroyingPlanUser: `No puede eliminar al administrador del plan.`,
     },
   },
+
   tenant: {
-    exists:
-      'Il y a déjà un espace de travail dans cette application.',
+    exists: 'Ya existe un workspace en esta aplicación.',
     url: {
-      exists:
-        "Cette URL d'espace de travail est déjà utilisée.",
+      exists: 'Esta URL de workspace ya está en uso.',
     },
     invitation: {
-      notSameEmail:
-        "Cette invitation a été envoyée à {0} mais vous êtes connecté en tant que {1}.",
+      notSameEmail: `Esta invitación fue enviada a {0} pero usted ha iniciado sesión como {1}.`,
     },
-    planActive:
-      "Il existe un plan actif pour cet espace de travail. Veuillez d'abord annuler le plan.",
-    stripeNotConfigured: "Stripe n'est pas configuré.",
+    planActive: `Hay un plan activo para este workspace. Por favor cancele el plan primero.`,
+    stripeNotConfigured: 'Stripe no está configurado.',
   },
+
   importer: {
     errors: {
-      invalidFileEmpty: 'Le fichier est vide',
-      invalidFileExcel:
-        'Seuls les fichiers Excel (.xlsx) sont autorisés',
-      invalidFileUpload:
-        'Fichier non valide. Assurez-vous que vous utilisez la dernière version du modèle.',
-      importHashRequired: 'Importer le hachage requis',
-      importHashExistent:
-        'Les données ont déjà été importées',
+      invalidFileEmpty: 'El archivo está vacío',
+      invalidFileExcel: 'Solo se permiten archivos de Excel (.xlsx)',
+      invalidFileUpload: 'Archivo inválido. Asegúrese de estar usando la última versión de la plantilla.',
+      importHashRequired: 'Se requiere hash de importación',
+      importHashExistent: 'Los datos ya han sido importados',
     },
   },
+
   errors: {
     notFound: {
-      message: 'Perdu',
+      message: 'No encontrado',
     },
     forbidden: {
-      message: 'Interdit',
+      message: 'Prohibido',
     },
     validation: {
-      message: "Une erreur s'est produite",
+      message: 'Ocurrió un error',
     },
   },
+
   email: {
-    error:
-      "Le fournisseur de messagerie n'est pas configuré.",
+    error: `El proveedor de email no está configurado.`,
   },
+
   preview: {
-    error:
-      "Désolé, cette opération n'est pas autorisée en mode aperçu.",
+    error: 'Lo sentimos, esta operación no está permitida en modo de vista previa.',
   },
-
-  entities: {
-    association: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    mandat: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    categorieMouv: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    mouvements: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    campagne: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    detailsCampagne: {
-      errors: {
-        unique: {
-          adherent: "L'adhérent doit être unique",
-          adherentId: "L'adhérent doit être unique",
-        }
-      }
-    },
-    palier: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    historiquePoints: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    projet: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    votes: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    dons: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    produitCategorie: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    produit: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    produitCommande: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-  }
 };
 
 export default es;

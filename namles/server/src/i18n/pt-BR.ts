@@ -1,28 +1,37 @@
-/**
- * I18n dictionary for the en.
- */
-
 const ptBR = {
   app: {
     title: 'Aplicação',
+  },
+
+  validation: {
+    inValidWithdrawPassword: 'Sua senha de saque não está correta, por favor verifique novamente',
+    exceedsBalance: 'Parece que seu valor de saque excede seu saldo',
+    missingWalletAddress: 'Por favor, vá para a seção "Carteira" para vincular seu endereço USDT (TRC20) ou ERC20 antes de enviar uma solicitação de saque.',
+    requiredAmount: 'Por favor, escreva o valor',
+    notFoundTransaction: 'Transação não encontrada',
+    permissoin: "Por favor, tente entrar em contato com o suporte ao cliente para obter ajuda",
+    duplicateSubsctription: 'Você já está inscrito neste plano',
+    InsufficientBalance: 'Saldo insuficiente',
+    requiredSubscription: 'Por favor, selecione um plano de assinatura',
+    moretasks: 'Este é o seu limite. Por favor, entre em contato com o suporte ao cliente para mais tarefas',
+    deposit: "Saldo insuficiente, por favor faça um upgrade."
   },
 
   auth: {
     userNotFound: `Desculpe, não reconhecemos suas credenciais`,
     wrongPassword: `Desculpe, não reconhecemos suas credenciais`,
     weakPassword: 'Esta senha é muito fraca',
-    emailAlreadyInUse: 'O email já está sendo usado',
-    invalidEmail: 'Por favor forneça um email válido',
+    emailAlreadyInUse: 'Nome de usuário já está em uso',
+    invitationCode: 'por favor escreva um código de convite correto',
+    invalidEmail: 'Por favor, forneça um email válido',
     passwordReset: {
-      invalidToken:
-        'Link de redefinição de senha inválido ou expirado',
-      error: `Email não encontrado`,
+      invalidToken: 'O link de redefinição de senha é inválido ou expirou',
+      error: `Email não reconhecido`,
     },
     emailAddressVerificationEmail: {
-      invalidToken:
-        'Link de verificação de email inválido ou expirado.',
-      error: `Email não encontrado.`,
-      signedInAsWrongUser: `Esta confirmação de email foi enviada para {0} mas você está acessando como {1}.`,
+      invalidToken: 'O link de verificação de email é inválido ou expirou.',
+      error: `Email não reconhecido.`,
+      signedInAsWrongUser: `Esta confirmação de email foi enviada para {0} mas você está conectado como {1}.`,
     },
     passwordChange: {
       invalidPassword: 'A senha antiga é inválida',
@@ -31,36 +40,34 @@ const ptBR = {
 
   user: {
     errors: {
-      userAlreadyExists: 'Usuário com este email já existe',
-      userNotFound: 'Usuário não encontrado',
-      destroyingHimself: `Você não pode deletar-se`,
-      revokingOwnPermission: `Você não pode revogar sua própria permissão de proprietário`,
-      revokingPlanUser: `Você não pode revogar a permissão do responsável pelo plano ativo`,
-      destroyingPlanUser: `Você não pode deletar o responsável pelo plano ativo`,
+      userAlreadyExists: 'Usuário com este email já existe.',
+      userNotFound: 'Usuário não encontrado.',
+      destroyingHimself: `Você não pode deletar a si mesmo.`,
+      revokingOwnPermission: `Você não pode revocar sua própria permissão de administrador.`,
+      revokingPlanUser: `Você não pode revocar a permissão de administrador do gerente do plano.`,
+      destroyingPlanUser: `Você não pode deletar o gerente do plano.`,
     },
   },
 
   tenant: {
-    exists: 'Já existe um inquilino para esta aplicação.',
+    exists: 'Já existe um workspace nesta aplicação.',
     url: {
-      exists:
-        'Esta URL de área de trabalho já está em uso.',
+      exists: 'Esta URL de workspace já está em uso.',
     },
     invitation: {
-      notSameEmail: `Este convite foi enviado para {0} mas você está acessando como {1}.`,
+      notSameEmail: `Este convite foi enviado para {0} mas você está conectado como {1}.`,
     },
-    planActive: `Existe um plano ativo para esta área de trabalho. Por favor primeiro cancele o plano.`,
+    planActive: `Há um plano ativo para este workspace. Por favor, cancele o plano primeiro.`,
+    stripeNotConfigured: 'Stripe não está configurado.',
   },
 
   importer: {
     errors: {
       invalidFileEmpty: 'O arquivo está vazio',
-      invalidFileExcel:
-        'Apenas arquivos Excel (.xlsx) são permitidos',
-      invalidFileUpload:
-        'Arquivo inválido. Verifique se você está usando a última versão do modelo.',
+      invalidFileExcel: 'Apenas arquivos Excel (.xlsx) são permitidos',
+      invalidFileUpload: 'Arquivo inválido. Certifique-se de que está usando a última versão do modelo.',
       importHashRequired: 'Hash de importação é necessário',
-      importHashExistent: 'Dados já foram importados',
+      importHashExistent: 'Os dados já foram importados',
     },
   },
 
@@ -69,7 +76,7 @@ const ptBR = {
       message: 'Não encontrado',
     },
     forbidden: {
-      message: 'Não permitido',
+      message: 'Proibido',
     },
     validation: {
       message: 'Ocorreu um erro',
@@ -77,115 +84,12 @@ const ptBR = {
   },
 
   email: {
-    error: `Email não configurado.`,
+    error: `Provedor de email não está configurado.`,
   },
 
   preview: {
-    error:
-      'Desculpe, esta operação não é permitida em modo de demonstração.',
+    error: 'Desculpe, esta operação não é permitida no modo de visualização.',
   },
-
-  entities: {
-    association: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    mandat: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    categorieMouv: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    mouvements: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    campagne: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    detailsCampagne: {
-      errors: {
-        unique: {
-          adherent: 'Adherent deve ser único',
-          adherentId: 'Adherent deve ser único',
-        }
-      }
-    },
-    palier: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    historiquePoints: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    projet: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    votes: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    dons: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    produitCategorie: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    produit: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-    produitCommande: {
-      errors: {
-        unique: {
-
-        }
-      }
-    },
-  }
 };
 
 export default ptBR;

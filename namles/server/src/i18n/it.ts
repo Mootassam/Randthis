@@ -2,7 +2,7 @@
  * I18n dictionary for the en.
  */
 
-const en = {
+const it = {
   app: {
     title: 'Application',
   },
@@ -103,7 +103,107 @@ const en = {
       'Sorry, this operation is not allowed in preview mode.',
   },
 
+  entities: {
+    association: {
+      errors: {
+        unique: {
 
+        }
+      }
+    },
+    mandat: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    categorieMouv: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    mouvements: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    campagne: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    detailsCampagne: {
+      errors: {
+        unique: {
+          adherent: 'Adherent must be unique',
+          adherentId: 'Adherent must be unique',
+        }
+      }
+    },
+    palier: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    historiquePoints: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    projet: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    votes: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    dons: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    produitCategorie: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    produit: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+    produitCommande: {
+      errors: {
+        unique: {
+
+        }
+      }
+    },
+  }
 };
 
-export default en;
+export default it;

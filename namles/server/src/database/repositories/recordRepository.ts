@@ -10,6 +10,7 @@ import Dates from "../utils/Dates";
 import Product from "../models/product";
 import UserRepository from "./userRepository";
 import User from "../models/user";
+import Error400 from "../../errors/Error400";
 
 class RecordRepository {
   static async create(data, options: IRepositoryOptions) {
@@ -203,19 +204,28 @@ class RecordRepository {
     ]);
 
     if (!userVip?.vip) {
-      throw new Error405("Please subscribe to at least one VIP package.");
+      throw new Error400(
+        options.language,
+        "validation.requiredSubscription"
+      );
     }
 
     const dailyOrder = userVip.vip.dailyorder;
 
     if (userVip.tasksDone >= dailyOrder) {
-      throw new Error405(
-        "This is your limit. Please contact customer support for more tasks"
+      throw new Error400(
+        options.language,
+        "validation.moretasks"
       );
     }
 
     if (userVip.balance <= 0) {
-      throw new Error405("Insufficient balance please upgrade.");
+
+
+      throw new Error400(
+        options.language,
+        "validation.InsufficientBalance"
+      );
     }
   }
 
@@ -393,7 +403,7 @@ class RecordRepository {
     });
 
     if (filter) {
-      filter = JSON.parse(filter);
+
 
       if (filter.id) {
         criteriaAnd.push({

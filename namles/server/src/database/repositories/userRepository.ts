@@ -13,6 +13,7 @@ import Error405 from "../../errors/Error405";
 import product from "../models/product";
 import VipRepository from "./vipRepository";
 import Vip from "../models/vip";
+import Error400 from "../../errors/Error400";
 export default class UserRepository {
   static async create(data, options: IRepositoryOptions) {
     const currentUser = MongooseRepository.getCurrentUser(options);
@@ -459,10 +460,20 @@ export default class UserRepository {
     if (!data?.vip?.id) return;
 
     if (currentVip === data?.vip?.id) {
-      throw new Error405("You are ready subscribed to this vip");
+
+
+
+      throw new Error400(
+        options.language,
+        "validation.duplicateSubsctription"
+      );
+
     }
     if (currentBalance < data?.vip?.levellimit) {
-      throw new Error405("Insufficient balance please upgrade");
+      throw new Error400(
+        options.language,
+        "validation.InsufficientBalance"
+      );
     }
   }
 

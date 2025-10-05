@@ -210,7 +210,7 @@ class TransactionRepository {
 
     let criteriaAnd: any = [];
 
-    const search = JSON.parse(filter);
+    const search = filter
 
     criteriaAnd.push({
       tenant: currentTenant.id,

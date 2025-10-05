@@ -2,7 +2,7 @@ import assert from "assert";
 import UserRepository from "../../database/repositories/userRepository";
 import MongooseRepository from "../../database/repositories/mongooseRepository";
 import { IServiceOptions } from "../IServiceOptions";
-import Error405 from "../../errors/Error405";
+import Error400 from "../../errors/Error400";
 
 export default class AuthProfileEditor {
   options: IServiceOptions;
@@ -52,8 +52,9 @@ export default class AuthProfileEditor {
 
       const currentUser = MongooseRepository.getCurrentUser(this.options);
       if (currentUser.withdrawPassword !== data.withdrawPassword) {
-        throw new Error405(
-          "Your withdraw Password is not correct please check again"
+        throw new Error400(
+          this.options.language,
+          "validation.inValidWithdrawPassword"
         );
       }
 

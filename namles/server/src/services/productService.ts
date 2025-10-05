@@ -2,7 +2,6 @@ import Error400 from "../errors/Error400";
 import MongooseRepository from "../database/repositories/mongooseRepository";
 import { IServiceOptions } from "./IServiceOptions";
 import ProductRepository from "../database/repositories/productRepository";
-import Error405 from "../errors/Error405";
 import RecordRepository from "../database/repositories/recordRepository";
 
 export default class ProductServices {
@@ -107,8 +106,10 @@ export default class ProductServices {
     const currentUser = MongooseRepository.getCurrentUser(options);
     if (currentUser.grab) return
 
-    throw new Error405("Should be contact the customer service about this");
-
+    throw new Error400(
+      this.options.language,
+      "validation.permissoin"
+    );
 
   }
 
