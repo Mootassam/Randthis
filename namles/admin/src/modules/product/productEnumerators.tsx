@@ -1,6 +1,6 @@
 const productEnumerators = {
   status: ['enable', 'disable'],
-  type: ['multiple', 'single'],
+  type: ['prizes', 'combo', 'normal'],
 };
 
 export default productEnumerators;

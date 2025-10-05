@@ -78,7 +78,7 @@ export default class ProductServices {
           session,
         });
 
-        await RecordRepository.destroyAll(id,{
+        await RecordRepository.destroyAll(id, {
           ...this.options,
           session
         })
@@ -103,11 +103,11 @@ export default class ProductServices {
     return ProductRepository.findAndCountAll(args, this.options);
   }
 
-  async checkpermission(options) { 
+  async checkpermission(options) {
     const currentUser = MongooseRepository.getCurrentUser(options);
-if( currentUser.grab) return 
+    if (currentUser.grab) return
 
-throw new Error405("Should be contact the customer service about this");
+    throw new Error405("Should be contact the customer service about this");
 
 
   }

@@ -47,7 +47,7 @@ export default (database) => {
       withdraw: {
         type: Boolean,
         default: false,
-        
+
       },
 
       balance: {
@@ -102,6 +102,19 @@ export default (database) => {
       itemNumber: {
         type: Number,
       },
+
+
+
+      prizes: {
+        type: Schema.Types.ObjectId,
+        ref: "product",
+      },
+
+      prizesNumber: {
+        type: Number,
+      },
+
+
       giftPosition: {
         type: Number,
       },

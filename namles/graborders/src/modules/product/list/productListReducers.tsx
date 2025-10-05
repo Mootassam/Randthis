@@ -6,6 +6,7 @@ const initialData = {
   rows: {},
   loading: false,
   filter: {},
+  showModal: false,
   rawFilter: {},
   pagination: {
     current: 1,
@@ -15,7 +16,7 @@ const initialData = {
   selectedKeys: [] as Array<string>,
 };
 
-export default (state = initialData, { type, payload }) => {
+export default (state = initialData, { type, payload, modal }) => {
   if (type === actions.RESETED) {
     return {
       ...initialData,
@@ -41,7 +42,7 @@ export default (state = initialData, { type, payload }) => {
     };
   }
 
- 
+
 
   if (type === actions.CLEAR_ALL_SELECTED) {
     return {
@@ -71,16 +72,17 @@ export default (state = initialData, { type, payload }) => {
     return {
       ...state,
       loading: true,
+      showModal: modal,
       selectedKeys: [],
       filter: payload ? payload.filter : {},
-rawFilter: payload ? payload.rawFilter : {},
+      rawFilter: payload ? payload.rawFilter : {},
       pagination:
         payload && payload.keepPagination
           ? state.pagination
           : {
-              current: 1,
-              pageSize: INITIAL_PAGE_SIZE,
-            },
+            current: 1,
+            pageSize: INITIAL_PAGE_SIZE,
+          },
     };
   }
 
@@ -89,7 +91,8 @@ rawFilter: payload ? payload.rawFilter : {},
       ...state,
       loading: false,
       rows: payload,
-      
+      showModal: modal,
+
     };
   }
 
@@ -98,7 +101,15 @@ rawFilter: payload ? payload.rawFilter : {},
       ...state,
       loading: false,
       rows: {},
+      showModal: modal,
 
+    };
+  }
+
+
+  if (type === actions.CLOSE_MODAL) {
+    return {
+      showModal: false,
     };
   }
 

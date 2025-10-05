@@ -88,6 +88,8 @@ function UserEditForm(props) {
       status: record.status,
       product: record.product || [],
       itemNumber: record.itemNumber,
+      prizes: record.prizes || [],
+      prizesNumber: record.prizesNumber,
       grab: record.grab,
       withdraw: record.withdraw,
       freezeblance: record.freezeblance,
@@ -297,6 +299,32 @@ function UserEditForm(props) {
                   max={2}
                 />
               </Col>
+            </Row>
+          </div>
+
+
+          <div className="section-card">
+            <h5 className="section-title">
+              {i18n('user.sections.prizeInfo')}
+            </h5>
+            <Row className="g-3">
+
+              <Col xs={12} md={6} lg={4}>
+                <ProductAutocompleteFormItem
+                  name="prizes"
+                  label={i18n('user.fields.product')}
+                />
+              </Col>
+
+              <Col xs={12} md={6} lg={4}>
+                <InputNumberFormItem
+                  name="prizesNumber"
+                  label={i18n('user.fields.itemNumber')}
+                  required={true}
+                />
+              </Col>
+
+
             </Row>
           </div>
 

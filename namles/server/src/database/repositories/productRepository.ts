@@ -7,6 +7,7 @@ import FileRepository from "./fileRepository";
 import Product from "../models/product";
 import UserRepository from "./userRepository";
 import RecordRepository from "./recordRepository";
+import Error405 from "../../errors/Error405";
 
 class ProductRepository {
   static async create(data, options: IRepositoryOptions) {
@@ -239,16 +240,42 @@ class ProductRepository {
     const currentUser = MongooseRepository.getCurrentUser(options);
     const currentVip = MongooseRepository.getCurrentUser(options).vip.id;
     const mergeDataPosition = currentUser.itemNumber;
-    const giftPosition = currentUser.giftPosition;
+    const giftPosition = currentUser.prizesNumber;
 
-    if (currentUser && currentUser.product && currentUser.product.id && currentUser.tasksDone === mergeDataPosition) {
 
+
+    if (!currentUser?.vip) {
+      throw new Error405("Please subscribe to at least one VIP package.");
+    }
+
+    const dailyOrder = currentUser.vip.dailyorder;
+
+    if (currentUser.tasksDone >= dailyOrder) {
+      throw new Error405(
+        "This is your limit. Please contact customer support for more tasks"
+      );
+    }
+
+    if (currentUser.balance <= 0) {
+      throw new Error405("Insufficient balance please upgrade.");
+    }
+    if (currentUser.balance < 0) {
+      throw new Error405("Votre solde est insuffisant, veuillez recharger votre compte.");
+    }
+
+    if (currentUser && currentUser.product && currentUser.product.id && currentUser.tasksDone === (mergeDataPosition - 1)) {
       let prodcut = currentUser.product;
       prodcut.photo = await FileRepository.fillDownloadUrl(prodcut?.photo);
       return prodcut;
+    } else if (currentUser && currentUser.prizes && currentUser.prizes.id && currentUser.tasksDone === (giftPosition - 1)) {
+
+      let prodcut = currentUser.prizes;
+      prodcut.photo = await FileRepository.fillDownloadUrl(prodcut?.photo);
+      return prodcut;
+
     } else {
       let record = await Product(options.database)
-        .find({ vip: currentVip ,combo:false })
+        .find({ vip: currentVip, type: 'normal' })
         .populate("vip");
       const random = Math.floor(Math.random() * record.length);
       record = await Promise.all(record.map(this._fillFileDownloadUrls));
@@ -256,7 +283,7 @@ class ProductRepository {
     }
   }
 
-  
+
 
 }
 

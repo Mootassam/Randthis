@@ -20,30 +20,40 @@ const productListActions = {
   EXPORT_SUCCESS: `${prefix}_EXPORT_SUCCESS`,
   EXPORT_ERROR: `${prefix}_EXPORT_ERROR`,
 
-
+  CLOSE_MODAL: `${prefix}_CLOSE_MODAL`,
   doFetch:
     (filter?, rawFilter?, keepPagination = false) =>
-    async (dispatch, getState) => {
-      try {
-        dispatch({
-          type: productListActions.FETCH_STARTED,
-          payload: { filter, rawFilter, keepPagination },
-        });
-        const response = await ProductService.list();
+      async (dispatch, getState) => {
+        try {
+          dispatch({
+            type: productListActions.FETCH_STARTED,
+            payload: { filter, rawFilter, keepPagination },
+            modal: true,
+          });
+          const response = await ProductService.list();
 
-        dispatch({
-          type: productListActions.FETCH_SUCCESS,
-          payload: response
-        });
-        
-      } catch (error) {
-        Errors.handle(error);
+          dispatch({
+            type: productListActions.FETCH_SUCCESS,
+            payload: response,
+            modal: true,
+          });
 
-        dispatch({
-          type: productListActions.FETCH_ERROR,
-        });
-      }
-    },
+        } catch (error) {
+          Errors.handle(error);
+
+          dispatch({
+            type: productListActions.FETCH_ERROR,
+            modal: false,
+          });
+        }
+      },
+
+  doCloseModal: () => async (dispatch) => {
+    dispatch({
+      type: productListActions.CLOSE_MODAL,
+      modal: false,
+    });
+  }
 };
 
 export default productListActions;

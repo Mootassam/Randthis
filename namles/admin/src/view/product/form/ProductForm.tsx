@@ -12,6 +12,8 @@ import ImagesFormItem from 'src/view/shared/form/items/ImagesFormItem';
 import Storage from 'src/security/storage';
 import VipAutocompleteFormItem from 'src/view/vip/autocomplete/VipAutocompleteFormItem';
 import SwitchFormItem from 'src/view/shared/form/items/SwitchFormItem';
+import SelectFormItem from 'src/view/shared/form/items/SelectFormItem';
+import productEnumerators from 'src/modules/product/productEnumerators';
 
 const schema = yup.object().shape({
   vip: yupFormSchemas.relationToOne(
@@ -34,7 +36,7 @@ const schema = yup.object().shape({
   ),
   commission: yupFormSchemas.string(
     i18n('entities.product.fields.commission'),
-    {required: true,},
+    { required: true, },
   ),
   photo: yupFormSchemas.images(
     i18n('entities.product.fields.photo'),
@@ -51,7 +53,7 @@ function ProductForm(props) {
       commission: record.commission,
       vip: record.vip || [],
       photo: record.photo,
-      combo: record.combo,
+      type: record.type,
     };
   });
 
@@ -126,11 +128,17 @@ function ProductForm(props) {
               />
             </div>
 
-             <div className="col-lg-7 col-md-8 col-12">
-              <SwitchFormItem
-                name="combo"
+            <div className="col-lg-7 col-md-8 col-12">
+              <SelectFormItem
+                name="type"
                 label={i18n(
                   'entities.product.fields.combo',
+                )}
+                 options={productEnumerators.type.map(
+                  (value) => ({
+                    value,
+                    label: i18n(`entities.product.enumerators.type.${value}`),
+                  }),
                 )}
               />
             </div>

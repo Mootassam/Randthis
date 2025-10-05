@@ -5,6 +5,14 @@ export default class AuthToken {
     return inMemoryToken || localStorage.getItem("jwt") || null;
   }
 
+
+  static clear() {
+    inMemoryToken = null;
+    localStorage.removeItem("jwt");
+    sessionStorage.removeItem("jwt"); // if you use sessionStorage
+  }
+
+  
   static set(token, rememberMe) {
     if (rememberMe) {
       localStorage.setItem("jwt", token || "");

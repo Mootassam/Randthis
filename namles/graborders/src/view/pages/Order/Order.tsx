@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import actions from "src/modules/record/list/recordListActions";
@@ -60,9 +61,9 @@ function Portfolio() {
           </div>
           <div className="product__image">
             <div className="image__">
-            {item?.product && item?.product.photo[0]?.downloadUrl && ( 
-              <img src={item?.product?.photo[0]?.downloadUrl} alt="" />
-            )}
+              {item?.product && item?.product.photo[0]?.downloadUrl && (
+                <img src={item?.product?.photo[0]?.downloadUrl} alt="" />
+              )}
             </div>
             <div className="product__detail">
               <div className="detail__name">{item?.product?.title}</div>
@@ -79,15 +80,25 @@ function Portfolio() {
             </div>
             <div className="cadre__detail">
               <div>Commission</div>
-              <div>{item?.product?.commission}% </div>
+              <div>
+
+
+                {item && item?.product.type === "prizes" ? '0' :
+                  item?.product?.commission
+                }
+
+                % </div>
             </div>
             <div className="cadre__detail">
               <div>Estimated return</div>
               <div>
-                {Calcule.calcule__total(
-                  item?.product?.amount,
-                  item?.product?.commission
-                )}{" "}
+                {item && item?.product.type === "prizes" ? item?.product?.amount :
+                  Calcule.calcule__total(
+                    item?.product?.amount,
+                    item?.product?.commission
+                  )
+                }
+
                 USD
               </div>
             </div>
@@ -104,11 +115,11 @@ function Portfolio() {
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
-          maxWidth :500, 
-          margin:'auto'
+          maxWidth: 500,
+          margin: 'auto'
         }}
       >
-     
+
         <div className="order__list">
           <div className="list__actions">
             <div

@@ -13,177 +13,213 @@ import User from "../models/user";
 
 class RecordRepository {
   static async create(data, options: IRepositoryOptions) {
+    const { database } = options;
     const currentTenant = MongooseRepository.getCurrentTenant(options);
     const currentUser = MongooseRepository.getCurrentUser(options);
-    await this.checkOrder(options);
-    await this.calculeGrap(data, options);
 
-    await User(options.database).updateOne(
-      { _id: currentUser.id },
-      { $set: { tasksDone: currentUser.tasksDone + 1 } }
-    );
+    // Execute parallel checks where possible
+    await Promise.all([
+      this.checkOrder(options),
+      this.calculeGrap(data, options)
+    ]);
 
-    const [record] = await Records(options.database).create(
-      [
-        {
-          ...data,
-          tenant: currentTenant.id,
-          createdBy: currentUser.id,
-          updatedBy: currentUser.id,
-          date: Dates.getDate(),
-          datecreation: Dates.getTimeZoneDate(),
-        },
-      ],
-      options
-    );
+    // Use bulk operations for better performance
+    const bulkOps = [
+      {
+        updateOne: {
+          filter: { _id: currentUser.id },
+          update: {
+            $inc: { tasksDone: 1 },
+            $set: { updatedAt: new Date() }
+          }
+        }
+      }
+    ];
 
-    await this._createAuditLog(
+    const recordData = {
+      ...data,
+      tenant: currentTenant.id,
+      createdBy: currentUser.id,
+      updatedBy: currentUser.id,
+      date: Dates.getDate(),
+      datecreation: Dates.getTimeZoneDate(),
+    };
+
+    // Execute in transaction if supported
+    const [record] = await Records(database).create([recordData], options);
+
+    await User(database).bulkWrite(bulkOps);
+
+    // Fire and forget audit log - don't block response
+    this._createAuditLog(
       AuditLogRepository.CREATE,
       record.id,
       data,
       options
-    );
+    ).catch(error => {
+      console.error('Audit log creation failed:', error);
+    });
 
     return this.findById(record.id, options);
   }
 
   static async calculeGrap(data, options) {
-    // Find the current product based on the provided data
-    const currentProduct = await Product(options.database).findOne({
-      _id: data.product,
-    });
-
+    const { database } = options;
     const currentUser = MongooseRepository.getCurrentUser(options);
-    const currentUserBalance = currentUser?.balance ? currentUser?.balance : 0;
+
+    // Parallel database calls
+    const [currentProduct, orderCount] = await Promise.all([
+      Product(database).findById(data.product).lean(),
+      this.CountOrder(options)
+    ]);
+
+    if (!currentProduct) {
+      throw new Error('Product not found');
+    }
+
+    const currentUserBalance = currentUser?.balance || 0;
     const productBalance = currentProduct.amount;
-    const currentCommission = currentProduct.commission; // Corrected typo in 'commission'
-    const Orderdone = (await RecordRepository.CountOrder(options)).record;
+    const currentCommission = currentProduct.commission;
     const mergeDataPosition = currentUser.itemNumber;
-    let total;
-    let frozen;
+    const prizesPosition = currentUser.prizesNumber;
+    let total, frozen;
 
-    if (
-      currentUser &&
-      currentUser.product &&
-      currentUser.product?.id &&
-      currentUser.tasksDone === mergeDataPosition
-    ) {
-      // Subtract total amount including commission from current user's balance
-      total = parseFloat(currentUserBalance) - parseFloat(productBalance);
-      frozen = parseFloat(currentUserBalance);
+    // Cache user product check
+    const hasProduct = currentUser?.product?.id;
+    const isPositionMatch = currentUser.tasksDone === (mergeDataPosition - 1);
+    const hasPrizes = currentUser?.prizes?.id;
+
+    const isPrizesMatch = currentUser.tasksDone === (prizesPosition - 1);
+
+
+
+    if (hasProduct && isPositionMatch) {
+      total = Number(currentUserBalance) - Number(productBalance);
+      frozen = Number(currentUserBalance);
+    } else if (hasPrizes && isPrizesMatch) {
+
+      total = Number(currentUserBalance) + Number(productBalance);
+
+
     } else {
-      const [invitedUser] = await User(options.database).find({
-        refcode: currentUser.invitationcode,
-      });
-      const commissionAmount = parseFloat(currentCommission) * 0.20;
+      // Find invited user only if needed
+      const invitedUser = await User(database).findOne({
+        refcode: currentUser.invitationcode
+      }).lean();
 
-      // Update invited user's balance
       if (invitedUser) {
-        await User(options.database).updateOne(
+        const commissionAmount = Number(currentCommission) * 0.20;
+
+        await User(database).updateOne(
           { _id: invitedUser._id },
           {
-            $set: {
-              balance: parseFloat(invitedUser.balance) + commissionAmount,
-            },
+            $inc: { balance: commissionAmount },
+            $set: { updatedAt: new Date() }
           }
         );
       }
 
-      // Add total amount including commission to current user's balance
-      total =
-        parseFloat(currentUserBalance) +
-        this.calculeTotal(productBalance, currentCommission);
+      total = Number(currentUserBalance) + this.calculeTotal(productBalance, currentCommission);
       frozen = 0;
     }
 
     const updatedValues = {
       balance: total,
       freezeblance: frozen,
+      updatedAt: new Date()
     };
 
-    // Update user's profile with the new balance and product
     await UserRepository.updateProfileGrap(
-      currentUser.id, // Use currentUser.id instead of currentUserid
+      currentUser.id,
       updatedValues,
       options
     );
   }
 
-  // Removed the static keyword to define a regular function
+  // Utility functions with validation
   static calculeTotal(price, commission) {
-    const total = (parseFloat(price) * parseFloat(commission)) / 100;
-    return total;
+    const numPrice = Number(price);
+    const numCommission = Number(commission);
+
+    if (isNaN(numPrice) || isNaN(numCommission)) {
+      throw new Error('Invalid price or commission values');
+    }
+
+    return (numPrice * numCommission) / 100;
   }
 
-  // Prodcut Minus //
-
   static calculeTotalMerge(price, commission) {
-    const total =
-      parseFloat(price) + (parseFloat(price) * parseFloat(commission)) / 100;
-    return total;
+    const numPrice = Number(price);
+    const numCommission = Number(commission);
+
+    if (isNaN(numPrice) || isNaN(numCommission)) {
+      throw new Error('Invalid price or commission values');
+    }
+
+    return numPrice + (numPrice * numCommission) / 100;
   }
 
   static async CountOrder(options) {
     const currentUser = MongooseRepository.getCurrentUser(options);
-    const currentDate = this.getTimeZoneDate(); // Get current date
+    const currentDate = Dates.getTimeZoneDate();
 
     const record = await Records(options.database)
-      .find({
+      .countDocuments({
         user: currentUser.id,
-        // Compare dates in the same format
-        datecreation: { $in: Dates.getTimeZoneDate() }, // Convert current date to Date object
-      })
-      .countDocuments();
+        datecreation: currentDate
+      });
 
-    const data = {
-      record: record,
-    };
-
-    return data;
+    return { record };
   }
 
   static async tasksDone(currentUser, options) {
-    const currentDate = this.getTimeZoneDate(); // Get current date
-    const [record] = await User(options.database).find({
-      _id: currentUser,
-      // Compare dates in the same format
-    });
+    const user = await User(options.database)
+      .findById(currentUser)
+      .select('tasksDone')
+      .lean();
 
-    const data = {
-      record: record.tasksDone,
-    };
+    if (!user) {
+      throw new Error('User not found');
+    }
 
-    return data;
+    return { record: user.tasksDone || 0 };
   }
 
   static async checkOrder(options) {
     const currentUser = MongooseRepository.getCurrentUser(options);
-    const currentDate = this.getTimeZoneDate(); // Get current date
+    const currentDate = Dates.getTimeZoneDate();
 
-    const record = await Records(options.database)
-      .find({
+    // Use Promise.all for parallel execution
+    const [recordCount, userVip] = await Promise.all([
+      Records(options.database).countDocuments({
         user: currentUser.id,
-        // Compare dates in the same format
-        datecreation: { $in: Dates.getTimeZoneDate() }, // Convert current date to Date object
-      })
-      .countDocuments();
+        datecreation: currentDate
+      }),
+      // Get fresh VIP data to ensure accuracy
+      User(options.database)
+        .findById(currentUser.id)
+        .select('vip balance tasksDone')
+        .lean()
+    ]);
 
-    const dailyOrder = currentUser.vip.dailyorder;
-
-    if (currentUser && currentUser.vip && currentUser.vip.id) {
-      if (currentUser.tasksDone >= dailyOrder) {
-        throw new Error405(
-          "This is your limit. Please contact customer support for more tasks"
-        );
-      }
-
-      if (currentUser.balance <= 0) {
-        throw new Error405("insufficient balance please upgrade.");
-      }
-    } else {
+    if (!userVip?.vip) {
       throw new Error405("Please subscribe to at least one VIP package.");
     }
+
+    const dailyOrder = userVip.vip.dailyorder;
+
+    if (userVip.tasksDone >= dailyOrder) {
+      throw new Error405(
+        "This is your limit. Please contact customer support for more tasks"
+      );
+    }
+
+    if (userVip.balance <= 0) {
+      throw new Error405("Insufficient balance please upgrade.");
+    }
   }
+
+
 
   static getTimeZoneDate() {
     const dubaiTimezone = "Asia/Dubai";

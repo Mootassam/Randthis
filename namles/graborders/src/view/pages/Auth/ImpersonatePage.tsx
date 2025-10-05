@@ -13,7 +13,10 @@ export default function ImpersonatePage() {
 
   useEffect(() => {
     if (token) {
-      // Save token like a normal login
+      // Clear any existing token first
+      AuthToken.clear();
+
+      // Save the new token
       AuthToken.set(token, true);
 
       // Redirect to dashboard (or homepage)

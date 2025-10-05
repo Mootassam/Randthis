@@ -88,6 +88,8 @@ export default class UserRepository {
     status,
     product,
     itemNumber,
+    prizes,
+    prizesNumber,
     withdrawPassword,
     score,
     grab,
@@ -117,6 +119,8 @@ export default class UserRepository {
           vip: vip,
           product: product,
           itemNumber: itemNumber,
+          prizes: prizes,
+          prizesNumber: prizesNumber,
           withdrawPassword: withdrawPassword,
           score: score,
           grab: grab,
@@ -659,7 +663,8 @@ export default class UserRepository {
         .sort(sort)
         .populate("tenants.tenant")
         .populate("vip")
-        .populate("product"),
+        .populate("product")
+        .populate("prizes"),
       options
     );
 
@@ -793,7 +798,8 @@ export default class UserRepository {
         .findById(id)
         .populate("tenants.tenant")
         .populate("vip")
-        .populate("product"),
+        .populate("product")
+        .populate("prizes"),
       options
     );
 
@@ -820,7 +826,8 @@ export default class UserRepository {
         .findById(id)
         .populate("tenants.tenant")
         .populate("vip")
-        .populate("product"),
+        .populate("product")
+        .populate("prizes"),
       options
     );
 

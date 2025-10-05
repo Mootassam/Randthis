@@ -3,6 +3,10 @@ import Message from 'src/view/shared/message';
 import { getHistory } from 'src/modules/store';
 import { i18n } from "../../../i18n";
 import RecordService from 'src/modules/record/recordService';
+import productListActions from 'src/modules/product/list/productListActions';
+import recordListActions from '../list/recordListActions';
+import authActions from 'src/modules/auth/authActions';
+import productListReducers from 'src/modules/product/list/productListReducers';
 
 const prefix = 'RECORD_FORM';
 
@@ -14,6 +18,8 @@ const recordFormActions = {
   CREATE_STARTED: `${prefix}_CREATE_STARTED`,
   CREATE_SUCCESS: `${prefix}_CREATE_SUCCESS`,
   CREATE_ERROR: `${prefix}_CREATE_ERROR`,
+
+
 
   UPDATE_STARTED: `${prefix}_UPDATE_STARTED`,
   UPDATE_SUCCESS: `${prefix}_UPDATE_SUCCESS`,
@@ -54,17 +60,25 @@ const recordFormActions = {
         type: recordFormActions.CREATE_STARTED,
       });
 
+      // Execute the creation first
       await RecordService.create(values);
 
       dispatch({
         type: recordFormActions.CREATE_SUCCESS,
       });
 
+      // Execute all independent dispatches in parallel
+      await Promise.all([
+        dispatch(recordListActions.doFetch()),
+        dispatch(authActions.doRefreshCurrentUser()),
+        dispatch(recordListActions.doCountDay()),
+        dispatch(productListActions.doCloseModal()),
+      ]);
+
       Message.success(
         i18n('entities.record.create.success'),
       );
 
-      getHistory().push('/grap');
     } catch (error) {
       Errors.handle(error);
 

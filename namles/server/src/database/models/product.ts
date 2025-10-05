@@ -19,12 +19,13 @@ export default (database) => {
       },
       commission: {
         type: String,
-      },
+      }, 
       photo: [FileSchema],
 
-      combo: {
-        type: Boolean,
-        default: false,
+      type: {
+        type: String,
+        enum: ["prizes", "combo", "normal"],
+        default: "normal",
       },
      
       vip: {

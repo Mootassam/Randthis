@@ -1751,6 +1751,14 @@ const en = {
         createdAtRange: 'Created at',
       },
       enumerators: {
+        type: {
+          prizes: "prizes",
+          combo: "combo",
+          normal: "normal",
+
+        },
+
+
         status: {
           enable: 'Enable',
           disable: 'Disable',
