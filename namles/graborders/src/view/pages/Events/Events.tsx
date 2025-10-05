@@ -7,7 +7,7 @@ function Events() {
     <div>
       <SubHeader title={i18n('pages.actions.event')} path="/" />
       <div className="images__events"> 
-        <img src="/images/events/Event.jpg" alt="" />
+        <img src="/images/events/Event.png" alt="" />
       </div>
     </div>
   );
