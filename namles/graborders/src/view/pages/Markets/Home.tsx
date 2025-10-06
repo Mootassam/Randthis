@@ -510,6 +510,7 @@ function Home() {
             padding: 24px 20px;
             border: 1px solid #E2E8F0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 70px
           }
 
           .employee-level-title {
