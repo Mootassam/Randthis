@@ -345,7 +345,7 @@ function Profile() {
 
 .profile-card {
   position: relative;
-  background: #FFFFFF;
+  background: #0d3e55;
   border-radius: 16px;
   padding: 20px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -379,7 +379,7 @@ function Profile() {
 .user-name {
   font-size: 18px;
   font-weight: 600;
-  color: #1A202C;
+  color: #fff;
   margin-bottom: 5px;
 }
 
@@ -416,7 +416,7 @@ function Profile() {
 
 .score-label {
   font-size: 14px;
-  color: #718096;
+  color: #fff;
   margin-bottom: 8px;
 }
 
@@ -461,14 +461,14 @@ function Profile() {
 
 .stat-label {
   font-size: 12px;
-  color: #718096;
+  color: #fff;
   margin-bottom: 4px;
 }
 
 .stat-amount {
   font-size: 14px;
   font-weight: 600;
-  color: #1A202C;
+  color: #fff;
 }
 
 .stat-divider {

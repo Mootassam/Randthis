@@ -11,18 +11,31 @@ import listactions from "src/modules/company/list/companyListActions";
 import selectors from "src/modules/company/list/companyListSelectors";
 import { i18n } from "../../../i18n";
 
-function Home() {
-  const MarketContainer = styled.div`
-    top: 0;
-    background-color: #EDF1F7;
-    with: 100dvw;
-    width: 100%;
-    height: auto;
-    position: absolute;
-    left: 0;
-    min-height: 100vh;
-  `;
+// Move styled component outside the component function
+const MarketContainer = styled.div`
+  top: 0;
+  background-color: #EDF1F7;
+  width: 100%;
+  height: auto;
+  position: absolute;
+  left: 0;
+  min-height: 100vh;
+`;
 
+interface DataItem {
+  id: string;
+  image: string;
+  title: string;
+  Entrylimit: string;
+  levellimit: string;
+  dailyorder: string;
+  comisionrate: string;
+  commissionmergedata?: string;
+  tasksperday?: string;
+  photo?: Array<{ downloadUrl: string }>;
+}
+
+function Home() {
   const dispatch = useDispatch();
   const record = useSelector(selector.selectRows);
   const logorecord = useSelector(selectors.selectRows);
@@ -34,19 +47,11 @@ function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const searchAllCoins = async () => { };
 
-  interface DataItem {
-    image: string;
-    title: string;
-    Entrylimit: string;
-    levellimit: string;
-    dailyorder: string;
-    comisionrate: string;
-  }
   const [selectedItem, setItems] = useState<DataItem | null>(null);
 
   const currentDate = () => {
-    const californiaTimezone = "America/Los_Angeles"; // Timezone for California
-    const options = { timeZone: californiaTimezone };
+    const californiaTimezone = "America/Los_Angeles";
+    const options: Intl.DateTimeFormatOptions = { timeZone: californiaTimezone };
     const currentDateTime = new Date().toLocaleString("en-US", options);
     return currentDateTime;
   };
@@ -70,10 +75,10 @@ function Home() {
       setCurrentSlide((prevSlide) =>
         prevSlide === Images.length - 1 ? 0 : prevSlide + 1
       );
-    }, 3000); // Change slide every 3 seconds
+    }, 3000);
 
     return () => {
-      clearInterval(sliderInterval); // Cleanup on unmount
+      clearInterval(sliderInterval);
     };
   }, []);
 
@@ -81,7 +86,7 @@ function Home() {
     setShowModal(false);
   };
 
-  const showModal = (item) => {
+  const showModal = (item: DataItem) => {
     setItems(item);
     setShowModal(true);
   };
@@ -119,17 +124,18 @@ function Home() {
     },
   ];
 
-  const submit = (item) => {
+  const submit = (item: DataItem) => {
     const data = {
       vip: item,
     };
     dispatch(actions.doUpdateProfileMobile(data));
   };
 
-  const NewsTicker = ({ text }) => {
+  // Fixed NewsTicker component with proper marquee
+  const NewsTicker = ({ text }: { text: string }) => {
     return (
       <div className="news-ticker-container">
-        <div className="news-ticker">
+        <div className="news-ticker-content">
           <span>{text}</span>
         </div>
       </div>
@@ -142,7 +148,7 @@ function Home() {
     "https://nowspeed.com/wp-content/uploads/jennifer-anderson-blog-1024x576.png",
     "https://nowspeed.com/wp-content/uploads/nathan-girard-blog-1024x576.png",
     "https://nowspeed.com/wp-content/uploads/dan-stradtman-blog-1024x576.png"
-  ]
+  ];
 
   return (
     <MarketContainer>
@@ -154,44 +160,23 @@ function Home() {
       >
         {/* Header with Image Slider */}
         <div className="advertise__header">
-          <div className="image-slider">
-            {Images.map((image, index) => (
-              <div
-                key={index}
-                className={`slide ${index === currentSlide ? 'active' : ''}`}
-              >
-                <img
-                  src={image}
-                  alt={`Slide ${index + 1}`}
-                  className="slider-image"
-                />
-              </div>
-            ))}
-
-            {/* Indicator dots */}
-            <div className="slider-indicators">
-              {Images.map((_, index) => (
-                <div
-                  key={index}
-                  className={`indicator ${index === currentSlide ? 'active' : ''}`}
-                  onClick={() => setCurrentSlide(index)}
-                />
-              ))}
-            </div>
-          </div>
+      
+      <img src="/images/home/home.png" alt="" srcset="" />
         </div>
 
         <div className="home__section">
+          {/* FIXED: Announcement section with working marquee */}
           <div className="advertise__speaker">
             <div>
-              <i className="fa-solid fa-volume-off speaker"></i>
+              <i className="fa-solid fa-volume-high speaker"></i>
             </div>
-            <div className="marquee">
-              <span>
-                {i18n('pages.home.announcement')}
-              </span>
+            <div className="announcement-container">
+              <div className="announcement-text">
+                <span>
+                  {i18n('pages.home.announcement')} - Welcome to our platform! Important updates and news will be displayed here.
+                </span>
+              </div>
             </div>
-            <NewsTicker text="" />
           </div>
 
           <div className="adverstise__actions">
@@ -239,9 +224,12 @@ function Home() {
                       <div className="vip-level-content">
                         <div className="vip-level-image">
                           <img
-                            src={item?.photo[0]?.downloadUrl}
+                            src={item?.photo?.[0]?.downloadUrl || "/default-image.png"}
                             alt={item?.title}
                             className="level-image"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = "/default-image.png";
+                            }}
                           />
                         </div>
 
@@ -285,6 +273,17 @@ function Home() {
               </div>
 
               <div className="modal-body-section">
+                <div className="level-preview">
+                  <div className="preview-image">
+                    <img
+                      src={selectedItem?.photo?.[0]?.downloadUrl || "/default-image.png"}
+                      alt={selectedItem?.title}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/default-image.png";
+                      }}
+                    />
+                  </div>
+                </div>
 
                 <div className="level-details">
                   <div className="detail-item">
@@ -327,7 +326,6 @@ function Home() {
           </div>
         )}
 
-
         <style>{`
           /* Image Slider Styles */
           .image-slider {
@@ -337,6 +335,8 @@ function Home() {
             height: 200px;
             overflow: hidden;
             background: #000;
+            margin: 0 auto;
+            border-radius: 12px;
           }
 
           .slide {
@@ -387,20 +387,7 @@ function Home() {
             background: #FFFFFF;
           }
 
-          /* Header Styles */
-          .advertise__header {
-            position: relative;
-            width: 100%;
-          }
-
-          .user__png {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            object-fit: cover;
-          }
-
-          /* Speaker/Announcement Styles */
+          /* FIXED: Announcement Styles */
           .advertise__speaker {
             background: #FFFFFF;
             padding: 12px 16px;
@@ -412,29 +399,44 @@ function Home() {
             gap: 12px;
             border: 1px solid #E2E8F0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
           }
 
           .speaker {
             color: #4299E1;
             font-size: 16px;
+            flex-shrink: 0;
           }
 
-          .marquee {
+          .announcement-container {
             flex: 1;
             overflow: hidden;
+            position: relative;
           }
 
-          .marquee span {
-            color: #4A5568;
-            font-size: 13px;
-            font-weight: 400;
+          .announcement-text {
             white-space: nowrap;
             animation: marquee 15s linear infinite;
           }
 
+          .announcement-text span {
+            color: #4A5568;
+            font-size: 13px;
+            font-weight: 400;
+          }
+
           @keyframes marquee {
-            0% { transform: translateX(100%); }
-            100% { transform: translateX(-100%); }
+            0% {
+              transform: translateX(100%);
+            }
+            100% {
+              transform: translateX(-100%);
+            }
+          }
+
+          /* Pause animation on hover */
+          .announcement-container:hover .announcement-text {
+            animation-play-state: paused;
           }
 
           /* Action Buttons */
@@ -442,7 +444,9 @@ function Home() {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            padding: 0 15px 20px;
+            padding: 20px 15px;
+            max-width: 400px;
+            margin: 0 auto;
           }
 
           .remove__ligne {
@@ -489,12 +493,15 @@ function Home() {
             font-weight: 600;
             margin: 0;
             cursor: pointer;
+            display: block;
           }
 
-          /* VIP Content - IMPROVED DESIGN */
+          /* VIP Content */
           .advertise__content {
             padding: 0 15px 20px;
             margin-bottom: 100px;
+            max-width: 400px;
+            margin: 0 auto;
           }
 
           .content__header {
@@ -647,34 +654,6 @@ function Home() {
             text-align: center;
           }
 
-          .level-stats {
-            display: flex;
-            gap: 16px;
-            background: #F7FAFC;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #E2E8F0;
-          }
-
-          .stat {
-            flex: 1;
-            text-align: center;
-          }
-
-          .stat-label {
-            color: #718096;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-          }
-
-          .stat-value {
-            color: #1A202C;
-            font-size: 16px;
-            font-weight: 700;
-          }
-
           /* Modal Styles */
           .upgrade-modal-overlay {
             position: fixed;
@@ -797,32 +776,6 @@ function Home() {
             font-weight: 700;
           }
 
-          .upgrade-benefits {
-            background: #EDF2F7;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #E2E8F0;
-          }
-
-          .upgrade-benefits h4 {
-            color: #1A202C;
-            font-size: 16px;
-            font-weight: 700;
-            margin: 0 0 12px 0;
-          }
-
-          .upgrade-benefits ul {
-            color: #4A5568;
-            font-size: 14px;
-            line-height: 1.6;
-            margin: 0;
-            padding-left: 20px;
-          }
-
-          .upgrade-benefits li {
-            margin-bottom: 6px;
-          }
-
           .modal-actions {
             display: flex;
             gap: 12px;
@@ -884,7 +837,7 @@ function Home() {
             .adverstise__actions {
               grid-template-columns: repeat(3, 1fr);
               gap: 12px;
-              padding: 0 12px 15px;
+              padding: 20px 12px;
             }
 
             .button__action {
@@ -914,10 +867,6 @@ function Home() {
               width: 70px;
               height: 70px;
               margin: 0 auto;
-            }
-
-            .level-stats {
-              justify-content: center;
             }
 
             .modal-actions {

@@ -7,7 +7,11 @@ function Events() {
     <div>
       <SubHeader title={i18n('pages.actions.event')} path="/" />
       <div className="images__events"> 
-        <img src="/images/events/Event.png" alt="" />
+        <img src="/images/events/event1.png" alt="" />
+        <img src="/images/events/event.png" alt="" />
+
+        <img src="/images/events/event3.png" alt="" />
+
       </div>
     </div>
   );

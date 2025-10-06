@@ -284,10 +284,6 @@ td {
   /* width: 100dvw; */
   max-width: 400px;
   margin: auto;
-  display: flex;
-  overflow: hidden;
-  margin-top: 50px;
-  position: relative;
 }
 
 .image {

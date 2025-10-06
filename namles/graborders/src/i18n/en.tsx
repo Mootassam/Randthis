@@ -103,7 +103,7 @@ tabBottomNavigator: {
       other: "Other",
 
       // Financial Items
-      recharge: "Recharge",
+      recharge: "Deposit",
       withdraw: "Withdraw",
 
       // Details Items
