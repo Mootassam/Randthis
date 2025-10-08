@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, memo } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -35,61 +35,155 @@ interface DataItem {
   photo?: Array<{ downloadUrl: string }>;
 }
 
+// Memoized VIP Card Component for better performance
+const VipLevelCard = memo(({
+  item,
+  isCurrent,
+  onShowModal
+}: {
+  item: DataItem;
+  isCurrent: boolean;
+  onShowModal: (item: DataItem) => void;
+}) => {
+  const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = "/default-image.png";
+  }, []);
+
+  return (
+    <div
+      className={`vip-level-card ${isCurrent ? 'vip-level-active' : ''}`}
+      onClick={() => onShowModal(item)}
+    >
+      <div className="vip-level-badge">
+        {isCurrent ? (
+          <div className="current-level-indicator">
+            <i className="fa-solid fa-crown"></i>
+            {i18n('pages.home.currentLevel')}
+          </div>
+        ) : (
+          <div className="upgrade-level-indicator">
+            {i18n('pages.home.upgrade')}
+          </div>
+        )}
+      </div>
+
+      <div className="vip-level-content">
+        <div className="vip-level-image">
+          <img
+            src={item?.photo?.[0]?.downloadUrl || "/default-image.png"}
+            alt={item?.title}
+            className="level-image"
+            loading="lazy"
+            onError={handleImageError}
+          />
+        </div>
+
+        <div className="vip-level-info">
+          <h4 className="level-title">{item?.title}</h4>
+
+          <div className="level-features">
+            <div className="feature-item">
+              <i className="fa-solid fa-chart-line feature-icon"></i>
+              <span>{item.comisionrate}% {i18n('pages.home.profitNormal')}</span>
+            </div>
+            <div className="feature-item">
+              <i className="fa-solid fa-star feature-icon"></i>
+              <span>{item.commissionmergedata}% {i18n('pages.home.profitPremium')}</span>
+            </div>
+            <div className="feature-item">
+              <i className="fa-solid fa-box feature-icon"></i>
+              <span>{i18n('pages.home.maxOrders')} {item.tasksperday}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+VipLevelCard.displayName = 'VipLevelCard';
+
+// Memoized Action Button Component
+const ActionButton = memo(({ item, index }: { item: any; index: number }) => (
+  <Link to={item.link} className="remove__ligne" key={index}>
+    <div className="button__action">
+      <div className="action__cirlce">
+        <i className={`${item.icon} icon__action`}></i>
+      </div>
+      <label htmlFor="" className="action__label">
+        {item.text}
+      </label>
+    </div>
+  </Link>
+));
+
+ActionButton.displayName = 'ActionButton';
+
 function Home() {
   const dispatch = useDispatch();
   const record = useSelector(selector.selectRows);
-  const logorecord = useSelector(selectors.selectRows);
-  const loadingImage = useSelector(selectors?.selectLoading);
-  const [timemodal, setBigModal] = useState(true);
   const loading = useSelector(selector.selectLoading);
-  const [Modal, setShowModal] = useState(false);
   const currentUser = useSelector(authSelectors.selectCurrentUser);
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const searchAllCoins = async () => { };
 
+  const [Modal, setShowModal] = useState(false);
   const [selectedItem, setItems] = useState<DataItem | null>(null);
 
-  const currentDate = () => {
-    const californiaTimezone = "America/Los_Angeles";
-    const options: Intl.DateTimeFormatOptions = { timeZone: californiaTimezone };
-    const currentDateTime = new Date().toLocaleString("en-US", options);
-    return currentDateTime;
-  };
+  // Optimized image slider with proper state management
+  const Images = [
+    "/images/home/home.png", // Use local image first
+    "https://nowspeed.com/wp-content/uploads/nowspeed-geo-visibility-1024x576.jpg",
+    "https://nowspeed.com/wp-content/uploads/jennifer-anderson-blog-1024x576.png",
+    "https://nowspeed.com/wp-content/uploads/nathan-girard-blog-1024x576.png"
+  ];
 
-  const dolistCompany = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Memoized functions to prevent unnecessary re-renders
+  const dolistCompany = useCallback(() => {
     dispatch(listactions.doFetch());
-  };
-
-  useEffect(() => {
-    dolistCompany();
-    searchAllCoins();
-    dispatch(Vipactions.doFetch());
-    currentDate();
-
-    // eslint-disable-next-line
   }, [dispatch]);
 
-  // Auto slide effect
+  const fetchVipData = useCallback(() => {
+    dispatch(Vipactions.doFetch());
+  }, [dispatch]);
+
+  const hideModal = useCallback(() => {
+    setShowModal(false);
+    setItems(null);
+  }, []);
+
+  const showModal = useCallback((item: DataItem) => {
+    setItems(item);
+    setShowModal(true);
+  }, []);
+
+  const submit = useCallback((item: DataItem) => {
+    const data = {
+      vip: item,
+    };
+    dispatch(actions.doUpdateProfileMobile(data));
+    setShowModal(false);
+    setItems(null);
+  }, [dispatch]);
+
+  // Single useEffect for all data fetching
+  useEffect(() => {
+    dolistCompany();
+    fetchVipData();
+  }, [dolistCompany, fetchVipData]);
+
+  // Auto slide effect with cleanup
   useEffect(() => {
     const sliderInterval = setInterval(() => {
       setCurrentSlide((prevSlide) =>
         prevSlide === Images.length - 1 ? 0 : prevSlide + 1
       );
-    }, 3000);
+    }, 4000); // Increased interval for better performance
 
     return () => {
       clearInterval(sliderInterval);
     };
-  }, []);
-
-  const hideModal = () => {
-    setShowModal(false);
-  };
-
-  const showModal = (item: DataItem) => {
-    setItems(item);
-    setShowModal(true);
-  };
+  }, [Images.length]);
 
   const button__action = [
     {
@@ -124,51 +218,45 @@ function Home() {
     },
   ];
 
-  const submit = (item: DataItem) => {
-    const data = {
-      vip: item,
-    };
-    dispatch(actions.doUpdateProfileMobile(data));
-  };
-
-  // Fixed NewsTicker component with proper marquee
-  const NewsTicker = ({ text }: { text: string }) => {
-    return (
-      <div className="news-ticker-container">
-        <div className="news-ticker-content">
-          <span>{text}</span>
-        </div>
-      </div>
-    );
-  };
-
-  const Images = [
-    "https://nowspeed.com/wp-content/uploads/nowspeed-geo-visibility-1024x576.jpg",
-    "/images/help.png",
-    "https://nowspeed.com/wp-content/uploads/jennifer-anderson-blog-1024x576.png",
-    "https://nowspeed.com/wp-content/uploads/nathan-girard-blog-1024x576.png",
-    "https://nowspeed.com/wp-content/uploads/dan-stradtman-blog-1024x576.png"
-  ];
-
   return (
     <MarketContainer>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {/* Header with Image Slider */}
+      <div className="home-container">
+        {/* Fixed Header with Image Slider */}
         <div className="advertise__header">
-      
-      <img src="/images/home/home.png" alt="" srcset="" />
+          <div className="image-slider">
+            {Images.map((image, index) => (
+              <div
+                key={index}
+                className={`slide ${index === currentSlide ? 'active' : ''}`}
+              >
+                <img
+                  src={image}
+                  alt={`Slide ${index + 1}`}
+                  className="slider-image"
+                  loading={index === 0 ? "eager" : "lazy"} // First image eager, others lazy
+                />
+              </div>
+            ))}
+
+            {/* Indicator dots */}
+            <div className="slider-indicators">
+              {Images.map((_, index) => (
+                <button
+                  key={index}
+                  className={`indicator ${index === currentSlide ? 'active' : ''}`}
+                  onClick={() => setCurrentSlide(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="home__section">
-          {/* FIXED: Announcement section with working marquee */}
+          {/* Announcement section */}
           <div className="advertise__speaker">
             <div>
-              <i className="fa-solid fa-volume-high speaker"></i>
+              <i className="fa-solid fa-volume-high speaker" aria-hidden="true"></i>
             </div>
             <div className="announcement-container">
               <div className="announcement-text">
@@ -179,97 +267,53 @@ function Home() {
             </div>
           </div>
 
+          {/* Action Buttons */}
           <div className="adverstise__actions">
             {button__action.map((item, index) => (
-              <Link to={item.link} className="remove__ligne" key={index}>
-                <div className="button__action">
-                  <div className="action__cirlce">
-                    <i className={`${item.icon} icon__action`}></i>
-                  </div>
-                  <label htmlFor="" className="action__label">
-                    {item.text}
-                  </label>
-                </div>
-              </Link>
+              <ActionButton key={index} item={item} index={index} />
             ))}
           </div>
 
+          {/* VIP Content Section */}
           <div className="advertise__content">
             <div className="content__header">
-              <h3 className="employee-level-title">{i18n('pages.home.levels')}</h3>
-              <p className="employee-level-subtitle">{i18n('pages.home.chooseLevel')}</p>
+              <div className="section-header">
+                <h3 className="employee-level-title">{i18n('pages.home.levels')}</h3>
+                <p className="employee-level-subtitle">{i18n('pages.home.chooseLevel')}</p>
+
+                {/* View All VIP Button as Link */}
+                <Link to="/vip" className="view-all-btn">
+                  <i className="fa-solid fa-grid"></i>
+                  {i18n('pages.home.viewAllVIP')}
+                </Link>
+              </div>
 
               {loading && <LoadingModal />}
               {!loading && record && (
-                <div className="vip-levels-grid">
-                  {record?.map((item, index) => (
-                    <div
-                      className={`vip-level-card ${currentUser?.vip?.id === item.id ? 'vip-level-active' : ''}`}
-                      onClick={() => showModal(item)}
-                      key={index}
-                    >
-                      <div className="vip-level-badge">
-                        {currentUser?.vip?.id === item.id ? (
-                          <div className="current-level-indicator">
-                            <i className="fa-solid fa-crown"></i>
-                            {i18n('pages.home.currentLevel')}
-                          </div>
-                        ) : (
-                          <div className="upgrade-level-indicator">
-                            {i18n('pages.home.upgrade')}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="vip-level-content">
-                        <div className="vip-level-image">
-                          <img
-                            src={item?.photo?.[0]?.downloadUrl || "/default-image.png"}
-                            alt={item?.title}
-                            className="level-image"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = "/default-image.png";
-                            }}
-                          />
-                        </div>
-
-                        <div className="vip-level-info">
-                          <h4 className="level-title">{item?.title}</h4>
-
-                          <div className="level-features">
-                            <div className="feature-item">
-                              <i className="fa-solid fa-chart-line feature-icon"></i>
-                              <span>{item.comisionrate}% {i18n('pages.home.profitNormal')}</span>
-                            </div>
-                            <div className="feature-item">
-                              <i className="fa-solid fa-star feature-icon"></i>
-                              <span>{item.commissionmergedata}% {i18n('pages.home.profitPremium')}</span>
-                            </div>
-                            <div className="feature-item">
-                              <i className="fa-solid fa-box feature-icon"></i>
-                              <span>{i18n('pages.home.maxOrders')} {item.tasksperday}</span>
-                            </div>
-                          </div>
-
-                        </div>
-                      </div>
-                    </div>
+                <div className="vip-levels-grid horizontal-view">
+                  {record.map((item, index) => (
+                    <VipLevelCard
+                      key={item.id || index}
+                      item={item}
+                      isCurrent={currentUser?.vip?.id === item.id}
+                      onShowModal={showModal}
+                    />
                   ))}
                 </div>
               )}
             </div>
           </div>
-
         </div>
 
+        {/* VIP Level Modal */}
         {selectedItem && Modal && (
-          <div className="upgrade-modal-overlay">
-            <div className="upgrade-modal-content">
+          <div className="upgrade-modal-overlay" onClick={hideModal}>
+            <div className="upgrade-modal-content" onClick={(e) => e.stopPropagation()}>
               <div className="modal-header-section">
                 <h3 className="modal-title">{i18n('pages.home.modal.levelDetails')}</h3>
-                <div className="modal-close" onClick={() => hideModal()}>
+                <button className="modal-close" onClick={hideModal} aria-label="Close modal">
                   <i className="fa-solid fa-times"></i>
-                </div>
+                </button>
               </div>
 
               <div className="modal-body-section">
@@ -278,6 +322,7 @@ function Home() {
                     <img
                       src={selectedItem?.photo?.[0]?.downloadUrl || "/default-image.png"}
                       alt={selectedItem?.title}
+                      loading="lazy"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = "/default-image.png";
                       }}
@@ -287,7 +332,7 @@ function Home() {
 
                 <div className="level-details">
                   <div className="detail-item">
-                    <i className="fa-solid fa-layer-group"></i>
+                    <i className="fa-solid fa-layer-group" aria-hidden="true"></i>
                     <div className="detail-content">
                       <span className="detail-label">{i18n('pages.home.modal.levelLimit')}</span>
                       <span className="detail-value">{selectedItem?.levellimit}</span>
@@ -295,7 +340,7 @@ function Home() {
                   </div>
 
                   <div className="detail-item">
-                    <i className="fa-solid fa-calendar-day"></i>
+                    <i className="fa-solid fa-calendar-day" aria-hidden="true"></i>
                     <div className="detail-content">
                       <span className="detail-label">{i18n('pages.home.modal.dailyOrders')}</span>
                       <span className="detail-value">{selectedItem?.dailyorder}</span>
@@ -303,18 +348,17 @@ function Home() {
                   </div>
 
                   <div className="detail-item">
-                    <i className="fa-solid fa-percentage"></i>
+                    <i className="fa-solid fa-percentage" aria-hidden="true"></i>
                     <div className="detail-content">
                       <span className="detail-label">{i18n('pages.home.modal.commissionRate')}</span>
                       <span className="detail-value">{selectedItem?.comisionrate}%</span>
                     </div>
                   </div>
                 </div>
-
               </div>
 
               <div className="modal-actions">
-                <button className="cancel-upgrade-btn" onClick={() => hideModal()}>
+                <button className="cancel-upgrade-btn" onClick={hideModal}>
                   {i18n('pages.home.modal.cancel')}
                 </button>
                 <button className="confirm-upgrade-btn" onClick={() => submit(selectedItem)}>
@@ -326,8 +370,20 @@ function Home() {
           </div>
         )}
 
-        <style>{`
-          /* Image Slider Styles */
+        <style >{`
+          /* Base Styles */
+          .home-container {
+            display: flex;
+            flex-direction: column;
+          }
+
+          /* Fixed Image Slider Styles */
+          .advertise__header {
+            width: 100%;
+            box-sizing: border-box;
+            margin-top:49px;
+          }
+
           .image-slider {
             position: relative;
             width: 100%;
@@ -336,7 +392,8 @@ function Home() {
             overflow: hidden;
             background: #000;
             margin: 0 auto;
-            border-radius: 12px;
+            // border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
           }
 
           .slide {
@@ -346,7 +403,7 @@ function Home() {
             width: 100%;
             height: 100%;
             opacity: 0;
-            transition: opacity 0.8s ease-in-out;
+            transition: opacity 0.5s ease-in-out;
           }
 
           .slide.active {
@@ -357,6 +414,7 @@ function Home() {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            background: #f0f0f0;
           }
 
           .slider-indicators {
@@ -376,6 +434,8 @@ function Home() {
             background: rgba(255, 255, 255, 0.5);
             cursor: pointer;
             transition: all 0.3s ease;
+            border: none;
+            padding: 0;
           }
 
           .indicator.active {
@@ -387,7 +447,7 @@ function Home() {
             background: #FFFFFF;
           }
 
-          /* FIXED: Announcement Styles */
+          /* Announcement Styles */
           .advertise__speaker {
             background: #FFFFFF;
             padding: 12px 16px;
@@ -416,7 +476,7 @@ function Home() {
 
           .announcement-text {
             white-space: nowrap;
-            animation: marquee 15s linear infinite;
+            animation: marquee 20s linear infinite;
           }
 
           .announcement-text span {
@@ -434,7 +494,6 @@ function Home() {
             }
           }
 
-          /* Pause animation on hover */
           .announcement-container:hover .announcement-text {
             animation-play-state: paused;
           }
@@ -443,7 +502,7 @@ function Home() {
           .adverstise__actions {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
+            gap: 12px;
             padding: 20px 15px;
             max-width: 400px;
             margin: 0 auto;
@@ -456,9 +515,9 @@ function Home() {
           .button__action {
             background: #FFFFFF;
             border-radius: 12px;
-            padding: 20px 10px;
+            padding: 15px 8px;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             border: 1px solid #E2E8F0;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             cursor: pointer;
@@ -466,40 +525,40 @@ function Home() {
 
           .button__action:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             border-color: #4299E1;
           }
 
           .action__cirlce {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             background: rgba(66, 153, 225, 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 10px;
+            margin: 0 auto 8px;
             border: 2px solid #4299E1;
           }
 
           .icon__action {
             color: #4299E1;
-            font-size: 20px;
+            font-size: 18px;
           }
 
           .action__label {
             color: #2D3748;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             margin: 0;
             cursor: pointer;
             display: block;
+            line-height: 1.3;
           }
 
           /* VIP Content */
           .advertise__content {
             padding: 0 15px 20px;
-            margin-bottom: 100px;
             max-width: 400px;
             margin: 0 auto;
           }
@@ -507,108 +566,134 @@ function Home() {
           .content__header {
             background: #FFFFFF;
             border-radius: 20px;
-            padding: 24px 20px;
+            padding: 20px;
             border: 1px solid #E2E8F0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-            margin-bottom: 70px
+
+            margin-bottom:80px;
           }
 
-          .employee-level-title {
-            color: #1A202C;
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 0 8px 0;
+          .section-header {
             text-align: center;
-            background: linear-gradient(135deg, #4299E1, #3182CE);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            margin-bottom: 20px;
           }
 
-          .employee-level-subtitle {
-            color: #718096;
+          /* View All Button as Link */
+          .view-all-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 24px;
             font-size: 14px;
-            text-align: center;
-            margin: 0 0 30px 0;
-            font-weight: 400;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            margin: 10px 0 20px 0;
+            text-decoration: none;
           }
 
-          .vip-levels-grid {
+          .view-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+          }
+
+          /* VIP Levels Grid */
+          .vip-levels-grid.horizontal-view {
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            gap: 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 10px;
+            -webkit-overflow-scrolling: touch;
+            cursor: grab;
+          }
+
+          .vip-levels-grid::-webkit-scrollbar {
+            display: none;
           }
 
           .vip-level-card {
             background: #FFFFFF;
             border: 2px solid #E2E8F0;
             border-radius: 16px;
-            padding: 20px;
-            transition: all 0.3s ease;
+            padding: 16px;
+            transition: all 0.2s ease;
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            flex: 0 0 auto;
+            width: 260px;
+            min-height: 160px;
           }
 
           .vip-level-card:hover {
             border-color: #4299E1;
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(66, 153, 225, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(66, 153, 225, 0.15);
           }
 
           .vip-level-card.vip-level-active {
             border-color: #48BB78;
             background: linear-gradient(135deg, #FFFFFF, #F0FFF4);
-            box-shadow: 0 8px 30px rgba(72, 187, 120, 0.15);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.15);
           }
 
           .vip-level-badge {
             position: absolute;
-            top: 16px;
-            right: 16px;
+            top: 12px;
+            right: 12px;
             z-index: 2;
           }
 
           .current-level-indicator {
             background: linear-gradient(135deg, #48BB78, #38A169);
             color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 4px;
-            box-shadow: 0 2px 8px rgba(72, 187, 120, 0.3);
           }
 
           .upgrade-level-indicator {
             background: linear-gradient(135deg, #4299E1, #3182CE);
             color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
             font-weight: 600;
-            box-shadow: 0 2px 8px rgba(66, 153, 225, 0.3);
           }
 
           .vip-level-content {
             display: flex;
-            align-items: flex-start;
-            gap: 16px;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 10px;
+            height: 100%;
           }
 
           .vip-level-image {
-            flex-shrink: 0;
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
             overflow: hidden;
-            border: 3px solid #E2E8F0;
+            border: 2px solid #E2E8F0;
             background: #F7FAFC;
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
           }
 
           .vip-level-card.vip-level-active .vip-level-image {
@@ -623,36 +708,58 @@ function Home() {
 
           .vip-level-info {
             flex: 1;
-            min-width: 0;
+            width: 100%;
           }
 
           .level-title {
             color: #1A202C;
-            font-size: 18px;
+            font-size: 15px;
             font-weight: 700;
-            margin: 0 0 12px 0;
+            margin: 0 0 8px 0;
+            line-height: 1.2;
           }
 
           .level-features {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-bottom: 16px;
+            gap: 4px;
           }
 
           .feature-item {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             color: #4A5568;
-            font-size: 13px;
+            font-size: 11px;
+            justify-content: center;
+            line-height: 1.2;
           }
 
           .feature-icon {
             color: #4299E1;
-            font-size: 12px;
-            width: 16px;
+            font-size: 10px;
+            width: 12px;
             text-align: center;
+          }
+
+          .employee-level-title {
+            color: #1A202C;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 0 6px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #4299E1, #3182CE);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+
+          .employee-level-subtitle {
+            color: #718096;
+            font-size: 13px;
+            text-align: center;
+            margin: 0 0 10px 0;
+            font-weight: 400;
           }
 
           /* Modal Styles */
@@ -668,7 +775,7 @@ function Home() {
             justify-content: center;
             padding: 20px;
             z-index: 1000;
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(4px);
           }
 
           .upgrade-modal-content {
@@ -676,7 +783,7 @@ function Home() {
             border-radius: 20px;
             padding: 0;
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
             border: 1px solid #E2E8F0;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
             overflow: hidden;
@@ -684,14 +791,14 @@ function Home() {
 
           .modal-header-section {
             background: linear-gradient(135deg, #4299E1, #3182CE);
-            padding: 24px;
+            padding: 20px;
             text-align: center;
             position: relative;
           }
 
           .modal-title {
             color: #FFFFFF;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             margin: 0;
           }
@@ -705,6 +812,9 @@ function Home() {
             font-size: 18px;
             opacity: 0.8;
             transition: opacity 0.3s ease;
+            background: none;
+            border: none;
+            padding: 4px;
           }
 
           .modal-close:hover {
@@ -712,21 +822,21 @@ function Home() {
           }
 
           .modal-body-section {
-            padding: 24px;
+            padding: 20px;
           }
 
           .level-preview {
             text-align: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
           }
 
           .preview-image {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 16px;
             overflow: hidden;
             margin: 0 auto;
-            border: 4px solid #E2E8F0;
+            border: 3px solid #E2E8F0;
             background: #F7FAFC;
           }
 
@@ -739,24 +849,24 @@ function Home() {
           .level-details {
             display: flex;
             flex-direction: column;
-            gap: 16px;
-            margin-bottom: 24px;
+            gap: 12px;
+            margin-bottom: 20px;
           }
 
           .detail-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 16px;
+            padding: 12px;
             background: #F7FAFC;
-            border-radius: 12px;
+            border-radius: 10px;
             border: 1px solid #E2E8F0;
           }
 
           .detail-item i {
             color: #4299E1;
-            font-size: 20px;
-            width: 24px;
+            font-size: 18px;
+            width: 20px;
           }
 
           .detail-content {
@@ -766,32 +876,32 @@ function Home() {
 
           .detail-label {
             color: #718096;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
           }
 
           .detail-value {
             color: #1A202C;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
           }
 
           .modal-actions {
             display: flex;
-            gap: 12px;
-            padding: 0 24px 24px;
+            gap: 10px;
+            padding: 0 20px 20px;
           }
 
           .cancel-upgrade-btn, .confirm-upgrade-btn {
             flex: 1;
-            padding: 16px;
+            padding: 14px;
             border: none;
             border-radius: 12px;
             font-weight: 600;
-            font-size: 15px;
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
           }
 
           .cancel-upgrade-btn {
@@ -811,13 +921,20 @@ function Home() {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+            gap: 6px;
           }
 
           .confirm-upgrade-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
+            transform: translateY(-1px);
+          }
+
+          /* Performance Optimizations */
+          @media (prefers-reduced-motion: reduce) {
+            * {
+              animation-duration: 0.01ms !important;
+              animation-iteration-count: 1 !important;
+              transition-duration: 0.01ms !important;
+            }
           }
 
           /* Responsive Design */
@@ -826,52 +943,36 @@ function Home() {
               height: 180px;
             }
 
-            .slider-indicators {
-              bottom: 12px;
-            }
-
-            .indicator {
-              width: 6px;
-              height: 6px;
-            }
-
             .adverstise__actions {
-              grid-template-columns: repeat(3, 1fr);
-              gap: 12px;
-              padding: 20px 12px;
+              gap: 10px;
+              padding: 15px 12px;
             }
 
             .button__action {
-              padding: 15px 8px;
+              padding: 12px 6px;
             }
 
             .action__cirlce {
-              width: 45px;
-              height: 45px;
+              width: 40px;
+              height: 40px;
             }
 
             .icon__action {
-              font-size: 18px;
+              font-size: 16px;
             }
 
-            .advertise__content {
-              padding: 0 12px 15px;
+            .action__label {
+              font-size: 10px;
             }
 
-            .vip-level-content {
-              flex-direction: column;
-              text-align: center;
-              gap: 12px;
+            .vip-level-card {
+              width: 240px;
+              padding: 12px;
             }
 
-            .vip-level-image {
-              width: 70px;
-              height: 70px;
-              margin: 0 auto;
-            }
-
-            .modal-actions {
-              flex-direction: column;
+            .view-all-btn {
+              padding: 10px 20px;
+              font-size: 13px;
             }
           }
         `}</style>
@@ -880,4 +981,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default memo(Home);

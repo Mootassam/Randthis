@@ -10,6 +10,12 @@ const privateRoutes = [
     exact: true,
   },
   {
+    path: "/vip",
+    loader: () => import("src/view/pages/Vip/Vip"),
+    permissionRequired: permissions.categoryRead,
+    exact: true,
+  },
+  {
     path: "/Order",
     loader: () => import("src/view/pages/Order/Order"),
     permissionRequired: permissions.categoryRead,

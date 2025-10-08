@@ -56,7 +56,8 @@ const en = {
       chooseLevel: "Choose your level to maximize your earnings",
       welcome: "Welcome",
       announcement: "Dear users, the Nowspeed platform is back to the best and normal, continue to earn as much as you can from the platform",
-
+      viewAllVIP: "View All VIP",
+      showLess: "Show Less",
       // Action Buttons
       services: "Services",
       events: "Events",
@@ -82,12 +83,38 @@ const en = {
         upgradeNow: "Upgrade Now"
       }
     },
-tabBottomNavigator: {
-    home: "home",
-    grap: "grap",
-    records: "records",
-    starting: "starting"
-  },
+
+     vip: {
+      title: "VIP Levels",
+      subtitle: "Choose your membership level and unlock exclusive benefits",
+      backToHome: "Back to Home",
+      searchPlaceholder: "Search VIP levels...",
+      noResults: "No VIP levels found",
+      noResultsDesc: "Try adjusting your search terms",
+      currentLevel: "Current Level",
+      upgrade: "Upgrade",
+      locked: "Locked",
+      currentlyOn: "Currently on",
+      upgradeTo: "Upgrade to",
+      levelDetails: "Level Details",
+      levelLimit: "Level Limit",
+      dailyOrders: "Daily Orders",
+      setperday:"Sets Per Day",
+      commissionRate: "Commission Rate",
+      premiumCommission: "Premium Commission",
+      maxOrders: "Max Orders",
+      commission: "Commission",
+      benefits: "Benefits",
+      cancel: "Cancel",
+      upgradeNow: "Upgrade Now",
+      upgrading: "Upgrading..."
+    },
+    tabBottomNavigator: {
+      home: "home",
+      grap: "grap",
+      records: "records",
+      starting: "starting"
+    },
     profile: {
       title: "Profile",
       invitationCode: "Invitation Code",
