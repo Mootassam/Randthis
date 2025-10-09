@@ -130,10 +130,11 @@ function Home() {
 
   // Optimized image slider with proper state management
   const Images = [
-    "/images/home/home.png", // Use local image first
-    "https://nowspeed.com/wp-content/uploads/nowspeed-geo-visibility-1024x576.jpg",
-    "https://nowspeed.com/wp-content/uploads/jennifer-anderson-blog-1024x576.png",
-    "https://nowspeed.com/wp-content/uploads/nathan-girard-blog-1024x576.png"
+    "images/home/home.png",
+    "https://nowspeed.com/wp-content/uploads/ns-content-marketing.jpg", // Use local image first
+    "https://nowspeed.com/wp-content/uploads/ns-campaigns.jpg",
+    "https://nowspeed.com/wp-content/uploads/aed8c19bc75f85346ff4c6e5265256a1.jpg",
+    "https://nowspeed.com/wp-content/uploads/ns-seo.jpg"
   ];
 
   const [currentSlide, setCurrentSlide] = useState(0);
