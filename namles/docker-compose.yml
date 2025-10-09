@@ -1,44 +1,70 @@
-version: "3.3"
+version: "3.8"
+
 services:
   backend:
-    build: ./server
+    container_name: namles-backend
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+      # prevents cache from creating dangling images
+      args:
+        - BUILDKIT_INLINE_CACHE=1
     ports:
-      - 8080:8080
+      - "8080:8080"
     restart: unless-stopped
     volumes:
       - upload:/upload
     environment:
       DATABASE_CONNECTION: mongodb://db/olivia
+    depends_on:
+      - db
+
   db:
+    container_name: namles-db
     image: mongo:4.0-xenial
     ports:
-      - 2737:27017
+      - "2737:27017"
     restart: unless-stopped
     volumes:
       - phone:/data/db
+
   web:
-    build: ./admin
+    container_name: namles-web
+    build:
+      context: ./admin
+      dockerfile: Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
     ports:
-      - 3055:80
+      - "3055:80"
     restart: unless-stopped
     volumes:
-      - "./admin:/app"
-      - "/app/node_modules"
+      - ./admin:/app
+      - /app/node_modules
     stdin_open: true
     environment:
-      - CHOKIDAR_USEPOLLING=true
+      CHOKIDAR_USEPOLLING: "true"
+    depends_on:
+      - backend
 
   web1:
-    build: ./graborders
+    container_name: namles-web1
+    build:
+      context: ./graborders
+      dockerfile: Dockerfile
+      args:
+        - BUILDKIT_INLINE_CACHE=1
     ports:
-      - 3018:80
+      - "3018:80"
     restart: unless-stopped
     volumes:
-      - "./graborders:/app"
-      - "/app/node_modules"
+      - ./graborders:/app
+      - /app/node_modules
     stdin_open: true
     environment:
-      - CHOKIDAR_USEPOLLING=true
+      CHOKIDAR_USEPOLLING: "true"
+    depends_on:
+      - backend
 
 volumes:
   phone:
