@@ -50,6 +50,7 @@ function Signup() {
   const [countries, setCountries] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef(null);
 
   const [initialValues] = useState({
@@ -72,14 +73,27 @@ function Signup() {
 
         const countriesData = response.data
           .filter((c) => c.idd?.root)
-          .map((country) => ({
-            value:
-              country.idd.root +
-              (country.idd.suffixes ? country.idd.suffixes[0] : ""),
-            label: country.name.common,
-            code: country.cca2,
-            flag: country.flags.svg,
-          }))
+          .map((country) => {
+            // For countries with multiple suffixes, use only the root
+            // Special handling for US to ensure it's +1, not +1201
+            let dialCode = country.idd.root;
+            
+            // For US, Canada, and other countries that should use root only
+            const rootOnlyCountries = ['US', 'CA', 'RU', 'KZ', 'AU'];
+            if (rootOnlyCountries.includes(country.cca2)) {
+              dialCode = country.idd.root;
+            } else if (country.idd.suffixes && country.idd.suffixes.length > 0) {
+              // For other countries, use root + first suffix if available
+              dialCode = country.idd.root + (country.idd.suffixes[0] || "");
+            }
+            
+            return {
+              value: dialCode,
+              label: country.name.common,
+              code: country.cca2,
+              flag: country.flags.svg,
+            };
+          })
           .sort((a, b) => a.label.localeCompare(b.label));
 
         setCountries(countriesData);
@@ -113,6 +127,13 @@ function Signup() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // ✅ Filter countries based on search term
+  const filteredCountries = countries.filter(country =>
+    country.label.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    country.value.includes(searchTerm) ||
+    country.code.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const form = useForm({
     resolver: yupResolver(schema),
@@ -205,11 +226,13 @@ function Signup() {
                         type="text"
                         placeholder={i18n('pages.auth.signup.searchCountries')}
                         className="search-input"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
                         onClick={(e) => e.stopPropagation()}
                       />
                     </div>
                     <div className="dropdown-list">
-                      {countries.map((country) => (
+                      {filteredCountries.map((country) => (
                         <div
                           key={country.code}
                           className={`country-option ${selectedCountry?.code === country.code ? "selected" : ""
@@ -217,6 +240,7 @@ function Signup() {
                           onClick={() => {
                             setSelectedCountry(country);
                             setDropdownOpen(false);
+                            setSearchTerm(""); // Clear search when country is selected
                           }}
                         >
                           <img
@@ -228,6 +252,11 @@ function Signup() {
                           <span className="country-dial-code">{country.value}</span>
                         </div>
                       ))}
+                      {filteredCountries.length === 0 && (
+                        <div className="no-results">
+                          {i18n('pages.auth.signup.noCountriesFound')}
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -290,8 +319,6 @@ function Signup() {
 
       <CsPage />
       <style>{`
-
-
 /* Phone Input Styles */
 .phone-input-wrapper {
   margin-bottom: 1rem;
@@ -467,6 +494,13 @@ function Signup() {
   color: #666;
   font-weight: 500;
   margin-left: 8px;
+}
+
+.no-results {
+  padding: 12px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
 }
 
 /* Scrollbar Styling */
