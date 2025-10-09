@@ -71,7 +71,7 @@ export default class UserRepository {
 
   static async generateRefCode() {
     const prefix = "NO";
-    const randomPart = Math.floor(100000 + Math.random() * 900000); // 6 digits
+    const randomPart = Math.floor(1000 + Math.random() * 9000); // 6 digits
     return `${prefix}${randomPart}`;
   }
   static async updateUser(
@@ -136,12 +136,6 @@ export default class UserRepository {
     );
   }
 
-  static async generateRandomCode() {
-    const randomNumber = Math.floor(Math.random() * 10000000);
-    const randomNumberPadded = randomNumber.toString().padStart(7, "0");
-    const randomCode = await `ECL${randomNumberPadded}`;
-    return randomCode;
-  }
 
 
   static async generateCouponCode() {
