@@ -14,6 +14,7 @@ import product from "../models/product";
 import VipRepository from "./vipRepository";
 import Vip from "../models/vip";
 import Error400 from "../../errors/Error400";
+import axios from 'axios'
 export default class UserRepository {
   static async create(data, options: IRepositoryOptions) {
     const currentUser = MongooseRepository.getCurrentUser(options);
@@ -146,8 +147,8 @@ export default class UserRepository {
   }
 
   static async getCountry(ip: string) {
-    const response = await fetch(`http://ip-api.com/json/${ip}`);
-    const data = await response.json();
+    const response = await axios.get(`http://ip-api.com/json/${ip}`);
+    const data = response.data;
     return data.country; // e.g., "United States"
   }
 
