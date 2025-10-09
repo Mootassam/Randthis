@@ -827,7 +827,7 @@ const en = {
 
   user: {
     fields: {
-      genre: "Gender",
+      gender: "Gender",
       username: "Username",
       walletName: "wallet Name",
       id: "Id",

@@ -287,10 +287,10 @@ function Signup() {
 
             <SelectFormItem
               name="gender"
-              placeholder={i18n("user.fields.genre")}
+              placeholder={i18n("user.fields.gender")}
               options={userEnumerators.genre.map((value) => ({
                 value,
-                label: i18n(`user.enumerators.genre.${value}`),
+                label: i18n(`user.enumerators.gender.${value}`),
               }))}
               required
             />
