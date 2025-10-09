@@ -49,12 +49,26 @@ const de = {
         upgradeNow: "Jetzt upgraden"
       }
     },
-  tabBottomNavigator: {
-    home: "Startseite",
-    grap: "Erfassen",
-    records: "Aufzeichnungen",
-    starting: "Starten"
-  },
+
+    prizeModal: {
+      congratulations: "Herzlichen Glückwunsch!",
+      spinning: "Dreht sich...",
+      prizeWon: "Sie haben gewonnen!",
+      currency: "USD",
+      prizeBreakdown: "Preisaufstellung",
+      totalAmount: "Gesamtbetrag",
+      yourWinnings: "Ihr Gewinn",
+      claimPrize: "Preis beanspruchen",
+      celebrationMessage: "Genießen Sie Ihre Belohnung!",
+    },
+
+    
+    tabBottomNavigator: {
+      home: "Startseite",
+      grap: "Erfassen",
+      records: "Aufzeichnungen",
+      starting: "Starten"
+    },
 
     transaction: {
       title: "Transaktionsverlauf",

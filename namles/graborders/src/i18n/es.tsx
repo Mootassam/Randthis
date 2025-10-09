@@ -1,3 +1,4 @@
+
 import Withdraw from "src/view/pages/withdraw/Withdraw";
 
 
@@ -48,12 +49,24 @@ const es = {
       }
     },
 
-  tabBottomNavigator: {
-    home: "Inicio",
-    grap: "Capturar",
-    records: "Registros",
-    starting: "Comenzar"
-  },
+    prizeModal: {
+      congratulations: "¡Felicidades!",
+      spinning: "Girando...",
+      prizeWon: "¡Has ganado!",
+      currency: "USD",
+      prizeBreakdown: "Desglose del Premio",
+      totalAmount: "Cantidad Total",
+      yourWinnings: "Tus Ganancias",
+      claimPrize: "Reclamar Premio",
+      celebrationMessage: "¡Disfruta tu recompensa!",
+    },
+
+    tabBottomNavigator: {
+      home: "Inicio",
+      grap: "Capturar",
+      records: "Registros",
+      starting: "Comenzar"
+    },
     transaction: {
       title: "Historial de Transacciones",
       filters: {

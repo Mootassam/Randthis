@@ -84,7 +84,7 @@ const en = {
       }
     },
 
-     vip: {
+    vip: {
       title: "VIP Levels",
       subtitle: "Choose your membership level and unlock exclusive benefits",
       backToHome: "Back to Home",
@@ -99,7 +99,7 @@ const en = {
       levelDetails: "Level Details",
       levelLimit: "Level Limit",
       dailyOrders: "Daily Orders",
-      setperday:"Sets Per Day",
+      setperday: "Sets Per Day",
       commissionRate: "Commission Rate",
       premiumCommission: "Premium Commission",
       maxOrders: "Max Orders",
@@ -359,6 +359,20 @@ const en = {
       quantity: "X 1",
       currency: "USD"
     },
+
+    prizeModal: {
+      congratulations: "Congratulations!",
+      spinning: "Spinning...",
+      prizeWon: "You won!",
+      currency: "USD",
+      prizeBreakdown: "Prize Breakdown",
+      totalAmount: "Total Amount",
+      yourWinnings: "Your Winnings",
+      claimPrize: "Claim Prize",
+      celebrationMessage: "Enjoy your reward!",
+    },
+
+
 
     actions: {
       event: "Events",

@@ -1,4 +1,5 @@
 
+
 const ptBR = {
   app: {
     title: "Nowspeed"
@@ -13,7 +14,7 @@ const ptBR = {
     walletaddress: "Endereço da carteira"
 
   },
- 
+
 
 
 
@@ -50,12 +51,25 @@ const ptBR = {
       }
     },
 
- tabBottomNavigator: {
-    home: "Início",
-    grap: "Capturar",
-    records: "Registros",
-    starting: "Iniciar"
-  },
+
+    prizeModal: {
+      congratulations: "Parabéns!",
+      spinning: "Girando...",
+      prizeWon: "Você ganhou!",
+      currency: "USD",
+      prizeBreakdown: "Detalhes do Prêmio",
+      totalAmount: "Valor Total",
+      yourWinnings: "Seu Ganho",
+      claimPrize: "Resgatar Prêmio",
+      celebrationMessage: "Aproveite sua recompensa!",
+    },
+
+    tabBottomNavigator: {
+      home: "Início",
+      grap: "Capturar",
+      records: "Registros",
+      starting: "Iniciar"
+    },
     transaction: {
       title: "Histórico de Transações",
       filters: {

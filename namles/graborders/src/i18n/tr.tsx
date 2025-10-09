@@ -53,12 +53,27 @@ const tr = {
       }
     },
 
-  tabBottomNavigator: {
-  home: "Ana Sayfa",
-  grap: "Yakala",
-  records: "Kayıtlar",
-  starting: "Başlat"
-},
+
+
+
+    prizeModal: {
+      congratulations: "Tebrikler!",
+      spinning: "Dönüyor...",
+      prizeWon: "Kazandınız!",
+      currency: "USD",
+      prizeBreakdown: "Ödül Detayları",
+      totalAmount: "Toplam Tutar",
+      yourWinnings: "Kazancınız",
+      claimPrize: "Ödülü Al",
+      celebrationMessage: "Ödülünüzün tadını çıkarın!",
+    },
+
+    tabBottomNavigator: {
+      home: "Ana Sayfa",
+      grap: "Yakala",
+      records: "Kayıtlar",
+      starting: "Başlat"
+    },
 
 
 

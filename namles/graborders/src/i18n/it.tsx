@@ -49,12 +49,27 @@ const it = {
             }
         },
 
-    tabBottomNavigator: {
-        home: "Home",
-        grap: "Acquisisci",
-        records: "Registri",
-        starting: "Avvia"
-    },
+
+
+        prizeModal: {
+            congratulations: "Congratulazioni!",
+            spinning: "Ruotando...",
+            prizeWon: "Hai vinto!",
+            currency: "USD",
+            prizeBreakdown: "Dettaglio Premio",
+            totalAmount: "Importo Totale",
+            yourWinnings: "Il tuo Guadagno",
+            claimPrize: "Riscatta il Premio",
+            celebrationMessage: "Goditi la tua ricompensa!",
+        },
+
+
+        tabBottomNavigator: {
+            home: "Home",
+            grap: "Acquisisci",
+            records: "Registri",
+            starting: "Avvia"
+        },
 
 
         transaction: {

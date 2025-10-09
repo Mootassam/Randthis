@@ -83,6 +83,10 @@ const Grappage = () => {
     await dispatch(recordActions.doCreate(values));
   };
 
+  console.log(
+    currentUser.grab
+  );
+
   const disableButton = currentUser.balance <= 0 || !currentUser.grab || currentUser.tasksDone >= currentUser.vip.dailyorder;
 
   return (
@@ -218,11 +222,11 @@ const Grappage = () => {
 
       {/* Loading and Modals */}
       {loading && <LoadingModal />}
-      {items && items?.type === "prizes" && Modal && <PrizeModal items={items}
+      {items && items?.type === "prizes" && Modal && !loading && <PrizeModal items={items}
         number={number}
         hideModal={hideModal}
         submit={submit} />}
-      {Modal && (
+      {Modal &&  !loading && (
         <GrapModal items={items} number={number} hideModal={hideModal} submit={submit} />
       )}
 

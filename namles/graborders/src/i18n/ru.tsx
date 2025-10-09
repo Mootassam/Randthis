@@ -45,7 +45,20 @@ const ru = {
       grap: "Захват",
       records: "Записи",
       starting: "Старт"
-    } ,
+    },
+
+
+    prizeModal: {
+      congratulations: "Поздравляем!",
+      spinning: "Крутим...",
+      prizeWon: "Вы выиграли!",
+      currency: "USD",
+      prizeBreakdown: "Разбивка Приза",
+      totalAmount: "Общая сумма",
+      yourWinnings: "Ваш выигрыш",
+      claimPrize: "Получить Приз",
+      celebrationMessage: "Наслаждайтесь наградой!",
+    },
     transaction: {
       title: "История Транзакций",
       filters: {
