@@ -277,6 +277,7 @@ td {
 }
 
 .logo__header {
+
   width: 100% !important;
 }
 
@@ -2845,3 +2846,8 @@ button:disabled {
   gap: 10px;
   margin-top: 25px;
 }
+
+
+
+
+

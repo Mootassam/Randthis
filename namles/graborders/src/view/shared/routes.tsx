@@ -85,6 +85,14 @@ const screenRoutes = [
     permissionRequired: permissions.categoryRead,
     exact: true,
   },
+
+
+  {
+    path: "/LiveChat",
+    loader: () => import("src/view/pages/Online/Livechat"),
+    permissionRequired: permissions.categoryRead,
+    exact: true,
+  },
   {
     path: "/Certificate",
     loader: () => import("src/view/pages/Certificate/Certificate"),

@@ -6,9 +6,10 @@ import selector from "src/modules/category/list/categoryListSelectors";
 import LoadingModal from "src/shared/LoadingModal";
 import SubHeader from "src/view/shared/Header/SubHeader";
 import { i18n } from "../../../i18n";
-
+import { Link } from 'react-router-dom'
 function Online() {
   const dispatch = useDispatch();
+
   const record = useSelector(selector.selectRows);
   const loading = useSelector(selector.selectLoading);
 
@@ -17,9 +18,35 @@ function Online() {
     // eslint-disable-next-line
   }, [dispatch]);
 
+  const handleLiveChatClick = () => {
+    // navigate("/LiveChat");
+  };
+
   return (
     <div className="customer-service-container">
       <SubHeader title={i18n('pages.online.title')} path="/" />
+
+      {/* Live Chat Button */}
+      <div className="live-chat-button-container">
+
+        <Link to="/LiveChat"   style={{ 
+    textDecoration: 'none', 
+    color: 'inherit' 
+  }} >
+          <button className="live-chat-button" onClick={handleLiveChatClick}>
+            <div className="live-chat-icon">
+              <i className="fa-solid fa-comment-dots"></i>
+            </div>
+            <div className="live-chat-text">
+              <span className="live-chat-title">Live Chat Support</span>
+              <span className="live-chat-subtitle">Get instant help from our team</span>
+            </div>
+            <div className="live-chat-arrow">
+              <i className="fa-solid fa-arrow-right"></i>
+            </div>
+          </button>
+        </Link>
+      </div>
 
       <div className="service-description-card">
         <div className="description-content">
@@ -83,7 +110,6 @@ function Online() {
         ))}
       </div>
 
-
       <style>{`
         .customer-service-container {
           max-width: 400px;
@@ -92,6 +118,107 @@ function Online() {
           min-height: 100vh;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
           padding-bottom: 20px;
+        }
+
+        /* Live Chat Button */
+        .live-chat-button-container {
+          padding: 0 20px;
+          margin: 20px 0;
+        }
+
+        .live-chat-button {
+          width: 100%;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border: none;
+          border-radius: 16px;
+          padding: 20px;
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .live-chat-button::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          transition: left 0.5s ease;
+        }
+
+        .live-chat-button:hover::before {
+          left: 100%;
+        }
+
+        .live-chat-button:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .live-chat-button:active {
+          transform: translateY(-1px);
+        }
+
+        .live-chat-icon {
+          width: 50px;
+          height: 50px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 22px;
+          color: white;
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .live-chat-text {
+          flex: 1;
+          text-align: left;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .live-chat-title {
+          color: white;
+          font-size: 16px;
+          font-weight: 700;
+          line-height: 1.2;
+        }
+
+        .live-chat-subtitle {
+          color: rgba(255, 255, 255, 0.9);
+          font-size: 13px;
+          font-weight: 400;
+          line-height: 1.2;
+        }
+
+        .live-chat-arrow {
+          width: 40px;
+          height: 40px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 14px;
+          color: white;
+          transition: all 0.3s ease;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .live-chat-button:hover .live-chat-arrow {
+          transform: translateX(3px);
+          background: rgba(255, 255, 255, 0.3);
         }
 
         /* Service Description */
@@ -298,6 +425,36 @@ function Online() {
             border-radius: 0;
           }
           
+          .live-chat-button-container {
+            padding: 0 15px;
+            margin: 15px 0;
+          }
+          
+          .live-chat-button {
+            padding: 16px;
+            gap: 12px;
+          }
+          
+          .live-chat-icon {
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
+          }
+          
+          .live-chat-title {
+            font-size: 15px;
+          }
+          
+          .live-chat-subtitle {
+            font-size: 12px;
+          }
+          
+          .live-chat-arrow {
+            width: 35px;
+            height: 35px;
+            font-size: 12px;
+          }
+          
           .service-description-card {
             margin: 15px;
             padding: 20px 15px;
@@ -333,6 +490,10 @@ function Online() {
             opacity: 1;
             transform: translateY(0);
           }
+        }
+
+        .live-chat-button {
+          animation: cardSlideIn 0.6s ease-out;
         }
 
         .support-agent-card {
