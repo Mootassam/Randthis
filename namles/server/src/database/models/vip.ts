@@ -14,6 +14,10 @@ export default (database) => {
       title: {
         type: String,
       },
+      maxEarning: {
+        type: Number,
+        required: true
+      },
       entrylimit: {
         type: String,
       },
@@ -30,13 +34,13 @@ export default (database) => {
       setperday: {
         type: String,
       },
-      withdrawperday:{
-        type:String
+      withdrawperday: {
+        type: String
       },
       commissionmergedata: {
         type: String,
       },
-      
+
       tasksperday: { type: String },
       handlingfee: { type: String },
       withdrawlimit: { type: String },

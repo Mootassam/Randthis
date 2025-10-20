@@ -9,34 +9,59 @@ import UserRepository from "./userRepository";
 import RecordRepository from "./recordRepository";
 import Error405 from "../../errors/Error405";
 import Error400 from "../../errors/Error400";
+import axios from "axios";
+import VipRepository from "./vipRepository";
 
 class ProductRepository {
-  static async create(data, options: IRepositoryOptions) {
-    const currentTenant = MongooseRepository.getCurrentTenant(options);
+static async create(data, options: IRepositoryOptions) {
+  const products = await this.CreateProduct(data, options); // returns array
 
-    const currentUser = MongooseRepository.getCurrentUser(options);
+  const currentTenant = MongooseRepository.getCurrentTenant(options);
+  const currentUser = MongooseRepository.getCurrentUser(options);
 
-    const [record] = await Product(options.database).create(
-      [
-        {
-          ...data,
-          tenant: currentTenant.id,
-          createdBy: currentUser.id,
-          updatedBy: currentUser.id,
-        },
-      ],
-      options
-    );
+  // Add tenant and user info to each product
+  const productsToInsert = products.map(product => ({
+    ...product,
+    tenant: currentTenant.id,
+    createdBy: currentUser.id,
+    updatedBy: currentUser.id,
+  }));
 
-    await this._createAuditLog(
-      AuditLogRepository.CREATE,
-      record.id,
-      data,
-      options
-    );
+  // Bulk insert
+  const records = await Product(options.database).insertMany(productsToInsert, options);
 
-    return this.findById(record.id, options);
+  // Create audit logs for each product
+  for (const record of records) {
+    await this._createAuditLog(AuditLogRepository.CREATE, record._id, record, options);
   }
+
+  return records;
+}
+
+
+static async CreateProduct(data, options) {
+  const mongoose = require("mongoose");
+
+  const findvip = await VipRepository.findById(data.vip, options);
+  if (!findvip) throw new Error("VIP not found");
+
+  const productResponse = await axios.get("https://dummyjson.com/products?limit=100");
+  const items = productResponse.data.products;
+
+  // Generate product array
+  const values = items.map((item: any) => ({
+    title: item.title || "",
+    image: item.thumbnail || "",
+    commission: findvip.comisionrate,
+    vip: mongoose.Types.ObjectId(findvip._id),
+    amount: String(item.price || 0) // fallback if API has no price
+  }));
+
+  return values;
+}
+
+
+
 
   static async update(id, data, options: IRepositoryOptions) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
@@ -242,8 +267,6 @@ class ProductRepository {
     const currentVip = MongooseRepository.getCurrentUser(options).vip.id;
     const mergeDataPosition = currentUser.itemNumber;
     const giftPosition = currentUser.prizesNumber;
-
-
 
     if (!currentUser?.vip) {
       throw new Error400(

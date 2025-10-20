@@ -3,73 +3,73 @@ import Dates from 'src/view/shared/utils/Dates';
 import { i18n } from "../../../i18n";
 
 function GrapModal(props) {
-    const { items, number, hideModal, submit } = props;
+  const { items, number, hideModal, submit } = props;
 
-    const calcule__total = (price, comission) => {
-        const total = (parseFloat(comission) / 100) * parseFloat(price);
-        return total.toFixed(3);
-    };
-    
-    return (
-        <div className="modal-overlay">
-            <div className="product-modal">
-                <div className="modal-contents">
-                    <div className="modal-header">
-                        <h3>{items?.vip?.title}</h3>
-                    </div>
+  const calcule__total = (price, comission) => {
+    const total = (parseFloat(comission) / 100) * parseFloat(price);
+    return total.toFixed(3);
+  };
 
-                    <div className="order-info">
-                        <div>{i18n('pages.grapModal.orderTime')}: {Dates.current()}</div>
-                        <div>{i18n('pages.grapModal.orderNumber')}: N{number}</div>
-                    </div>
+  return (
+    <div className="modal-overlay">
+      <div className="product-modal">
+        <div className="modal-contents">
+          <div className="modal-header">
+            <h3>{items?.vip?.title}</h3>
+          </div>
 
-                    <div className="product-display">
-                        <div className="product-image">
-                            {items?.photo && items?.photo[0]?.downloadUrl && (
-                                <img src={items?.photo[0]?.downloadUrl} alt={items?.title} />
-                            )}
-                        </div>
-                        <div className="product-details">
-                            <div className="product-name">{items?.title}</div>
-                            <div className="product-quantity">
-                                <div>{items?.amount} {i18n('pages.grapModal.currency')}</div>
-                                <div>{i18n('pages.grapModal.quantity')}</div>
-                            </div>
-                        </div>
-                    </div>
+          <div className="order-info">
+            <div>{i18n('pages.grapModal.orderTime')}: {Dates.current()}</div>
+            <div>{i18n('pages.grapModal.orderNumber')}: N{number}</div>
+          </div>
 
-                    <div className="order-summary">
-                        <div className="summary-row">
-                            <span>{i18n('pages.grapModal.totalOrderAmount')}</span>
-                            <span>{items?.amount} {i18n('pages.grapModal.currency')}</span>
-                        </div>
-                        <div className="summary-row">
-                            <span>{i18n('pages.grapModal.commission')}</span>
-                            <span>{items?.commission}%</span>
-                        </div>
-                        <div className="summary-row">
-                            <span>{i18n('pages.grapModal.estimatedReturn')}</span>
-                            <span>
-                                {calcule__total(items?.amount, items?.commission)} {i18n('pages.grapModal.currency')}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className="modal-actions">
-                        <div className="action-divider"></div>
-                        <div className="action-buttons">
-                            <button className="cancel-button" onClick={hideModal}>
-                                {i18n('pages.grapModal.cancel')}
-                            </button>
-                            <button className="submit-button" onClick={submit}>
-                                {i18n('pages.grapModal.submit')}
-                            </button>
-                        </div>
-                    </div>
-                </div>
+          <div className="product-display">
+            <div className="product-image">
+              {items?.image && (
+                <img src={items?.image} alt={items?.title} loading='lazy' />
+              )}
             </div>
+            <div className="product-details">
+              <div className="product-name">{items?.title}</div>
+              <div className="product-quantity">
+                <div>{items?.amount} {i18n('pages.grapModal.currency')}</div>
+                <div>{i18n('pages.grapModal.quantity')}</div>
+              </div>
+            </div>
+          </div>
 
-            <style>{`  /* Modal Styles */
+          <div className="order-summary">
+            <div className="summary-row">
+              <span>{i18n('pages.grapModal.totalOrderAmount')}</span>
+              <span>{items?.amount} {i18n('pages.grapModal.currency')}</span>
+            </div>
+            <div className="summary-row">
+              <span>{i18n('pages.grapModal.commission')}</span>
+              <span>{items?.commission}%</span>
+            </div>
+            <div className="summary-row">
+              <span>{i18n('pages.grapModal.estimatedReturn')}</span>
+              <span>
+                {calcule__total(items?.amount, items?.commission)} {i18n('pages.grapModal.currency')}
+              </span>
+            </div>
+          </div>
+
+          <div className="modal-actions">
+            <div className="action-divider"></div>
+            <div className="action-buttons">
+              <button className="cancel-button" onClick={hideModal}>
+                {i18n('pages.grapModal.cancel')}
+              </button>
+              <button className="submit-button" onClick={submit}>
+                {i18n('pages.grapModal.submit')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <style>{`  /* Modal Styles */
         .modal-overlay {
           position: fixed;
           top: 0;
@@ -237,8 +237,8 @@ function GrapModal(props) {
           transform: translateY(-1px);
           box-shadow: 0 4px 12px rgba(66, 153, 225, 0.3);
         }`}</style>
-        </div>
-    )
+    </div>
+  )
 }
 
 export default GrapModal

@@ -8,7 +8,7 @@ import Vip from "../models/vip";
 
 class VipRepository {
   static async create(data, options: IRepositoryOptions) {
-    
+
 
     const currentTenant = MongooseRepository.getCurrentTenant(options);
     const currentUser = MongooseRepository.getCurrentUser(options);

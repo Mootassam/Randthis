@@ -117,7 +117,6 @@ export default class ProductServices {
     const session = await MongooseRepository.createSession(
       this.options.database
     );
-
     try {
       // await this.checkpermission(this.options)
       return ProductRepository.grapOrders(this.options);

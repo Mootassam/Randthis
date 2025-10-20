@@ -79,6 +79,15 @@ const schema = yup.object().shape({
       required: true,
     },
   ),
+
+
+  maxEarning: yupFormSchemas.decimal(
+    i18n('entities.vip.fields.commissionmergedata'),
+    {
+      required: true,
+    },
+  ),
+
 });
 
 function VipForm(props) {
@@ -95,6 +104,7 @@ function VipForm(props) {
       tasksperday: record.tasksperday,
       handlingfee: record.handlingfee,
       setperday: record.setperday,
+      maxEarning: record.maxEarning,
       withdrawperday: record.withdrawperday,
       // withdrawlimit: record.withdrawlimit,
     };
@@ -142,6 +152,18 @@ function VipForm(props) {
             </div>
 
             <div className="col-lg-7 col-md-8 col-12">
+              <InputFormItem
+                name="maxEarning"
+                label={i18n(
+                  'entities.vip.fields.maxEarning',
+                )}
+                required={true}
+                autoFocus
+              />
+            </div>
+
+
+            <div className="col-lg-7 col-md-8 col-12">
               <InputNumberFormItem
                 name="comisionrate"
                 label={i18n(
@@ -180,7 +202,7 @@ function VipForm(props) {
                 required={true}
               />
             </div>
-{/* 
+            {/* 
             <div className="col-lg-7 col-md-8 col-12">
               <InputFormItem
                 name="withdrawlimit"
