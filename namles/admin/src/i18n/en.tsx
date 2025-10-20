@@ -104,7 +104,7 @@ const en = {
       },
       fields: {
         title: 'Vip Name',
-        dailyorder: 'Daily Order',
+        dailyorder: 'Max Order per set',
         commissionrate: ' commission',
         tasksDone: 'tasksDone',
         levelLimit: 'Level Limit',
