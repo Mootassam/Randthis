@@ -14,10 +14,6 @@ export default (database) => {
       title: {
         type: String,
       },
-      maxEarning: {
-        type: Number,
-        required: true
-      },
       entrylimit: {
         type: String,
       },

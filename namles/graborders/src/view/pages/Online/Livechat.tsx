@@ -32,7 +32,7 @@ function LiveChat() {
       // Initialize Crisp only once
       if (!crispInitialized) {
         window.$crisp = [];
-        window.CRISP_WEBSITE_ID = "9334600b-db8a-45e0-84df-3892e749ff86";
+        window.CRISP_WEBSITE_ID = "ea224312-0aa0-4914-a885-a0fb55eadb16";
 
         const script = document.createElement('script');
         script.src = 'https://client.crisp.chat/l.js';
