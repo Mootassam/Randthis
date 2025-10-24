@@ -10,55 +10,187 @@ import RecordRepository from "./recordRepository";
 import Error405 from "../../errors/Error405";
 import Error400 from "../../errors/Error400";
 import axios from "axios";
-import VipRepository from "./vipRepository";
-
 class ProductRepository {
-static async create(data, options: IRepositoryOptions) {
-  const products = await this.CreateProduct(data, options); // returns array
 
-  const currentTenant = MongooseRepository.getCurrentTenant(options);
-  const currentUser = MongooseRepository.getCurrentUser(options);
+  private static baseConfig = {
+    "cookie": "ka_sessionid=fb8ba94b3d36836866047fb80894f053; _ga=GA1.1.199781079.1760524055; ACCEPTED_COOKIES=true; CSRF-TOKEN=CfDJ8IaGWDgvvrBFtGGva9hUIY4kvXUOvqeD0gwSDfor3RFWPp9te_pY-oW0ilh7HWxUw452GJUHOhUz8nlcAcdbiTOhHDgK2U4KFS1ptuFefw; GCLB=CIzn3_P97cmejAEQAw; build-hash=29506ea853cc6a3a542f130dec2b4a40863d7254; searchToken=5849ba31-873f-4e4e-a179-e47a19fa8c64; XSRF-TOKEN=CfDJ8IaGWDgvvrBFtGGva9hUIY4Yi-euRhcXJbAy-5hTpeAZxxGBEkUciAJrB_IOBGlc-4syCmaF8PjGGUiXRiITLqNvwyKvAZvi1gUwJfZ0vkoSAg; CLIENT-TOKEN=eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJpc3MiOiJrYWdnbGUiLCJhdWQiOiJjbGllbnQiLCJzdWIiOiIiLCJuYnQiOiIyMDI1LTEwLTIxVDE0OjI5OjA2LjI3MjY2MjdaIiwiaWF0IjoiMjAyNS0xMC0yMVQxNDoyOTowNi4yNzI2NjI3WiIsImp0aSI6IjRkYTVlNmZhLTQ1MjYtNGFhMi1iZTdhLWYxZmQzNDk5YjI3OCIsImV4cCI6IjIwMjUtMTEtMjFUMTQ6Mjk6MDYuMjcyNjYyN1oiLCJhbm9uIjp0cnVlLCJmZiI6WyJLZXJuZWxzT3BlbkluQ29sYWJMb2NhbFVybCIsIk1ldGFzdG9yZUNoZWNrQWdncmVnYXRlRmlsZUhhc2hlcyIsIlVzZXJMaWNlbnNlQWdyZWVtZW50U3RhbGVuZXNzVHJhY2tpbmciLCJLZXJuZWxzUGF5VG9TY2FsZSIsIkJlbmNobWFya091dHB1dEltcHJvdmVtZW50cyIsIkhhY2thdGhvbkRlbGV0ZVdyaXRldXBzIiwiRmVhdHVyZWRNb2RlbHNTaGVsZiIsIkRhdGFzZXRQb2xhcnNEYXRhTG9hZGVyIiwiS2VybmVsc1NldHRpbmdzVGFiIiwiS2VybmVsc0ZpcmViYXNlTG9uZ1BvbGxpbmciLCJGcm9udGVuZEVycm9yUmVwb3J0aW5nIiwiQWxsb3dGb3J1bUF0dGFjaG1lbnRzIiwiVGVybXNPZlNlcnZpY2VCYW5uZXIiLCJEYXRhc2V0VXBsb2FkZXJEdXBsaWNhdGVEZXRlY3Rpb24iXSwiZmZkIjp7Ik1vZGVsSWRzQWxsb3dJbmZlcmVuY2UiOiIiLCJNb2RlbEluZmVyZW5jZVBhcmFtZXRlcnMiOiJ7IFwibWF4X3Rva2Vuc1wiOiAxMjgsIFwidGVtcGVyYXR1cmVcIjogMC40LCBcInRvcF9rXCI6IDUgfSIsIlNwb3RsaWdodENvbW11bml0eUNvbXBldGl0aW9uIjoiMTA1ODc0LDEwMTAzOSwxMTMxNTUsMTAzNDMyLDExMzY2NCIsIkZlYXR1cmVkQmVuY2htYXJrcyI6IjEzNywxNiwxNDcsMTM0IiwiR2V0dGluZ1N0YXJ0ZWRDb21wZXRpdGlvbnMiOiIzMTM2LDU0MDcsODY1MTgsMzQzNzciLCJTdHNNaW5GaWxlcyI6IjEwMDAwMCIsIlN0c01pbkdiIjoiMSIsIlBlcnNvbmFsQmVuY2htYXJrc1ByaW9yaXR5VGFza0lkcyI6IjEwNiwyMjksMTA1LDIyNywxMTAsMjI4LDExNiwyMzAsMTczLDIzMiwxNzUsMjM5LDI2NCwyNDksMjQ3IiwiQ2xpZW50UnBjUmF0ZUxpbWl0UXBzIjoiNDAiLCJDbGllbnRScGNSYXRlTGltaXRRcG0iOiI1MDAiLCJBZGRGZWF0dXJlRmxhZ3NUb1BhZ2VMb2FkVGFnIjoiZGlzYWJsZWQiLCJLZXJuZWxFZGl0b3JBdXRvc2F2ZVRocm90dGxlTXMiOiIzMDAwMCIsIktlcm5lbHNMNEdwdUNvbXBzIjoiODYwMjMsODQ3OTUsODg5MjUsOTE0OTYiLCJFbmFibGVDZG5DYWNoZSI6IiIsIkh0dHBHZXRFbmFibGVkUnBjcyI6IiIsIkZlYXR1cmVkQ29tbXVuaXR5Q29tcGV0aXRpb25zIjoiNjAwOTUsNTQwMDAsNTcxNjMsODA4NzQsODE3ODYsODE3MDQsODI2MTEsODUyMTAiLCJFbWVyZ2VuY3lBbGVydEJhbm5lciI6IiIsIkNvbXBldGl0aW9uTWV0cmljVGltZW91dE1pbnV0ZXMiOiIzMCIsIkdhbWVBcmVuYUZlYXR1cmVkTGVhZGVyYm9hcmRCZW5jaG1hcmtWZXJzaW9ucyI6IjEyOSIsIkNkbkNhY2hlRGlzYWJsZWRScGNzIjoiIiwiRGF0YXNldHNTZW5kUGVuZGluZ1N1Z2dlc3Rpb25zUmVtaW5kZXJzQmF0Y2hTaXplIjoiMTAwIiwiR2FtZUFyZW5hQmVuY2htYXJrVmVyc2lvbnMiOiIxMjkiLCJLZXJuZWxzUGF5VG9TY2FsZVByb1BsdXNHcHVIb3VycyI6IjMwIiwiS2VybmVsc1BheVRvU2NhbGVQcm9HcHVIb3VycyI6IjE1IiwiRW1lcmdlbmN5QWxlcnRCYW5uZXJGb3JVc2VyUHJvZmlsZSI6IiJ9LCJwaWQiOiJrYWdnbGUtMTYxNjA3Iiwic3ZjIjoid2ViLWZlIiwic2RhayI6IkFJemFTeUE0ZU5xVWRSUnNrSnNDWldWei1xTDY1NVhhNUpFTXJlRSIsImJsZCI6IjI5NTA2ZWE4NTNjYzZhM2E1NDJmMTMwZGVjMmI0YTQwODYzZDcyNTQifQ.; _ga_T7QHS60L4Q=GS2.1.s1761056917$o2$g1$t1761056947$j30$l0$h0",
+    "origin": "https://www.kaggle.com",
+    "referer": "https://www.kaggle.com/datasets/asaniczka/amazon-canada-products-2023-2-1m-products",
+    "x-kaggle-build-version": "29506ea853cc6a3a542f130dec2b4a40863d7254",
+    "Content-Type": "application/json",
+    "x-xsrf-token": "CfDJ8IaGWDgvvrBFtGGva9hUIY4Yi-euRhcXJbAy-5hTpeAZxxGBEkUciAJrB_IOBGlc-4syCmaF8PjGGUiXRiITLqNvwyKvAZvi1gUwJfZ0vkoSAg"
+  };
+  static async create(data, options: IRepositoryOptions) {
+    const currentTenant = MongooseRepository.getCurrentTenant(options);
+    const currentUser = MongooseRepository.getCurrentUser(options);
 
-  // Add tenant and user info to each product
-  const productsToInsert = products.map(product => ({
-    ...product,
-    tenant: currentTenant.id,
-    createdBy: currentUser.id,
-    updatedBy: currentUser.id,
-  }));
+    const [record] = await Product(options.database).create(
+      [
+        {
+          ...data,
+          tenant: currentTenant.id,
+          createdBy: currentUser.id,
+          updatedBy: currentUser.id,
+        },
+      ],
+      options
+    );
 
-  // Bulk insert
-  const records = await Product(options.database).insertMany(productsToInsert, options);
+    await this._createAuditLog(
+      AuditLogRepository.CREATE,
+      record.id,
+      data,
+      options
+    );
 
-  // Create audit logs for each product
-  for (const record of records) {
-    await this._createAuditLog(AuditLogRepository.CREATE, record._id, record, options);
+    return this.findById(record.id, options);
   }
 
-  return records;
-}
+
+  private static async fetchKaggleData(dataConfig: any, value: any, titleIndex: number, imageIndex: number) {
+    const url = "https://www.kaggle.com/api/i/datasets.DatasetService/GetDataViewExternal";
+
+    try {
+      const response = await axios.post(url, dataConfig, { headers: this.baseConfig });
+      const payload = response?.data?.dataView?.dataTable?.rows;
+
+      if (!payload || !Array.isArray(payload)) {
+        console.log('No data found in response');
+        return [];
+      }
+
+      const values = payload.map((item) => {
+        return {
+          title: item.text[titleIndex] || 'No Title',
+          image: item.text[imageIndex] || 'No Image',
+          commission: value.comisionrate,
+          vip: value.vipId,
+          amount: this.generateRandomPrice(value.min, value.max)
+        };
+      });
+
+      return values;
+    } catch (error) {
+      console.error('Error fetching data from Kaggle:', error);
+      throw error;
+    }
+  }
 
 
-static async CreateProduct(data, options) {
-  const mongoose = require("mongoose");
+  private static generateRandomPrice(minStr: string, maxStr: string): string {
+    const min = parseFloat(minStr);
+    const max = parseFloat(maxStr);
 
-  const findvip = await VipRepository.findById(data.vip, options);
-  if (!findvip) throw new Error("VIP not found");
+    if (isNaN(min) || isNaN(max)) {
+      return '0.00';
+    }
 
-  const productResponse = await axios.get("https://dummyjson.com/products?limit=100");
-  const items = productResponse.data.products;
+    const randomPrice = (Math.random() * (max - min) + min).toFixed(2);
+    return randomPrice;
+  }
+  // VIP 1 - Amazon Canada Products
+  static async Vip1(value: any) {
+    const data = {
+      verificationInfo: {
+        datasetId: 3892743,
+        databundleVersionId: 7739884
+      },
+      firestorePath: "FTFGzaZX82u89A2tMkJX/versions/AQr8CIhNOjHHDrZPl1l1/files/amz_ca_total_products_data_processed.csv",
+      tableQuery: {
+        skip: 0,
+        take: 1000,
+        filter: { constantFilter: { value: true } },
+        selectedColumns: [],
+        sorts: []
+      }
+    };
 
-  // Generate product array
-  const values = items.map((item: any) => ({
-    title: item.title || "",
-    image: item.thumbnail || "",
-    commission: findvip.comisionrate,
-    vip: mongoose.Types.ObjectId(findvip._id),
-    amount: String(item.price || 0) // fallback if API has no price
-  }));
+    return await ProductRepository.fetchKaggleData(data, value, 1, 2);
+  }
 
-  return values;
-}
+  // VIP 2 - Home and Kitchen
+  static async Vip2(value: any) {
+    const data = {
+      verificationInfo: {
+        datasetId: 3020336,
+        databundleVersionId: 5312147
+      },
+      firestorePath: "xPzcStLbnsPzJKeYPOag/versions/DCzIM1E87eQwV2sueUk6/files/All Home and Kitchen.csv",
+      tableQuery: {
+        skip: 0,
+        take: 1000,
+        filter: { constantFilter: { value: true } },
+        selectedColumns: [],
+        sorts: []
+      }
+    };
+    return await ProductRepository.fetchKaggleData(data, value, 0, 3);
+
+
+  }
+
+  // VIP 3 - Car Parts
+  static async Vip3(value: any) {
+    const data = {
+      verificationInfo: {
+        datasetId: 3020336,
+        databundleVersionId: 5312147
+      },
+      firestorePath: "xPzcStLbnsPzJKeYPOag/versions/DCzIM1E87eQwV2sueUk6/files/Car Parts.csv",
+      tableQuery: {
+        skip: 0,
+        take: 1000,
+        filter: { constantFilter: { value: true } },
+        selectedColumns: [],
+        sorts: []
+      }
+    };
+
+    return await ProductRepository.fetchKaggleData(data, value, 0, 3);
+
+  }
+
+  // VIP 4 - Air Conditioners
+  static async Vip4(value: any) {
+    const data = {
+      verificationInfo: {
+        datasetId: 3020336,
+        databundleVersionId: 5312147
+      },
+      firestorePath: "xPzcStLbnsPzJKeYPOag/versions/DCzIM1E87eQwV2sueUk6/files/Air Conditioners.csv",
+      tableQuery: {
+        skip: 0,
+        take: 1000,
+        filter: { constantFilter: { value: true } },
+        selectedColumns: [],
+        sorts: []
+      }
+    };
+
+        return await ProductRepository.fetchKaggleData(data, value, 0, 3);
+
+  }
+
+  // VIP 5 - Grocery and Gourmet Foods
+  static async Vip5(value: any) {
+    const data = {
+      verificationInfo: {
+        datasetId: 3020336,
+        databundleVersionId: 5312147
+      },
+      firestorePath: "xPzcStLbnsPzJKeYPOag/versions/DCzIM1E87eQwV2sueUk6/files/All Grocery and Gourmet Foods.csv",
+      tableQuery: {
+        skip: 0,
+        take: 1000,
+        filter: { constantFilter: { value: true } },
+        selectedColumns: [],
+        sorts: []
+      }
+    };
+
+    return await ProductRepository.fetchKaggleData(data, value, 0, 3);
+
+  }
 
 
 
@@ -267,6 +399,8 @@ static async CreateProduct(data, options) {
     const currentVip = MongooseRepository.getCurrentUser(options).vip.id;
     const mergeDataPosition = currentUser.itemNumber;
     const giftPosition = currentUser.prizesNumber;
+
+
 
     if (!currentUser?.vip) {
       throw new Error400(

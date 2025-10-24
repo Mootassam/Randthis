@@ -11,7 +11,7 @@ const authAxios = Axios.create({
   baseURL: "http://162.0.228.113:8080/api",
 
   //Randthis
-  // baseURL: 'http://159.198.77.158:8080/api/',
+  // baseURL: 'http://localhost:8080/api/',
 
   paramsSerializer: function (params) {
     return Qs.stringify(params, {

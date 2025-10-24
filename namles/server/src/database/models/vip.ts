@@ -30,14 +30,16 @@ export default (database) => {
       setperday: {
         type: String,
       },
-      withdrawperday: {
-        type: String
+      withdrawperday:{
+        type:String
       },
       commissionmergedata: {
         type: String,
       },
+      min: { type: String },
+      max: { type: String },
+      
 
-      tasksperday: { type: String },
       handlingfee: { type: String },
       withdrawlimit: { type: String },
 

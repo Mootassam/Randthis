@@ -31,10 +31,6 @@ function GrapModal(props) {
             </div>
             <div className="product-details">
               <div className="product-name">{items?.title}</div>
-              <div className="product-quantity">
-                <div>{items?.amount} {i18n('pages.grapModal.currency')}</div>
-                <div>{i18n('pages.grapModal.quantity')}</div>
-              </div>
             </div>
           </div>
 

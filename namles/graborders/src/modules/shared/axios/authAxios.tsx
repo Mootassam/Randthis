@@ -8,7 +8,7 @@ import AuthToken from 'src/modules/auth/authToken';
 
 const authAxios = Axios.create({
   //Local
-  // baseURL: "http://159.198.77.158:8080/api/",
+  // baseURL: "http://localhost:8080/api/",
 
   //Randthis
   baseURL: "https://nowspeeds.com/api",

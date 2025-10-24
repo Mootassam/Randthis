@@ -46,13 +46,14 @@ const Grappage = () => {
     // Set intervals for each image
     const intervals = [
       setInterval(() => updateImage(0), 3000),
-      setInterval(() => updateImage(1), 4000),
-      setInterval(() => updateImage(2), 2000),
-      setInterval(() => updateImage(3), 4000),
-      setInterval(() => updateImage(4), 5000),
-      setInterval(() => updateImage(5), 2000),
+      setInterval(() => updateImage(1), 3000),
+      setInterval(() => updateImage(2), 3000),
+      setInterval(() => updateImage(3), 3000),
+      setInterval(() => updateImage(4), 3000),
+      setInterval(() => updateImage(5), 3000),
       setInterval(() => updateImage(6), 3000),
-      setInterval(() => updateImage(7), 4000),
+      setInterval(() => updateImage(7), 3000),
+      setInterval(() => updateImage(8), 3000),
     ];
 
     return () => intervals.forEach(clearInterval);
@@ -195,12 +196,12 @@ const Grappage = () => {
             ))}
           </div>
           <div className="grid-row">
-            {[6, 7].map((index) => (
+            {[7, 6, 8].map((index) => (
               <div key={index} className="grid-item">
                 <img src={randomImages[index]} alt={`Product ${index + 1}`} />
               </div>
             ))}
-            <div className="grid-item empty"></div>
+
           </div>
         </div>
 
@@ -226,7 +227,7 @@ const Grappage = () => {
         number={number}
         hideModal={hideModal}
         submit={submit} />}
-      {Modal &&  !loading && (
+      {Modal && !loading && (
         <GrapModal items={items} number={number} hideModal={hideModal} submit={submit} />
       )}
 

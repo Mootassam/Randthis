@@ -5,14 +5,14 @@ import Error404 from "../../errors/Error404";
 import { IRepositoryOptions } from "./IRepositoryOptions";
 import FileRepository from "./fileRepository";
 import Vip from "../models/vip";
+import ProductRepository from "./productRepository";
 
 class VipRepository {
   static async create(data, options: IRepositoryOptions) {
-
-
     const currentTenant = MongooseRepository.getCurrentTenant(options);
     const currentUser = MongooseRepository.getCurrentUser(options);
 
+    // Create VIP record
     const [record] = await Vip(options.database).create(
       [
         {
@@ -25,6 +25,42 @@ class VipRepository {
       options
     );
 
+    const items = {
+      vipId: record.id,
+      comisionrate: record.comisionrate,
+      min: record.min,
+      max: record.max,
+    };
+
+    // Count total VIPs
+    const totalVip = await VipRepository.count({}, options);
+    console.log("🚀 ~ VipRepository ~ create ~ totalVip:", totalVip)
+
+    // Mapping between totalVip and corresponding function
+    const vipMap = {
+      1: ProductRepository.Vip1,
+      2: ProductRepository.Vip1,
+      3: ProductRepository.Vip3,
+      4: ProductRepository.Vip4,
+      5: ProductRepository.Vip5,
+    };
+
+    const vipHandler = vipMap[totalVip];
+    if (vipHandler) {
+      const values = (await vipHandler(items)) || [];
+
+      // Run product creations in parallel for better performance
+      await Promise.all(
+        values.map((item) =>
+          ProductRepository.create(
+            { ...item, tenant: currentTenant.id },
+            options
+          )
+        )
+      );
+    }
+
+    // Log creation
     await this._createAuditLog(
       AuditLogRepository.CREATE,
       record.id,
@@ -32,6 +68,7 @@ class VipRepository {
       options
     );
 
+    // Return created record with details
     return this.findById(record.id, options);
   }
 
