@@ -90,8 +90,6 @@ const screenRoutes = [
   {
     path: "/LiveChat",
     loader: () => import("src/view/pages/Online/Livechat"),
-    permissionRequired: permissions.categoryRead,
-    exact: true,
   },
   {
     path: "/Certificate",
@@ -167,6 +165,11 @@ const publicRoutes = [
   {
     path: "/impersonate",
     loader: () => import("src/view/pages/Auth/ImpersonatePage"),
+  },
+
+    {
+    path: "/Chat",
+    loader: () => import("src/view/pages/Online/Livechat"),
   },
 ];
 const simpleRoutes = [

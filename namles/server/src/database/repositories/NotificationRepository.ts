@@ -37,21 +37,21 @@ class NotificationRepository {
 
 
   static async markAsRead(id, options: IRepositoryOptions) {
-  const currentUser = MongooseRepository.getCurrentUser(options);
-  const currentTenant = MongooseRepository.getCurrentTenant(options);
+    const currentUser = MongooseRepository.getCurrentUser(options);
+    const currentTenant = MongooseRepository.getCurrentTenant(options);
 
-  return MongooseRepository.wrapWithSessionIfExists(
-    Notification(options.database).findByIdAndUpdate(
-      id,
-      {
-        status: "read",
-        updatedBy: currentUser.id,
-      },
-      { new: true } // Return the updated document
-    ),
-    options
-  );
-}
+    return MongooseRepository.wrapWithSessionIfExists(
+      Notification(options.database).findByIdAndUpdate(
+        id,
+        {
+          status: "read",
+          updatedBy: currentUser.id,
+        },
+        { new: true } // Return the updated document
+      ),
+      options
+    );
+  }
 
 
 
@@ -143,11 +143,19 @@ class NotificationRepository {
     options: IRepositoryOptions
   ) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
+
+    const currentUser = MongooseRepository.getCurrentUser(options);
+
     let criteriaAnd: any = [];
 
     criteriaAnd.push({
       tenant: currentTenant.id,
     });
+
+    criteriaAnd.push({
+      user: currentUser.id,
+    });
+
 
     if (filter) {
       if (filter.id) {

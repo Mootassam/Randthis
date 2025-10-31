@@ -26,7 +26,8 @@ function GrapModal(props) {
           <div className="product-display">
             <div className="product-image">
               {items?.image && (
-                <img src={items?.image} alt={items?.title} loading='lazy' />
+                <img src={items.image || items?.photo[0]?.downloadUrl || 'https://via.placeholder.com/70x70/3b82f6/ffffff?text=Product'}
+                  alt={items?.title} loading='lazy' />
               )}
             </div>
             <div className="product-details">

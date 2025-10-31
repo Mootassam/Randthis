@@ -56,11 +56,12 @@ export default (app) => {
   );  
 
 
-  app.put(
-    `/auth/profile`,
-    require('./authUpdateProfile').default,
-  );
 
+
+   app.put(
+    `/auth/profile/mobile`,
+    require('./authUpdateProfileMobile').default,
+  );
 
   app.put(
     `/auth/`,

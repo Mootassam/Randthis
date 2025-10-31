@@ -31,7 +31,7 @@ function Withdraw() {
   const refreshItems = useCallback(async () => {
     await dispatch(authActions.doRefreshCurrentUser());
   }, [dispatch]);
-  
+
   const onSubmit = async ({ amount, withdrawPassword }) => {
     const values = {
       status: "pending",
@@ -90,6 +90,19 @@ function Withdraw() {
                   />
                 </div>
 
+                <div className="advertise__speaker">
+                  <div>
+                    <i className="fa-solid fa-volume-high speaker" aria-hidden="true"></i>
+                  </div>
+                  <div className="announcement-container">
+                    <div className="announcement-text">
+                      <span>
+                        {i18n('pages.withdraw.announcement')}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
                 {currentUser.withdraw ? (
                   <button className="confirm" type="submit">
                     {i18n('pages.withdraw.confirm')}
@@ -104,7 +117,7 @@ function Withdraw() {
           </FormProvider>
         </div>
 
-        <div className="withdraw__rules">
+        {/* <div className="withdraw__rules">
           <div className="rules__title">{i18n('pages.withdraw.rulesDescription')}</div>
 
           <ul className="rules__list">
@@ -116,7 +129,7 @@ function Withdraw() {
               {i18n('pages.withdraw.rules.orderCompletion')}
             </li>
           </ul>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -20,7 +20,7 @@ function Online() {
 
   const handleLiveChatClick = () => {
     // navigate("/LiveChat");
-  };
+  }; 
 
   return (
     <div className="customer-service-container">
@@ -29,10 +29,10 @@ function Online() {
       {/* Live Chat Button */}
       <div className="live-chat-button-container">
 
-        <Link to="/LiveChat"   style={{ 
-    textDecoration: 'none', 
-    color: 'inherit' 
-  }} >
+        <Link to="/LiveChat" style={{
+          textDecoration: 'none',
+          color: 'inherit'
+        }} >
           <button className="live-chat-button" onClick={handleLiveChatClick}>
             <div className="live-chat-icon">
               <i className="fa-solid fa-comment-dots"></i>

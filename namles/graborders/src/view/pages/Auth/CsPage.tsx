@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom'; // Import Link for navigation
 import categoryService from 'src/modules/category/categoryService';
 import { i18n } from "../../../i18n";
 
@@ -107,6 +108,32 @@ function CsPage() {
             <div className="modal-body">
               <p className="modal-text">{i18n('pages.csPage.howCanWeHelp')}</p>
               <div className="contact-options">
+                {/* Live Chat Button - Inside Modal */}
+                <Link to="/Chat" className="contact-option live-chat-option" onClick={closeModal}>
+                  <div className="contact-avatar">
+                    <div className="live-chat-avatar">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="contact-info">
+                    <span className="contact-platform">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>
+                      </svg>
+                      Live Chat
+                    </span>
+                    <span className="contact-number">Get instant help from our team</span>
+                  </div>
+                  <div className="contact-arrow">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#666">
+                      <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                    </svg>
+                  </div>
+                </Link>
+
+                {/* Other contact options */}
                 {response && response.map((cs, index) => (
                   <div
                     key={index}
@@ -145,7 +172,6 @@ function CsPage() {
           </div>
         </div>
       )}
-
 
       <style>{`
         .cs-page-container {
@@ -222,7 +248,6 @@ function CsPage() {
         .modal-icon {
           width: 40px;
           height: 40px;
-        //   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
           border-radius: 10px;
           display: flex;
           align-items: center;
@@ -293,6 +318,8 @@ function CsPage() {
           transition: all 0.3s ease;
           cursor: pointer;
           border: 1px solid transparent;
+          text-decoration: none;
+          color: inherit;
         }
 
         .contact-option:hover {
@@ -300,6 +327,28 @@ function CsPage() {
           border-color: #667eea;
           box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
           transform: translateY(-2px);
+          text-decoration: none;
+          color: inherit;
+        }
+
+        /* Live Chat specific styles */
+        .live-chat-option:hover {
+          border-color: #48bb78;
+        }
+
+        .live-chat-option:hover .contact-arrow {
+          color: #48bb78;
+        }
+
+        .live-chat-avatar {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
         }
 
         .contact-option.whatsapp:hover {

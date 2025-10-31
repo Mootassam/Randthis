@@ -468,7 +468,7 @@ const imagesdata = [
     url: "https://m.media-amazon.com/images/I/71zy3NhF2ML._AC_UL320_.jpg",
   },
   {
-    url: "https://m.media-amazon.com/images/I/71LU859j9XL._AC_UL320_.jpg",
+    url: "https://m.media-amazon.com/images/I/71LU8599j9XL._AC_UL320_.jpg",
   },
   {
     url: "https://m.media-amazon.com/images/I/71Ud22XpY-L._AC_UL320_.jpg",

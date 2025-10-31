@@ -45,9 +45,7 @@ const VipLevelCard = memo(({
   isCurrent: boolean;
   onShowModal: (item: DataItem) => void;
 }) => {
-  const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = "/default-image.png";
-  }, []);
+
 
   return (
     <div
@@ -70,11 +68,11 @@ const VipLevelCard = memo(({
       <div className="vip-level-content">
         <div className="vip-level-image">
           <img
-            src={item?.photo?.[0]?.downloadUrl || "/default-image.png"}
+            src={item?.photo?.[0]?.downloadUrl }
             alt={item?.title}
             className="level-image"
             loading="lazy"
-            onError={handleImageError}
+          
           />
         </div>
 
@@ -130,7 +128,6 @@ function Home() {
 
   // Optimized image slider with proper state management
   const Images = [
-    "images/home/home.png",
     "https://nowspeed.com/wp-content/uploads/ns-content-marketing.jpg", // Use local image first
     "https://nowspeed.com/wp-content/uploads/ns-campaigns.jpg",
     "https://nowspeed.com/wp-content/uploads/aed8c19bc75f85346ff4c6e5265256a1.jpg",
@@ -321,12 +318,10 @@ function Home() {
                 <div className="level-preview">
                   <div className="preview-image">
                     <img
-                      src={selectedItem?.photo?.[0]?.downloadUrl || "/default-image.png"}
+                      src={selectedItem?.photo?.[0]?.downloadUrl }
                       alt={selectedItem?.title}
                       loading="lazy"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/default-image.png";
-                      }}
+                  
                     />
                   </div>
                 </div>
@@ -446,57 +441,6 @@ function Home() {
 
           .indicator:hover {
             background: #FFFFFF;
-          }
-
-          /* Announcement Styles */
-          .advertise__speaker {
-            background: #FFFFFF;
-            padding: 12px 16px;
-            max-width: 370px;
-            margin: 15px auto 0 auto;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border: 1px solid #E2E8F0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
-          }
-
-          .speaker {
-            color: #4299E1;
-            font-size: 16px;
-            flex-shrink: 0;
-          }
-
-          .announcement-container {
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-          }
-
-          .announcement-text {
-            white-space: nowrap;
-            animation: marquee 20s linear infinite;
-          }
-
-          .announcement-text span {
-            color: #4A5568;
-            font-size: 13px;
-            font-weight: 400;
-          }
-
-          @keyframes marquee {
-            0% {
-              transform: translateX(100%);
-            }
-            100% {
-              transform: translateX(-100%);
-            }
-          }
-
-          .announcement-container:hover .announcement-text {
-            animation-play-state: paused;
           }
 
           /* Action Buttons */

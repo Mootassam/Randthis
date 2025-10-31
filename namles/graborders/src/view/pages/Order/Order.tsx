@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import actions from "src/modules/record/list/recordListActions";
@@ -38,8 +39,9 @@ function Portfolio() {
           </div>
           <div className="product__image">
             <div className="image__">
-              {item?.product && item?.product.photo[0]?.downloadUrl && (
-                <img src={item?.product?.photo[0]?.downloadUrl} alt="" />
+              {item?.product && (
+                <img src={item.product.image || item?.product.photo[0]?.downloadUrl || 'https://via.placeholder.com/70x70/3b82f6/ffffff?text=Product'}
+                  alt={item.title || item?.product?.title} loading="lazy" />
               )}
             </div>
             <div className="product__detail">
@@ -58,7 +60,7 @@ function Portfolio() {
             <div className="cadre__detail">
               <div>{i18n('pages.portfolio.commission')}</div>
               <div>
-                {item && item?.product.type === "prizes" ? '0' : item?.product?.commission}% 
+                {item && item?.product.type === "prizes" ? '0' : item?.product?.commission}%
               </div>
             </div>
             <div className="cadre__detail">
@@ -103,12 +105,7 @@ function Portfolio() {
             >
               <span>{i18n('pages.portfolio.pending')}</span>
             </div>
-            <div
-              onClick={() => setActive("canceled")}
-              className={active === "canceled" ? `active__order` : ""}
-            >
-              <span>{i18n('pages.portfolio.canceled')}</span>
-            </div>
+       
           </div>
         </div>
         <div className="list__product">

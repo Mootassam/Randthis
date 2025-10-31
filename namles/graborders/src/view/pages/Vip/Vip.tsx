@@ -151,7 +151,7 @@ function VipPage() {
               alt={vip?.title}
               className="level-image"
               loading="lazy"
-              onError={handleImageError}
+             
             />
           </div>
 
