@@ -10,7 +10,8 @@ function Events() {
         <img src="/images/events/event1.png" alt="" />
         <img src="/images/events/event.png" alt="" />
 
-        <img src="/images/events/event3.png" alt="" />
+        <img src="/images/events/event3.jpg
+        " alt="" />
 
       </div>
     </div>

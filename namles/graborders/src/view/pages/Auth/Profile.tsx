@@ -548,7 +548,7 @@ function Profile() {
 
 .logout-button {
   margin: 30px 20px 90px;
-  background: #E53E3E;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   color: white;
   padding: 16px;
   border-radius: 12px;

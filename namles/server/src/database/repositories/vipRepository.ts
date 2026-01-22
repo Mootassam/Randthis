@@ -39,7 +39,7 @@ class VipRepository {
     // Mapping between totalVip and corresponding function
     const vipMap = {
       1: ProductRepository.Vip1,
-      2: ProductRepository.Vip1,
+      2: ProductRepository.Vip2,
       3: ProductRepository.Vip3,
       4: ProductRepository.Vip4,
       5: ProductRepository.Vip5,

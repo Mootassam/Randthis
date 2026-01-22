@@ -40,7 +40,7 @@ function Portfolio() {
           <div className="product__image">
             <div className="image__">
               {item?.product && (
-                <img src={item.product.image || item?.product.photo[0]?.downloadUrl || 'https://via.placeholder.com/70x70/3b82f6/ffffff?text=Product'}
+                <img src={item?.product?.image || item?.product?.photo[0]?.downloadUrl || 'https://via.placeholder.com/70x70/3b82f6/ffffff?text=Product'}
                   alt={item.title || item?.product?.title} loading="lazy" />
               )}
             </div>

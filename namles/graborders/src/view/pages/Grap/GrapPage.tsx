@@ -16,6 +16,8 @@ import GrapModal from "./GrapModal";
 import productListActions from "src/modules/product/list/productListActions";
 import PrizeModal from "./PrizeModal";
 import { i18n } from "../../../i18n";
+import Message from "src/view/shared/message";
+
 
 const Grappage = () => {
   const [randomImages, setRandomImages] = useState(Array(8).fill(""));
@@ -60,6 +62,18 @@ const Grappage = () => {
   };
 
   const rollAll = async () => {
+    // Check if user has insufficient balance
+    if (currentUser.balance <= 0) {
+      Message.error('Insufficient balance. Please top up your account to continue.');
+      return;
+    }
+    
+    // Check if user has completed all tasks
+    if (currentUser.tasksDone >= currentUser.vip.dailyorder) {
+      Message.success('You have completed all available tasks. Please contact customer support to reset your account.');
+      return;
+    }
+
     await dispatch(actions.doFetch());
   };
 
@@ -74,6 +88,17 @@ const Grappage = () => {
     return cleanup;
   }, [dispatch]);
 
+  // Add useEffect to show alerts when component loads if conditions are met
+  useEffect(() => {
+    if (currentUser.balance <= 0) {
+      Message.error('Insufficient balance. Please top up your account to continue.');
+    }
+    
+    if (currentUser.tasksDone >= currentUser.vip.dailyorder) {
+      Message.success('You have completed all available tasks. Please contact customer support to reset your account.');
+    }
+  }, [currentUser.balance, currentUser.tasksDone, currentUser.vip.dailyorder]);
+
   const submit = async () => {
     const values = {
       number: number,
@@ -83,10 +108,6 @@ const Grappage = () => {
     };
     await dispatch(recordActions.doCreate(values));
   };
-
-  console.log(
-    currentUser.grab
-  );
 
   const disableButton = currentUser.balance <= 0 || !currentUser.grab || currentUser.tasksDone >= currentUser.vip.dailyorder;
 
@@ -196,7 +217,7 @@ const Grappage = () => {
             ))}
           </div>
           <div className="grid-row">
-            {[7, 6, 8].map((index) => (
+            {[6, 7, 0].map((index) => (
               <div key={index} className="grid-item">
                 <img src={randomImages[index]} alt={`Product ${index + 1}`} />
               </div>
@@ -230,6 +251,8 @@ const Grappage = () => {
       {Modal && !loading && (
         <GrapModal items={items} number={number} hideModal={hideModal} submit={submit} />
       )}
+
+
 
 
       <style>{`
