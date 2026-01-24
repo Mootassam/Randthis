@@ -29,7 +29,7 @@
 .children__content {
   align-items: center;
   justify-content: center;
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
 
   margin-bottom: 60px;
@@ -55,7 +55,7 @@
   justify-content: space-around;
   z-index: 10;
   bottom: 0;
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
   left: 0;
   right: 0;

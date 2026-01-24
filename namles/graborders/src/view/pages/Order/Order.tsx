@@ -87,7 +87,7 @@ function Portfolio() {
           display: "flex",
           justifyContent: "center",
           flexDirection: "column",
-          maxWidth: 500,
+          maxWidth: 1000,
           margin: 'auto'
         }}
       >

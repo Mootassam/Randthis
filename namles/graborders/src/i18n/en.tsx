@@ -265,9 +265,9 @@ const en = {
       // Order Information
       orderTime: "Order Time",
       orderNumber: "Order Number",
-      totalOrderAmount: "Total order amount",
+      totalOrderAmount: "TOTAL AMOUNT",
       commission: "Commission",
-      estimatedReturn: "Estimated return",
+      estimatedReturn: "PROFIT",
 
       // Product Details
       quantity: "X 1",
@@ -295,7 +295,7 @@ const en = {
 
     withdraw: {
       title: "Withdraw",
-      announcement:"The minimum withdrawal amount is $100. All withdrawals are processed and completed within one hour.",
+      announcement:"The minimum withdrawal amount is $50. All withdrawals are processed and completed within one hour.",
       withdrawAmount: "Withdraw Amount",
       withdrawPassword: "Withdraw Password",
       availableBalance: "Available balance",
@@ -352,9 +352,9 @@ const en = {
     grapModal: {
       orderTime: "Order Time",
       orderNumber: "Order Number",
-      totalOrderAmount: "Total order amount",
+      totalOrderAmount: "TOTAL AMOUNT",
       commission: "Commission",
-      estimatedReturn: "Estimated return",
+      estimatedReturn: "PROFIT",
       cancel: "Cancel",
       submit: "Submit",
       quantity: "X 1",
@@ -467,7 +467,7 @@ const en = {
         title: "Edit Record",
       },
       create: {
-        success: "Product submitted successfully.",
+        success: "Task Submission Complete.",
       },
       update: {
         success: "Product submitted successfully.",

@@ -206,7 +206,7 @@ function Transaction() {
 
       <style>{`
         .transaction-page-container {
-          max-width: 400px;
+          max-width: 1000px;
           margin: 0 auto;
           background: #EDF1F7;
           min-height: 100vh;

@@ -386,7 +386,7 @@ function VipPage() {
 
         <style >{`
           .vip-page-container {
-            max-width: 400px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 15px;
           }

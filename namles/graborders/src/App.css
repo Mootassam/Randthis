@@ -3,7 +3,7 @@
 @import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 .container {
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
   left: 0;
   right: 0;
@@ -272,7 +272,7 @@ td {
   top: 0;
   position: relative;
   z-index: 999;
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
 }
 
@@ -283,7 +283,7 @@ td {
 
 .advertise__header {
   /* width: 100dvw; */
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
 }
 
@@ -310,7 +310,7 @@ td {
 
 .image {
   width: 100dvw;
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
   height: auto;
 }
@@ -748,7 +748,7 @@ td {
   border: 1px solid #cfd1d5;
   border-radius: 10px;
   width: 100%;
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
   padding: 15px 10px;
 }
@@ -821,7 +821,7 @@ td {
   padding: 10px 20px;
   margin: 20px 0;
   border-radius: 10px;
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
 }
 
@@ -894,7 +894,7 @@ td {
   padding: 10px;
   padding: 20px;
   border-radius: 10px;
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
   margin-top: 20px;
 }
@@ -907,7 +907,7 @@ li {
 .app__grappage {
   margin-bottom: 80px;
   position: relative;
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
 
   left: 0;
@@ -1176,7 +1176,8 @@ img {
 /* styling the home page  */
 
 .home__section {
-  max-width: 400px;
+  max-width: 1000px;
+  width: 100%;
   margin: auto;
   /* margin: auto; */
 }
@@ -2669,7 +2670,7 @@ button:disabled {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: 400px;
+  max-width: 1000px;
   margin: auto;
   background-color: #000;
   padding: 20px;

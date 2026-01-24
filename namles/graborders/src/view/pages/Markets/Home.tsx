@@ -383,7 +383,7 @@ function Home() {
           .image-slider {
             position: relative;
             width: 100%;
-            max-width: 400px;
+            max-width: 1000px;
             height: 200px;
             overflow: hidden;
             background: #000;
@@ -449,7 +449,7 @@ function Home() {
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
             padding: 20px 15px;
-            max-width: 400px;
+            max-width: 1000px;
             margin: 0 auto;
           }
 
@@ -504,7 +504,7 @@ function Home() {
           /* VIP Content */
           .advertise__content {
             padding: 0 15px 20px;
-            max-width: 400px;
+            max-width: 1000px;
             margin: 0 auto;
           }
 

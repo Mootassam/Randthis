@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/styles.css";
 import { useDispatch, useSelector } from "react-redux";
 import authSelectors from "src/modules/auth/authSelectors";
@@ -10,65 +10,115 @@ import recordActions from "src/modules/record/form/recordFormActions";
 import recordListAction from "src/modules/record/list/recordListActions";
 import recordSelector from "src/modules/record/list/recordListSelectors";
 import Image from "src/shared/Images";
-import { useHistory } from "react-router-dom";
-import authActions from "src/modules/auth/authActions";
 import GrapModal from "./GrapModal";
 import productListActions from "src/modules/product/list/productListActions";
 import PrizeModal from "./PrizeModal";
 import { i18n } from "../../../i18n";
 import Message from "src/view/shared/message";
 
-
 const Grappage = () => {
-  const [randomImages, setRandomImages] = useState(Array(8).fill(""));
+  const [images, setImages] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+
   const dispatch = useDispatch();
   const record = useSelector(authSelectors.selectCurrentUser);
   const items = useSelector(selector.selectRows);
   const loading = useSelector(selector.selectLoading);
   const Modal = useSelector(selector.showModal);
+
   const [number] = useState(Dates.Number());
   const currentUser = useSelector(authSelectors.selectCurrentUser);
   const totalperday = useSelector(recordSelector.selectTotalPerday);
 
-  const displayRandomImage = () => {
-    const updateImage = async (index) => {
-      const randomImage = await Image.randomImages();
-      setRandomImages(prev => {
-        const newImages = [...prev];
-        newImages[index] = randomImage;
-        return newImages;
-      });
-    };
-
-    // Initialize all images
-    randomImages.forEach((_, index) => {
-      updateImage(index);
-    });
-
-    // Set intervals for each image
-    const intervals = [
-      setInterval(() => updateImage(0), 3000),
-      setInterval(() => updateImage(1), 3000),
-      setInterval(() => updateImage(2), 3000),
-      setInterval(() => updateImage(3), 3000),
-      setInterval(() => updateImage(4), 3000),
-      setInterval(() => updateImage(5), 3000),
-      setInterval(() => updateImage(6), 3000),
-      setInterval(() => updateImage(7), 3000),
-      setInterval(() => updateImage(8), 3000),
-    ];
-
-    return () => intervals.forEach(clearInterval);
+  // Initialize images
+  const initializeImages = async () => {
+    try {
+      const initialImages = await Promise.all(
+        Array(9).fill(0).map(() => Image.randomImages())
+      );
+      setImages(initialImages);
+      setIsInitialized(true);
+    } catch (error) {
+      console.error("Error loading images:", error);
+      // Fallback to default images
+      const defaultImages = Array(9).fill("https://plus.unsplash.com/premium_photo-1664392147011-2a720f214e01?q=80&w=878&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+      setImages(defaultImages);
+      setIsInitialized(true);
+    }
   };
 
+  // Get visible images (always 3 images)
+  const getVisibleImages = () => {
+    if (images.length < 3) {
+      return Array(3).fill("https://plus.unsplash.com/premium_photo-1664392147011-2a720f214e01?q=80&w=878&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    }
+
+    const visible = [];
+    for (let i = 0; i < 3; i++) {
+      const index = (currentIndex + i) % images.length;
+      visible.push({
+        src: images[index],
+        id: `${index}-${Date.now()}-${Math.random()}`, // Unique key
+        position: i
+      });
+    }
+    return visible;
+  };
+
+  // Handle slide to next
+  const slideToNext = () => {
+    if (isAnimating || !isInitialized) return;
+
+    setIsAnimating(true);
+
+    // Animation duration
+    setTimeout(() => {
+      setCurrentIndex(prev => {
+        const nextIndex = (prev + 1) % images.length;
+        return nextIndex;
+      });
+
+      // Reset animation state
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 50);
+    }, 600); // Match CSS animation duration
+  };
+
+  // Initialize and start slider
+  useEffect(() => {
+    dispatch(recordListAction.doCount());
+    dispatch(recordListAction.doCountDay());
+    initializeImages();
+  }, [dispatch]);
+
+  // Start automatic sliding
+  useEffect(() => {
+    if (!isInitialized) return;
+
+    const interval = setInterval(slideToNext, 3000);
+    return () => clearInterval(interval);
+  }, [isInitialized, isAnimating]);
+
+  // Check user conditions
+  useEffect(() => {
+    if (currentUser.balance <= 0) {
+      Message.error('Insufficient balance. Please top up your account to continue.');
+    }
+
+    if (currentUser.tasksDone >= currentUser.vip.dailyorder) {
+      Message.success('You have completed all available tasks. Please contact customer support to reset your account.');
+    }
+  }, [currentUser.balance, currentUser.tasksDone, currentUser.vip.dailyorder]);
+
   const rollAll = async () => {
-    // Check if user has insufficient balance
     if (currentUser.balance <= 0) {
       Message.error('Insufficient balance. Please top up your account to continue.');
       return;
     }
-    
-    // Check if user has completed all tasks
+
     if (currentUser.tasksDone >= currentUser.vip.dailyorder) {
       Message.success('You have completed all available tasks. Please contact customer support to reset your account.');
       return;
@@ -81,24 +131,6 @@ const Grappage = () => {
     dispatch(productListActions.doCloseModal())
   };
 
-  useEffect(() => {
-    dispatch(recordListAction.doCount());
-    dispatch(recordListAction.doCountDay());
-    const cleanup = displayRandomImage();
-    return cleanup;
-  }, [dispatch]);
-
-  // Add useEffect to show alerts when component loads if conditions are met
-  useEffect(() => {
-    if (currentUser.balance <= 0) {
-      Message.error('Insufficient balance. Please top up your account to continue.');
-    }
-    
-    if (currentUser.tasksDone >= currentUser.vip.dailyorder) {
-      Message.success('You have completed all available tasks. Please contact customer support to reset your account.');
-    }
-  }, [currentUser.balance, currentUser.tasksDone, currentUser.vip.dailyorder]);
-
   const submit = async () => {
     const values = {
       number: number,
@@ -110,6 +142,8 @@ const Grappage = () => {
   };
 
   const disableButton = currentUser.balance <= 0 || !currentUser.grab || currentUser.tasksDone >= currentUser.vip.dailyorder;
+
+  const visibleImages = getVisibleImages();
 
   return (
     <div className="grappage-container">
@@ -173,7 +207,7 @@ const Grappage = () => {
         </div>
       </div>
 
-      {/* Main Game Grid */}
+      {/* Main Game Area - Professional Slider */}
       <div className="game-grid-section">
         <div className="game-header">
           <div className="vip-info">
@@ -188,41 +222,43 @@ const Grappage = () => {
           </div>
         </div>
 
-        <div className="game-grid">
-          <div className="grid-row">
-            {[0, 1, 2].map((index) => (
-              <div key={index} className="grid-item">
-                <img src={randomImages[index]} alt={`Product ${index + 1}`} />
-              </div>
-            ))}
+        {/* Slider Container */}
+        <div className="slider-container">
+          <div className="slider-wrapper">
+            <div className={`slider-viewport ${isAnimating ? 'sliding' : ''}`}>
+              {visibleImages.map((item, index) => (
+                <div
+                  key={item.id}
+                  className={`slider-item ${index === 1 ? 'active' : ''}`}
+                  data-position={index}
+                >
+                  <div className="image-container">
+                    <img
+                      src={item.src}
+                      alt={`Product ${index + 1}`}
+                      className="slider-image"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/images/default-product.png";
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="grid-row">
-            {[3, 4, 5].map((index) => (
-              <div key={index} className="grid-item">
-                {index === 4 ? (
-                  <button
-                    className={`start-button ${loading ? "loading" : ""} ${disableButton ? "disabled" : ""
-                      }`}
-                    onClick={rollAll}
-                    disabled={disableButton}
-                  >
-                    <span className="button-text">
-                      {loading ? i18n('pages.grab.processing') : i18n('pages.grab.startButton')}
-                    </span>
-                  </button>
-                ) : (
-                  <img src={randomImages[index]} alt={`Product ${index + 1}`} />
-                )}
-              </div>
-            ))}
-          </div>
-          <div className="grid-row">
-            {[6, 7, 0].map((index) => (
-              <div key={index} className="grid-item">
-                <img src={randomImages[index]} alt={`Product ${index + 1}`} />
-              </div>
-            ))}
 
+          {/* Start Button - Positioned in the middle grid item */}
+          <div className="game-grid">
+            <button
+              className={`start-button ${loading ? "loading" : ""} ${disableButton ? "disabled" : ""}`}
+              onClick={rollAll}
+              disabled={disableButton}
+            >
+              <span className="button-text">
+                {loading ? i18n('pages.grab.processing') : i18n('pages.grab.startButton')}
+              </span>
+            </button>
           </div>
         </div>
 
@@ -244,20 +280,25 @@ const Grappage = () => {
 
       {/* Loading and Modals */}
       {loading && <LoadingModal />}
-      {items && items?.type === "prizes" && Modal && !loading && <PrizeModal items={items}
-        number={number}
-        hideModal={hideModal}
-        submit={submit} />}
-      {Modal && !loading && (
-        <GrapModal items={items} number={number} hideModal={hideModal} submit={submit} />
+      {items && items?.type === "prizes" && Modal && !loading && (
+        <PrizeModal
+          items={items}
+          number={number}
+          hideModal={hideModal}
+          submit={submit}
+        />
       )}
-
-
-
+      {Modal && !loading && (
+        <GrapModal
+          items={items}
+          number={number}
+          hideModal={hideModal}
+          submit={submit}
+        />
+      )}
 
       <style>{`
         .grappage-container {
-          max-width: 440px;
           margin: 0 auto;
           padding: 20px;
           background: linear-gradient(135deg, #EDF1F7 0%, #F7FAFC 100%);
@@ -457,62 +498,160 @@ const Grappage = () => {
           font-size: 12px;
         }
 
-        .game-grid {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
+        /* Slider Container */
+        .slider-container {
           margin: 20px 0;
+          position: relative;
         }
 
-        .grid-row {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr;
-          gap: 12px;
+        .slider-wrapper {
+          position: relative;
+          width: 100%;
+          height: 250px;
+          overflow: hidden;
         }
 
-        .grid-item {
-          aspect-ratio: 1;
-          background: #F7FAFC;
-          border-radius: 12px;
-          border: 2px solid #E2E8F0;
+        .slider-viewport {
           display: flex;
           align-items: center;
           justify-content: center;
+          height: 100%;
+          position: relative;
+          width: 100%;
+        }
+
+        /* Sliding animation for the entire viewport */
+        .slider-viewport.sliding {
+          animation: slideViewport 0.6s ease-in-out;
+        }
+
+        @keyframes slideViewport {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(-33.33%);
+          }
+        }
+
+        .slider-item {
+          position: absolute;
+          transition: all 0.6s ease;
+          border-radius: 16px;
           overflow: hidden;
-          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
-        .grid-item:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        /* Position 0: Left (small) */
+        .slider-item[data-position="0"] {
+          width: 180px;
+          height: 180px;
+          left: 10%;
+          opacity: 0.7;
+          transform: translateX(0) scale(0.85);
+          z-index: 1;
         }
 
-        .grid-item img {
+        /* Position 1: Center (large and active) */
+        .slider-item[data-position="1"] {
+          width: 250px;
+          height: 250px;
+          left: 50%;
+          transform: translateX(-50%) scale(1);
+          opacity: 1;
+          z-index: 3;
+          box-shadow: 0 10px 40px rgba(66, 153, 225, 0.4);
+        }
+
+        /* Position 2: Right (small) */
+        .slider-item[data-position="2"] {
+          width: 180px;
+          height: 180px;
+          left: 90%;
+          transform: translateX(-100%) scale(0.85);
+          opacity: 0.7;
+          z-index: 1;
+        }
+
+        /* Active item styling */
+        .slider-item.active .image-container {
+          border: 3px solid #4299E1;
+        }
+
+        .image-container {
+          width: 100%;
+          height: 100%;
+          border-radius: 16px;
+          overflow: hidden;
+          border: 2px solid #E2E8F0;
+          background: #F7FAFC;
+        }
+
+        .slider-image {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          transition: transform 0.3s ease;
         }
 
+        .slider-item.active .slider-image:hover {
+          transform: scale(1.05);
+        }
+
+        /* Game Grid for Start Button */
+        .game-grid {
+          margin: 30px 0;
+        }
+
+        .grid-row {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 20px;
+          margin: 0 auto;
+          max-width: 600px;
+        }
+
+        .grid-item {
+          flex: 1;
+          max-width: 180px;
+          aspect-ratio: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .placeholder-item {
+          width: 100%;
+          height: 100%;
+          background: #F7FAFC;
+          border-radius: 16px;
+          border: 2px solid #E2E8F0;
+        }
+
+        /* Start Button */
         .start-button {
-        margin-top: 0px !important;
           width: 100%;
           height: 100%;
           background: linear-gradient(135deg, #48BB78 0%, #38A169 100%);
           border: none;
-          border-radius: 10px;
+          border-radius: 16px;
           color: white;
-          font-size: 16px;
+          font-size: 18px;
           font-weight: 700;
           cursor: pointer;
           transition: all 0.3s ease;
           display: flex;
           align-items: center;
           justify-content: center;
+          box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
         }
 
         .start-button:hover:not(.disabled):not(.loading) {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(72, 187, 120, 0.3);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
         }
 
         .start-button.loading {
@@ -527,16 +666,19 @@ const Grappage = () => {
         }
 
         .button-text {
-          font-size: 16px;
+          font-size: 18px;
           font-weight: 700;
+          padding: 0 10px;
+          text-align: center;
         }
 
         .channel-footer {
           text-align: center;
           color: #718096;
           font-size: 12px;
-          padding-top: 10px;
+          padding-top: 20px;
           border-top: 1px solid #E2E8F0;
+          margin-top: 10px;
         }
 
         /* Notice Section */
@@ -559,7 +701,6 @@ const Grappage = () => {
           font-size: 13px;
           line-height: 1.5;
           margin: 0;
-          padding-left: 16px;
         }
 
         .notice-list li {
@@ -567,6 +708,78 @@ const Grappage = () => {
         }
 
         /* Responsive Design */
+        @media (max-width: 768px) {
+          .slider-wrapper {
+            height: 220px;
+          }
+          
+          .slider-item[data-position="0"],
+          .slider-item[data-position="2"] {
+            width: 150px;
+            height: 150px;
+          }
+          
+          .slider-item[data-position="1"] {
+            width: 220px;
+            height: 220px;
+          }
+          
+          .slider-item[data-position="0"] {
+            left: 5%;
+          }
+          
+          .slider-item[data-position="2"] {
+            left: 95%;
+          }
+          
+          .grid-row {
+            gap: 15px;
+          }
+          
+          .grid-item {
+            max-width: 150px;
+          }
+          
+          .button-text {
+            font-size: 16px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .slider-wrapper {
+            height: 200px;
+          }
+          
+          .slider-item[data-position="0"],
+          .slider-item[data-position="2"] {
+            width: 120px;
+            height: 120px;
+            left: 0%;
+          }
+          
+          .slider-item[data-position="1"] {
+            width: 180px;
+            height: 180px;
+          }
+          
+          .slider-item[data-position="2"] {
+            left: 100%;
+            transform: translateX(-120%) scale(0.85);
+          }
+          
+          .grid-row {
+            gap: 10px;
+          }
+          
+          .grid-item {
+            max-width: 120px;
+          }
+          
+          .button-text {
+            font-size: 14px;
+          }
+        }
+
         @media (max-width: 480px) {
           .grappage-container {
             padding: 16px;
@@ -574,32 +787,126 @@ const Grappage = () => {
           
           .user-greeting {
             padding: 14px 16px;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-start;
+          }
+          
+          .vip-badge {
+            align-self: flex-end;
           }
           
           .stat-card {
             padding: 16px;
+            flex-direction: column;
+            gap: 15px;
+            text-align: center;
+          }
+          
+          .stat-content {
+            flex-direction: column;
+            text-align: center;
+          }
+          
+          .stat-amount {
+            text-align: center;
           }
           
           .game-grid-section {
             padding: 16px;
           }
           
+          .slider-wrapper {
+            height: 180px;
+          }
+          
+          .slider-item[data-position="0"],
+          .slider-item[data-position="2"] {
+            width: 100px;
+            height: 100px;
+          }
+          
+          .slider-item[data-position="1"] {
+            width: 160px;
+            height: 160px;
+          }
+          
           .grid-row {
             gap: 8px;
+          }
+          
+          .grid-item {
+            max-width: 100px;
+          }
+          
+          .button-text {
+            font-size: 12px;
+          }
+          
+          .start-button {
+            font-size: 14px;
           }
         }
 
         @media (max-width: 360px) {
-          .vip-info {
-            flex-direction: column;
-            gap: 8px;
-            align-items: flex-start;
+          .slider-wrapper {
+            height: 160px;
           }
           
-          .greeting-content {
-            flex-direction: column;
-            text-align: center;
-            gap: 8px;
+          .slider-item[data-position="0"],
+          .slider-item[data-position="2"] {
+            width: 80px;
+            height: 80px;
+          }
+          
+          .slider-item[data-position="1"] {
+            width: 140px;
+            height: 140px;
+          }
+          
+          .grid-row {
+            gap: 6px;
+          }
+          
+          .grid-item {
+            max-width: 80px;
+          }
+          
+          .button-text {
+            font-size: 11px;
+          }
+          
+          .start-button {
+            font-size: 12px;
+          }
+        }
+
+        @media (max-width: 320px) {
+          .slider-wrapper {
+            height: 140px;
+          }
+          
+          .slider-item[data-position="0"],
+          .slider-item[data-position="2"] {
+            width: 70px;
+            height: 70px;
+          }
+          
+          .slider-item[data-position="1"] {
+            width: 120px;
+            height: 120px;
+          }
+          
+          .grid-row {
+            gap: 4px;
+          }
+          
+          .grid-item {
+            max-width: 70px;
+          }
+          
+          .button-text {
+            font-size: 10px;
           }
         }
       `}</style>

@@ -234,7 +234,7 @@ function Notifications() {
 
       <style>{`
         .notifications-container {
-          max-width: 400px;
+          max-width: 1000px;
           margin: 0 auto;
           background: #F8FAFC;
           min-height: 100vh;

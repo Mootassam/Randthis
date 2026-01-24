@@ -115,7 +115,9 @@ const en = {
         levellimit: '',
         setperday: 'sets of data everyday',
         withdrawperday: 'Withdraw per day',
-        photo: "photo"
+        photo: "photo",
+        min: "Minimum product price for this VIP ",
+        max: "Maximum product price for this VIP"
       },
 
       new: {
@@ -2649,6 +2651,8 @@ const en = {
       accountSettings: 'Account Settings',
       permissions: 'Permissions',
       additionalInfo: 'VIP + COMBO',
+      prizeInfo: 'Prizes'
+
 
 
     },
