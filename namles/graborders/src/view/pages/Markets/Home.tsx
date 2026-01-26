@@ -10,6 +10,7 @@ import actions from "src/modules/auth/authActions";
 import listactions from "src/modules/company/list/companyListActions";
 import selectors from "src/modules/company/list/companyListSelectors";
 import { i18n } from "../../../i18n";
+import logos from "src/shared/data/logos";
 
 // Move styled component outside the component function
 const MarketContainer = styled.div`
@@ -45,8 +46,6 @@ const VipLevelCard = memo(({
   isCurrent: boolean;
   onShowModal: (item: DataItem) => void;
 }) => {
-
-
   return (
     <div
       className={`vip-level-card ${isCurrent ? 'vip-level-active' : ''}`}
@@ -72,7 +71,6 @@ const VipLevelCard = memo(({
             alt={item?.title}
             className="level-image"
             loading="lazy"
-          
           />
         </div>
 
@@ -128,7 +126,7 @@ function Home() {
 
   // Optimized image slider with proper state management
   const Images = [
-    "https://nowspeed.com/wp-content/uploads/ns-content-marketing.jpg", // Use local image first
+    "https://nowspeed.com/wp-content/uploads/ns-content-marketing.jpg",
     "https://nowspeed.com/wp-content/uploads/ns-campaigns.jpg",
     "https://nowspeed.com/wp-content/uploads/aed8c19bc75f85346ff4c6e5265256a1.jpg",
     "https://nowspeed.com/wp-content/uploads/ns-seo.jpg"
@@ -176,7 +174,7 @@ function Home() {
       setCurrentSlide((prevSlide) =>
         prevSlide === Images.length - 1 ? 0 : prevSlide + 1
       );
-    }, 4000); // Increased interval for better performance
+    }, 4000);
 
     return () => {
       clearInterval(sliderInterval);
@@ -216,6 +214,17 @@ function Home() {
     },
   ];
 
+  // Services data for About Us section
+  const services = [
+    { icon: "fa-solid fa-bullhorn", name: "Digital Advertising" },
+    { icon: "fa-solid fa-hand-pointer", name: "PPC" },
+    { icon: "fa-solid fa-magnifying-glass", name: "SEO" },
+    { icon: "fa-solid fa-hashtag", name: "Social Media Marketing" },
+    { icon: "fa-solid fa-envelope", name: "Email Marketing" },
+    { icon: "fa-solid fa-robot", name: "Marketing Automation" },
+    { icon: "fa-solid fa-desktop", name: "Web Design" }
+  ];
+
   return (
     <MarketContainer>
       <div className="home-container">
@@ -231,7 +240,7 @@ function Home() {
                   src={image}
                   alt={`Slide ${index + 1}`}
                   className="slider-image"
-                  loading={index === 0 ? "eager" : "lazy"} // First image eager, others lazy
+                  loading={index === 0 ? "eager" : "lazy"}
                 />
               </div>
             ))}
@@ -301,6 +310,71 @@ function Home() {
               )}
             </div>
           </div>
+
+          {/* NEW ABOUT US SECTION - Added under VIP section */}
+          <div className="about-us-section">
+            <div className="about-us-container">
+              <div className="about-us-header">
+                <h2 className="about-us-title">
+                  <i className="fa-solid fa-building-columns"></i>
+                  ABOUT US
+                </h2>
+              </div>
+
+              <div className="about-us-content">
+                <div className="about-us-text">
+                  <p className="about-us-description">
+                Nowspeed is a digital marketing agency 
+providing innovative Digital Advertising, PPC 
+(Pay-per-click), SEO (Search Engine 
+Optimization), Social Media Marketing, 
+Email Marketing, Marketing Automation, and 
+Web Design solutions. From our offices in 
+the United States and Canada, we work 
+closely with our clients to provide solutions 
+specially designed for their unique online
+marketing objectives.
+                   
+                  </p>
+                  
+                
+
+                </div>
+
+              </div>
+
+           
+            </div>
+          </div>
+
+
+          {/* {SLIDER LIKE NEWS} */}
+<div className="slider-news">
+  <div className="slider-news-track">
+    {/* First set of logos */}
+    {logos.map((logo, index) => (
+      <div key={`first-${index}`} className="logo-item">
+        <img
+          src={logo.url}
+          alt={`logo-${index + 1}`}
+          className="logo-img"
+        />
+      </div>
+    ))}
+    {/* Duplicated set for seamless infinite effect */}
+    {logos.map((logo, index) => (
+      <div key={`second-${index}`} className="logo-item">
+        <img
+          src={logo.url}
+          alt={`logo-${index + 1}`}
+          className="logo-img"
+        />
+      </div>
+    ))}
+  </div>
+</div>
+
+
         </div>
 
         {/* VIP Level Modal */}
@@ -321,7 +395,6 @@ function Home() {
                       src={selectedItem?.photo?.[0]?.downloadUrl }
                       alt={selectedItem?.title}
                       loading="lazy"
-                  
                     />
                   </div>
                 </div>
@@ -366,12 +439,13 @@ function Home() {
           </div>
         )}
 
-        <style >{`
+        <style>{`
           /* Base Styles */
           .home-container {
             display: flex;
             flex-direction: column;
           }
+            
 
           /* Fixed Image Slider Styles */
           .advertise__header {
@@ -388,9 +462,138 @@ function Home() {
             overflow: hidden;
             background: #000;
             margin: 0 auto;
-            // border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
           }
+
+
+  .slider-news {
+    background-color: #FFFFFF;
+    border-radius: 50vw !important;
+    padding-top: 35px;
+    padding-bottom: 35px;
+    overflow: hidden;
+    position: relative;
+    margin: 20px auto;
+    max-width: 1000px;
+    width: 100%;
+    margin-bottom:100px;
+  }
+
+  .slider-news::before,
+  .slider-news::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .slider-news::before {
+    left: 0;
+    background: linear-gradient(to right, #FFFFFF, transparent);
+  }
+
+  .slider-news::after {
+    right: 0;
+    background: linear-gradient(to left, #FFFFFF, transparent);
+  }
+
+  .slider-news-track {
+    display: flex;
+    animation: slide 20s linear infinite;
+    width: max-content;
+  }
+
+  .slider-news:hover .slider-news-track {
+    animation-play-state: paused;
+  }
+
+  .logo-item {
+    padding: 0 20px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .slider-news:hover .logo-item:hover {
+    transform: scale(1.1);
+  }
+
+  .logo-img {
+    height: 70px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+    filter: grayscale(100%) brightness(0.7);
+    transition: filter 1.6s ease, transform 0.3s ease;
+    opacity: 0.8;
+  }
+
+  .slider-news:hover .logo-img {
+    filter: grayscale(50%) brightness(0.85);
+  }
+
+  .logo-item:hover .logo-img {
+    filter: grayscale(0%) brightness(1);
+    opacity: 1;
+    transform: scale(1.05);
+  }
+
+  @keyframes slide {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Pause animation on reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .slider-news-track {
+      animation: none;
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .slider-news {
+      padding-top: 25px;
+      padding-bottom: 25px;
+      border-radius: 25px !important;
+    }
+
+    .logo-img {
+      height: 50px;
+    }
+
+    .logo-item {
+      padding: 0 15px;
+    }
+
+    .slider-news::before,
+    .slider-news::after {
+      width: 50px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .slider-news {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+
+    .logo-img {
+      height: 40px;
+    }
+
+    .logo-item {
+      padding: 0 10px;
+    }
+  }
+
 
           .slide {
             position: absolute;
@@ -514,8 +717,7 @@ function Home() {
             padding: 20px;
             border: 1px solid #E2E8F0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-
-            margin-bottom:80px;
+            margin-bottom: 20px;
           }
 
           .section-header {
@@ -707,6 +909,237 @@ function Home() {
             font-weight: 400;
           }
 
+          /* NEW ABOUT US SECTION STYLES */
+          .about-us-section {
+            padding: 0 15px 10px;
+            max-width: 1000px;
+            margin: 0 auto;
+          }
+
+          .about-us-container {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%);
+            border-radius: 20px;
+            padding: 30px 25px;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+          }
+
+          .about-us-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #4299E1, #667eea, #764ba2);
+          }
+
+          .about-us-header {
+            text-align: center;
+            margin-bottom: 30px;
+          }
+
+          .about-us-title {
+            color: #1A202C;
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #2B6CB0, #4299E1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+
+          .about-us-title i {
+            color: #4299E1;
+            font-size: 24px;
+          }
+
+          .about-us-subtitle {
+            color: #718096;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0;
+          }
+
+          .about-us-content {
+            display: grid;
+            gap: 30px;
+          }
+
+          .about-us-text {
+            text-align: center;
+          }
+
+          .about-us-description {
+            color: #4A5568;
+            font-size: 16px;
+            line-height: 1.8;
+            margin: 0 0 20px 0;
+            padding: 0 10px;
+          }
+
+          .highlight {
+            color: #4299E1;
+            font-weight: 600;
+            background: rgba(66, 153, 225, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin: 0 2px;
+          }
+
+          .about-us-location {
+            color: #2D3748;
+            font-size: 15px;
+            font-style: italic;
+            background: #F7FAFC;
+            padding: 15px;
+            border-radius: 12px;
+            border-left: 4px solid #4299E1;
+            margin: 25px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          }
+
+          .about-us-location i {
+            color: #4299E1;
+            font-size: 18px;
+            flex-shrink: 0;
+          }
+
+          .about-us-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+          }
+
+          .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            min-width: 100px;
+            border: 1px solid #E2E8F0;
+          }
+
+          .stat-number {
+            color: #4299E1;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 5px;
+          }
+
+          .stat-label {
+            color: #718096;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+
+          .about-us-services {
+            margin-top: 20px;
+          }
+
+          .services-title {
+            color: #1A202C;
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            margin: 0 0 20px 0;
+          }
+
+          .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+          }
+
+          .service-card {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #E2E8F0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+          }
+
+          .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(66, 153, 225, 0.15);
+            border-color: #4299E1;
+          }
+
+          .service-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(66, 153, 225, 0.1), rgba(102, 126, 234, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4299E1;
+            font-size: 20px;
+          }
+
+          .service-name {
+            color: #2D3748;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.3;
+          }
+
+          .about-us-cta {
+            text-align: center;
+            margin-top: 30px;
+          }
+
+          .learn-more-btn {
+            background: linear-gradient(135deg, #4299E1, #3182CE);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(66, 153, 225, 0.3);
+          }
+
+          .learn-more-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(66, 153, 225, 0.4);
+            color: white;
+            text-decoration: none;
+          }
+
+          .learn-more-btn i {
+            transition: transform 0.3s ease;
+          }
+
+          .learn-more-btn:hover i {
+            transform: translateX(4px);
+          }
+
           /* Modal Styles */
           .upgrade-modal-overlay {
             position: fixed;
@@ -883,6 +1316,34 @@ function Home() {
           }
 
           /* Responsive Design */
+          @media (max-width: 768px) {
+            .about-us-content {
+              grid-template-columns: 1fr;
+            }
+            
+            .services-grid {
+              grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .about-us-stats {
+              gap: 15px;
+            }
+            
+            .stat-item {
+              min-width: 80px;
+              padding: 12px;
+            }
+            
+            .stat-number {
+              font-size: 24px;
+            }
+            
+            .about-us-description {
+              font-size: 15px;
+              padding: 0;
+            }
+          }
+
           @media (max-width: 400px) {
             .image-slider {
               height: 180px;
@@ -918,6 +1379,28 @@ function Home() {
             .view-all-btn {
               padding: 10px 20px;
               font-size: 13px;
+            }
+            
+            .about-us-title {
+              font-size: 24px;
+            }
+            
+            .about-us-subtitle {
+              font-size: 14px;
+            }
+            
+            .services-grid {
+              grid-template-columns: repeat(2, 1fr);
+              gap: 12px;
+            }
+            
+            .service-card {
+              padding: 12px 8px;
+            }
+            
+            .learn-more-btn {
+              padding: 12px 20px;
+              font-size: 14px;
             }
           }
         `}</style>

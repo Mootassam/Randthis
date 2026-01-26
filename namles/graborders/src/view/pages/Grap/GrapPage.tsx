@@ -42,14 +42,13 @@ const Grappage = () => {
       setIsInitialized(true);
     } catch (error) {
       console.error("Error loading images:", error);
-      // Fallback to default images
       const defaultImages = Array(9).fill("https://plus.unsplash.com/premium_photo-1664392147011-2a720f214e01?q=80&w=878&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
       setImages(defaultImages);
       setIsInitialized(true);
     }
   };
 
-  // Get visible images (always 3 images)
+  // Get visible images
   const getVisibleImages = () => {
     if (images.length < 3) {
       return Array(3).fill("https://plus.unsplash.com/premium_photo-1664392147011-2a720f214e01?q=80&w=878&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
@@ -60,7 +59,7 @@ const Grappage = () => {
       const index = (currentIndex + i) % images.length;
       visible.push({
         src: images[index],
-        id: `${index}-${Date.now()}-${Math.random()}`, // Unique key
+        id: `${index}-${Date.now()}-${Math.random()}`,
         position: i
       });
     }
@@ -72,19 +71,10 @@ const Grappage = () => {
     if (isAnimating || !isInitialized) return;
 
     setIsAnimating(true);
-
-    // Animation duration
     setTimeout(() => {
-      setCurrentIndex(prev => {
-        const nextIndex = (prev + 1) % images.length;
-        return nextIndex;
-      });
-
-      // Reset animation state
-      setTimeout(() => {
-        setIsAnimating(false);
-      }, 50);
-    }, 600); // Match CSS animation duration
+      setCurrentIndex(prev => (prev + 1) % images.length);
+      setTimeout(() => setIsAnimating(false), 50);
+    }, 600);
   };
 
   // Initialize and start slider
@@ -97,12 +87,11 @@ const Grappage = () => {
   // Start automatic sliding
   useEffect(() => {
     if (!isInitialized) return;
-
     const interval = setInterval(slideToNext, 3000);
     return () => clearInterval(interval);
   }, [isInitialized, isAnimating]);
 
-  // Check user conditions
+  // Check user conditions - Show messages on mount when conditions are met
   useEffect(() => {
     if (currentUser.balance <= 0) {
       Message.error('Insufficient balance. Please top up your account to continue.');
@@ -116,19 +105,20 @@ const Grappage = () => {
   const rollAll = async () => {
     if (currentUser.balance <= 0) {
       Message.error('Insufficient balance. Please top up your account to continue.');
-      return;
+      return; // Don't proceed to rollAll
     }
 
     if (currentUser.tasksDone >= currentUser.vip.dailyorder) {
       Message.success('You have completed all available tasks. Please contact customer support to reset your account.');
-      return;
+      return; // Don't proceed to rollAll
     }
 
+    // If all conditions pass, execute rollAll
     await dispatch(actions.doFetch());
   };
 
   const hideModal = () => {
-    dispatch(productListActions.doCloseModal())
+    dispatch(productListActions.doCloseModal());
   };
 
   const submit = async () => {
@@ -140,8 +130,6 @@ const Grappage = () => {
     };
     await dispatch(recordActions.doCreate(values));
   };
-
-  const disableButton = currentUser.balance <= 0 || !currentUser.grab || currentUser.tasksDone >= currentUser.vip.dailyorder;
 
   const visibleImages = getVisibleImages();
 
@@ -207,7 +195,7 @@ const Grappage = () => {
         </div>
       </div>
 
-      {/* Main Game Area - Professional Slider */}
+      {/* Main Game Area */}
       <div className="game-grid-section">
         <div className="game-header">
           <div className="vip-info">
@@ -248,12 +236,12 @@ const Grappage = () => {
             </div>
           </div>
 
-          {/* Start Button - Positioned in the middle grid item */}
+          {/* Start Button - Always clickable */}
           <div className="game-grid">
             <button
-              className={`start-button ${loading ? "loading" : ""} ${disableButton ? "disabled" : ""}`}
+              className={`start-button ${loading ? "loading" : ""}`}
               onClick={rollAll}
-              disabled={disableButton}
+              disabled={loading} // Only disable when loading
             >
               <span className="button-text">
                 {loading ? i18n('pages.grab.processing') : i18n('pages.grab.startButton')}
@@ -520,7 +508,6 @@ const Grappage = () => {
           width: 100%;
         }
 
-        /* Sliding animation for the entire viewport */
         .slider-viewport.sliding {
           animation: slideViewport 0.6s ease-in-out;
         }
@@ -544,7 +531,6 @@ const Grappage = () => {
           justify-content: center;
         }
 
-        /* Position 0: Left (small) */
         .slider-item[data-position="0"] {
           width: 180px;
           height: 180px;
@@ -554,7 +540,6 @@ const Grappage = () => {
           z-index: 1;
         }
 
-        /* Position 1: Center (large and active) */
         .slider-item[data-position="1"] {
           width: 250px;
           height: 250px;
@@ -565,7 +550,6 @@ const Grappage = () => {
           box-shadow: 0 10px 40px rgba(66, 153, 225, 0.4);
         }
 
-        /* Position 2: Right (small) */
         .slider-item[data-position="2"] {
           width: 180px;
           height: 180px;
@@ -575,7 +559,6 @@ const Grappage = () => {
           z-index: 1;
         }
 
-        /* Active item styling */
         .slider-item.active .image-container {
           border: 3px solid #4299E1;
         }
@@ -602,39 +585,15 @@ const Grappage = () => {
 
         /* Game Grid for Start Button */
         .game-grid {
-          margin: 30px 0;
-        }
-
-        .grid-row {
+          margin: 20px 0;
           display: flex;
           justify-content: center;
-          align-items: center;
-          gap: 20px;
-          margin: 0 auto;
-          max-width: 600px;
         }
 
-        .grid-item {
-          flex: 1;
-          max-width: 180px;
-          aspect-ratio: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .placeholder-item {
-          width: 100%;
-          height: 100%;
-          background: #F7FAFC;
-          border-radius: 16px;
-          border: 2px solid #E2E8F0;
-        }
-
-        /* Start Button */
+        /* Start Button - Always enabled */
         .start-button {
-          width: 100%;
-          height: 100%;
+          width: 280px;
+          height: 60px;
           background: linear-gradient(135deg, #48BB78 0%, #38A169 100%);
           border: none;
           border-radius: 16px;
@@ -647,11 +606,19 @@ const Grappage = () => {
           align-items: center;
           justify-content: center;
           box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+          position: relative;
+          overflow: hidden;
         }
 
-        .start-button:hover:not(.disabled):not(.loading) {
+        .start-button:hover:not(.loading) {
           transform: translateY(-3px);
           box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+          background: linear-gradient(135deg, #38A169 0%, #2F855A 100%);
+        }
+
+        .start-button:active:not(.loading) {
+          transform: translateY(0);
+          box-shadow: 0 4px 12px rgba(72, 187, 120, 0.3);
         }
 
         .start-button.loading {
@@ -659,17 +626,31 @@ const Grappage = () => {
           cursor: not-allowed;
         }
 
-        .start-button.disabled {
-          background: #CBD5E0;
-          cursor: not-allowed;
-          opacity: 0.6;
+        .start-button.loading::after {
+          content: '';
+          position: absolute;
+          width: 20px;
+          height: 20px;
+          border: 2px solid rgba(255, 255, 255, 0.3);
+          border-radius: 50%;
+          border-top-color: white;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
+          }
         }
 
         .button-text {
           font-size: 18px;
           font-weight: 700;
-          padding: 0 10px;
           text-align: center;
+        }
+
+        .start-button.loading .button-text {
+          margin-right: 10px;
         }
 
         .channel-footer {
@@ -732,12 +713,9 @@ const Grappage = () => {
             left: 95%;
           }
           
-          .grid-row {
-            gap: 15px;
-          }
-          
-          .grid-item {
-            max-width: 150px;
+          .start-button {
+            width: 240px;
+            height: 56px;
           }
           
           .button-text {
@@ -767,12 +745,9 @@ const Grappage = () => {
             transform: translateX(-120%) scale(0.85);
           }
           
-          .grid-row {
-            gap: 10px;
-          }
-          
-          .grid-item {
-            max-width: 120px;
+          .start-button {
+            width: 200px;
+            height: 52px;
           }
           
           .button-text {
@@ -787,7 +762,6 @@ const Grappage = () => {
           
           .user-greeting {
             padding: 14px 16px;
-            flex-direction: column;
             gap: 12px;
             align-items: flex-start;
           }
@@ -798,14 +772,14 @@ const Grappage = () => {
           
           .stat-card {
             padding: 16px;
-            flex-direction: column;
+            // flex-direction: column;
             gap: 15px;
             text-align: center;
           }
           
           .stat-content {
-            flex-direction: column;
-            text-align: center;
+            // flex-direction: column;
+            text-align: left;
           }
           
           .stat-amount {
@@ -831,19 +805,12 @@ const Grappage = () => {
             height: 160px;
           }
           
-          .grid-row {
-            gap: 8px;
-          }
-          
-          .grid-item {
-            max-width: 100px;
+          .start-button {
+            width: 180px;
+            height: 48px;
           }
           
           .button-text {
-            font-size: 12px;
-          }
-          
-          .start-button {
             font-size: 14px;
           }
         }
@@ -864,20 +831,13 @@ const Grappage = () => {
             height: 140px;
           }
           
-          .grid-row {
-            gap: 6px;
-          }
-          
-          .grid-item {
-            max-width: 80px;
+          .start-button {
+            width: 160px;
+            height: 44px;
           }
           
           .button-text {
-            font-size: 11px;
-          }
-          
-          .start-button {
-            font-size: 12px;
+            font-size: 13px;
           }
         }
 
@@ -897,16 +857,13 @@ const Grappage = () => {
             height: 120px;
           }
           
-          .grid-row {
-            gap: 4px;
-          }
-          
-          .grid-item {
-            max-width: 70px;
+          .start-button {
+            width: 140px;
+            height: 40px;
           }
           
           .button-text {
-            font-size: 10px;
+            font-size: 12px;
           }
         }
       `}</style>

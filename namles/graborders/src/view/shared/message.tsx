@@ -9,7 +9,7 @@ export default class Message {
     style.id = 'custom-toast-style';
     style.textContent = `
       .custom-toast {
-        position: absolute; /* Changed from fixed to absolute */
+        position: fixed; /* Changed from fixed to absolute */
         top: 20px;
         left: 50%;
         transform: translateX(-50%) translateY(-100px);
@@ -25,6 +25,7 @@ export default class Message {
         z-index: 1000; /* Reduced from 9999 to stay within page content */
         transition: transform 0.3s ease, opacity 0.3s ease;
         max-width: 90%;
+        width:100%;
         word-wrap: break-word;
         text-align: center;
       }
