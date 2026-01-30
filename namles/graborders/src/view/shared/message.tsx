@@ -79,7 +79,7 @@ export default class Message {
     // must be changed change because Bootstrap UI
     // css overrides the style
     toastr.options.toastClass = 'toastr';
-    toastr.options.positionClass = 'toast-bottom-left';
+    toastr.options.positionClass = 'toast-top-left';
 
     toastr.error(arg);
   }

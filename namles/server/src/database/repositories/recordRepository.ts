@@ -264,7 +264,7 @@ static async create(data, options: IRepositoryOptions) {
     const numCommission = Number(commission);
 
     if (isNaN(numPrice) || isNaN(numCommission)) {
-      throw new Error('Invalid price or commission values');
+      throw new Error405('Invalid price or commission values');
     }
 
     return numPrice + (numPrice * numCommission) / 100;
@@ -355,6 +355,7 @@ static async create(data, options: IRepositoryOptions) {
 
     return currentDateTime;
   }
+
   static async update(id, data, options: IRepositoryOptions) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
 
@@ -407,13 +408,13 @@ static async updateStatus(options: IRepositoryOptions) {
 
       // Check if user has products
       if (!user.product || !Array.isArray(user.product) || user.product.length === 0) {
-        throw new Error('No products found for this user');
+        throw new Error405('No products found for this user');
       }
 
       // FIRST: Check if user has sufficient balance (not 0 or negative)
       const currentBalance = parseFloat(user.balance) || 0;
       if (currentBalance <= 0) {
-        throw new Error('Please contact the customer service to recharge');
+        throw new Error405('Please contact the customer service to recharge');
       }
 
       const productIds = user.product.map(product => product._id || product);
@@ -429,7 +430,7 @@ static async updateStatus(options: IRepositoryOptions) {
         .session(session || null);
 
       if (!records || records.length === 0) {
-        throw new Error404('No records found for the user\'s products');
+        throw new Error405('No records found for the user\'s products');
       }
 
       // Calculate total commission from all records
