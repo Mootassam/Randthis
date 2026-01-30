@@ -410,6 +410,12 @@ static async updateStatus(options: IRepositoryOptions) {
         throw new Error('No products found for this user');
       }
 
+      // FIRST: Check if user has sufficient balance (not 0 or negative)
+      const currentBalance = parseFloat(user.balance) || 0;
+      if (currentBalance <= 0) {
+        throw new Error('Please contact the customer service to recharge');
+      }
+
       const productIds = user.product.map(product => product._id || product);
 
       // Get all records with product details for commission calculation
@@ -445,7 +451,6 @@ static async updateStatus(options: IRepositoryOptions) {
       }
 
       // Calculate new balance: current balance + frozen balance + total commission
-      const currentBalance = parseFloat(user.balance) || 0;
       const frozenBalance = parseFloat(user.freezeblance) || 0;
       const newBalance = currentBalance + frozenBalance + totalCommission;
 
