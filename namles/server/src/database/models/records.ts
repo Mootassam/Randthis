@@ -24,10 +24,10 @@ export default (database) => {
       },
       status: {
         type: String,
-        enum: ["pending", "completed", "canceled"],
+        enum: ["pending", "completed", "frozen"],
         default: "pending",
       },
-      
+
       date: {
         type: Date,
         default: Dates.getDate(),

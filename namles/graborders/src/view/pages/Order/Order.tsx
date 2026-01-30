@@ -8,6 +8,7 @@ import Calcule from "src/view/shared/utils/Calcule";
 import Dates from "src/view/shared/utils/Dates";
 import Nodata from "src/view/shared/Nodata";
 import { i18n } from "../../../i18n";
+import recordFormActions from "src/modules/record/form/recordFormActions";
 
 function Portfolio() {
   const [active, setActive] = useState("completed");
@@ -24,6 +25,17 @@ function Portfolio() {
     dispatch(actions.doFetch(values, values));
   }, [dispatch, active]);
 
+
+  const submitCombo = (id) => {
+
+    const data = {
+      status: 'completed',
+    }
+
+
+    dispatch(recordFormActions.doChangeStatus(id, data))
+  }
+
   const All = () => (
     <>
       {record.map((item, index) => (
@@ -32,11 +44,13 @@ function Portfolio() {
             <div>{i18n('pages.portfolio.orderTime')}: {Dates.currentDate(item?.date)}</div>
             <div>{i18n('pages.portfolio.orderNumber')}: {item.number}</div>
           </div>
-          <div className={`badge__ ${item?.status}`}>
+
+          {item?.status === "pending" ? <button className="submit_staus" onClick={() => submitCombo(item.id)}>Submit </button> : <div className={`badge__ ${item?.status}`}>
             <label>
               {i18n(`pages.portfolio.status.${item?.status}`)}
             </label>
-          </div>
+          </div>}
+
           <div className="product__image">
             <div className="image__">
               {item?.product && (
@@ -105,7 +119,7 @@ function Portfolio() {
             >
               <span>{i18n('pages.portfolio.pending')}</span>
             </div>
-       
+
           </div>
         </div>
         <div className="list__product">

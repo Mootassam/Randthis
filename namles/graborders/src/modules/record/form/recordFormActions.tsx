@@ -88,6 +88,41 @@ const recordFormActions = {
     }
   },
 
+
+
+  doChangeStatus: (id, data) => async (dispatch) => {
+    try {
+
+      dispatch({
+        type: recordFormActions.CREATE_STARTED,
+      });
+
+      // Execute the creation first
+      await RecordService.updateStatus(id, data);
+
+      dispatch({
+        type: recordFormActions.CREATE_SUCCESS,
+      });
+
+           await Promise.all([
+        dispatch(recordListActions.doFetch()),
+        dispatch(authActions.doRefreshCurrentUser()),
+        dispatch(recordListActions.doCountDay()),
+      ]);
+
+    } catch (error) {
+
+      Errors.handle(error);
+
+      dispatch({
+        type: recordFormActions.CREATE_ERROR,
+      });
+    }
+
+
+  },
+
+
   doUpdate: (id, values) => async (dispatch, getState) => {
     try {
       dispatch({

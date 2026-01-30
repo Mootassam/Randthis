@@ -103,7 +103,7 @@ export default class ProductService {
     };
     const tenantId = AuthCurrentTenant.get();
     const response = await authAxios.get(
-      `/tenant/${tenantId}/product/autocomplete`,
+      `/tenant/${tenantId}/product/autocomplete/product`,
       {
         params,
       },

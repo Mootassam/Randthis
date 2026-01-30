@@ -49,7 +49,7 @@ const schema = yup.object().shape({
     max: 100,
   }),
 
-  product: yupFormSchemas.relationToOne(
+  product: yupFormSchemas.relationToMany(
     i18n('prodcut'),
     {},
   ),
@@ -280,6 +280,7 @@ function UserEditForm(props) {
                 <ProductAutocompleteFormItem
                   name="product"
                   label={i18n('user.fields.product')}
+                  mode="multiple"
                 />
               </Col>
 

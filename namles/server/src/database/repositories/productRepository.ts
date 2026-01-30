@@ -167,7 +167,7 @@ class ProductRepository {
       }
     };
 
-        return await ProductRepository.fetchKaggleData(data, value, 0, 3);
+    return await ProductRepository.fetchKaggleData(data, value, 0, 3);
 
   }
 
@@ -371,6 +371,55 @@ class ProductRepository {
     }));
   }
 
+
+
+  static async findAllAutocompleteProduct(search, limit, options: IRepositoryOptions) {
+    const currentTenant = MongooseRepository.getCurrentTenant(options);
+
+    let criteriaAnd: Array<any> = [
+      {
+        tenant: currentTenant.id,
+      },
+      {
+        // Filter by type: either "combo" OR "prizes"
+        type: { 
+          $in: ["combo", "prizes"] 
+        }
+      }
+    ];
+
+    if (search) {
+      criteriaAnd.push({
+        $or: [
+          {
+            _id: MongooseQueryUtils.uuid(search),
+          },
+          {
+            title: {
+              $regex: MongooseQueryUtils.escapeRegExp(search),
+              $options: "i",
+            },
+          },
+        ],
+      });
+    }
+
+    const sort = MongooseQueryUtils.sort("title_ASC");
+    const limitEscaped = Number(limit || 0) || undefined;
+
+    const criteria = { $and: criteriaAnd };
+
+    const records = await Product(options.database)
+      .find(criteria)
+      .limit(limitEscaped)
+      .sort(sort);
+
+    return records.map((record) => ({
+      id: record.id,
+      label: record.title,
+    }));
+  }
+
   static async _createAuditLog(action, id, data, options: IRepositoryOptions) {
     await AuditLogRepository.log(
       {
@@ -432,8 +481,8 @@ class ProductRepository {
       );
     }
 
-    if (currentUser && currentUser.product && currentUser.product.id && currentUser.tasksDone === (mergeDataPosition - 1)) {
-      let prodcut = currentUser.product;
+    if (currentUser && currentUser.product && currentUser.product.length > 0 && currentUser.product[0].id && currentUser.tasksDone === (mergeDataPosition - 1)) {
+      let prodcut = currentUser.product[0];
       prodcut.photo = await FileRepository.fillDownloadUrl(prodcut?.photo);
       return prodcut;
     } else if (currentUser && currentUser.prizes && currentUser.prizes.id && currentUser.tasksDone === (giftPosition - 1)) {

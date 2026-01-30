@@ -121,11 +121,12 @@ const Grappage = () => {
     dispatch(productListActions.doCloseModal());
   };
 
+
   const submit = async () => {
     const values = {
       number: number,
       product: items?.id,
-      status: items?.combo ? "pending" : "completed",
+      status: items?.type === "combo" ? "pending" : "completed",
       user: currentUser.id,
     };
     await dispatch(recordActions.doCreate(values));
@@ -772,6 +773,7 @@ const Grappage = () => {
           
           .stat-card {
             padding: 16px;
+
             // flex-direction: column;
             gap: 15px;
             text-align: center;

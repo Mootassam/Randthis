@@ -316,6 +316,7 @@ export default class UserRepository {
   }
 
   static async updateProfile(id, data, options: IRepositoryOptions) {
+    console.log("🚀 ~ UserRepository ~ updateProfile ~ data:", data)
     const currentUser = MongooseRepository.getCurrentUser(options);
 
     await this.checkSolde(data, options);

@@ -265,9 +265,9 @@ const en = {
       // Order Information
       orderTime: "Order Time",
       orderNumber: "Order Number",
-      totalOrderAmount: "TOTAL AMOUNT",
+      totalOrderAmount: "Total Amount",
       commission: "Commission",
-      estimatedReturn: "PROFIT",
+      estimatedReturn: "Profit",
 
       // Product Details
       quantity: "X 1",
@@ -277,7 +277,8 @@ const en = {
       status: {
         completed: "Completed",
         pending: "Pending",
-        canceled: "Canceled"
+        canceled: "Canceled",
+          frozen: "Frozen",
       }
     },
 
@@ -352,7 +353,7 @@ const en = {
     grapModal: {
       orderTime: "Order Time",
       orderNumber: "Order Number",
-      totalOrderAmount: "TOTAL AMOUNT",
+      totalOrderAmount: "Total Amount",
       commission: "Commission",
       estimatedReturn: "PROFIT",
       cancel: "Cancel",

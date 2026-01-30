@@ -18,6 +18,11 @@ export default class RecordService {
     return response.data;
   }
 
+
+
+
+
+
   static async destroyAll(ids) {
     const params = {
       ids,
@@ -47,19 +52,28 @@ export default class RecordService {
     return response.data;
   }
 
-  static async count() { 
+  static async updateStatus(id ,data) {
     const tenantId = AuthCurrentTenant.get();
-    const response = await authAxios.get(
-      `/tenant/${tenantId}/record/count`, 
+    const response = await authAxios.put(
+      `/tenant/${tenantId}/record/updateStatus`,
     );
     return response.data.record;
   }
 
 
-  static async countDay () { 
+  static async count() {
     const tenantId = AuthCurrentTenant.get();
     const response = await authAxios.get(
-      `/tenant/${tenantId}/count/recordperdays`, 
+      `/tenant/${tenantId}/record/count`,
+    );
+    return response.data.record;
+  }
+
+
+  static async countDay() {
+    const tenantId = AuthCurrentTenant.get();
+    const response = await authAxios.get(
+      `/tenant/${tenantId}/count/recordperdays`,
     );
     return response.data.total;
   }
@@ -115,13 +129,13 @@ export default class RecordService {
 
 
   static async check() {
-   
+
 
     const tenantId = AuthCurrentTenant.get();
 
     const response = await authAxios.get(
       `/tenant/${tenantId}/check`,
-     
+
     );
 
     return response.data;

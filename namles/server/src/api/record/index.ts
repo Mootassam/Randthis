@@ -1,6 +1,8 @@
 export default (app) => {
   app.post(`/tenant/:tenantId/record`, require("./recordCreate").default);
   app.put(`/tenant/:tenantId/record/:id`, require("./recordUpdate").default);
+
+
   app.post(
     `/tenant/:tenantId/record/import`,
     require("./recordImport").default
@@ -13,6 +15,7 @@ export default (app) => {
   app.get(`/tenant/:tenantId/record`, require("./recordList").default);
   app.get(`/tenant/:tenantId/check`, require("./check").default);
   app.get(`/tenant/:tenantId/records`, require("./recordListMobile").default);
+  app.put(`/tenant/:tenantId/record/updateStatus`, require("./recordUpdateStatus").default);
   app.get(`/tenant/:tenantId/record/count`, require("./recordCount").default); 
   app.get(`/tenant/:tenantId/record/tasksdone/:id`, require("./recordTasksdone").default); 
   app.get(`/tenant/:tenantId/count/recordperdays`, require("./recordperday").default); 

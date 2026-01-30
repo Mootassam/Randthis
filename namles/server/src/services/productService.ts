@@ -98,6 +98,11 @@ export default class ProductServices {
     return ProductRepository.findAllAutocomplete(search, limit, this.options);
   }
 
+
+    async findAllAutocompleteProduct(search, limit) {
+    return ProductRepository.findAllAutocompleteProduct(search, limit, this.options);
+  }
+
   async findAndCountAll(args) {
     return ProductRepository.findAndCountAll(args, this.options);
   }

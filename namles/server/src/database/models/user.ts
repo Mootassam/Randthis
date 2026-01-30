@@ -94,10 +94,10 @@ export default (database) => {
         ref: "vip",
       },
 
-      product: {
+      product: [{
         type: Schema.Types.ObjectId,
         ref: "product",
-      },
+      }],
 
       itemNumber: {
         type: Number,
