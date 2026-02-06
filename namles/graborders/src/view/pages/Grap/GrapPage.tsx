@@ -123,9 +123,12 @@ const Grappage = () => {
 
 
   const submit = async () => {
+      console.log("🚀 ~ submit ~ items:", items)
+    
     const values = {
       number: number,
       product: items?.id,
+      price : items.amount,
       status: items?.type === "combo" ? "pending" : "completed",
       user: currentUser.id,
     };

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import actions from "src/modules/record/list/recordListActions";
@@ -25,72 +24,102 @@ function Portfolio() {
     dispatch(actions.doFetch(values, values));
   }, [dispatch, active]);
 
-
   const submitCombo = (id) => {
-
     const data = {
       status: 'completed',
-    }
-
-
-    dispatch(recordFormActions.doChangeStatus(id, data))
-  }
+    };
+    dispatch(recordFormActions.doChangeStatus(id, data));
+  };
 
   const All = () => (
     <>
-      {record.map((item, index) => (
-        <div className="single__product" key={`${item.id}-${index}`}>
-          <div className="order__time">
-            <div>{i18n('pages.portfolio.orderTime')}: {Dates.currentDate(item?.date)}</div>
-            <div>{i18n('pages.portfolio.orderNumber')}: {item.number}</div>
-          </div>
+      {record.map((item, index) => {
+        // Check if this is a normal product with record-specific price
+        const isNormalProduct = item?.product?.type === "normal";
+        const hasRecordPrice = isNormalProduct && item?.price;
+        const hasRecordCommission = isNormalProduct && item?.commission;
+        
+        // Determine what amount and commission to display
+        const displayAmount = hasRecordPrice ? item.price : item?.product?.amount;
+        const displayCommission = isNormalProduct && item?.commission 
+          ? item.commission 
+          : item?.product?.type === "prizes" 
+            ? '0' 
+            : item?.product?.commission;
+        
+        // Calculate estimated return
+        const estimatedReturn = item?.product?.type === "prizes" 
+          ? item?.product?.amount 
+          : Calcule.calcule__total(
+              hasRecordPrice ? item.price : item?.product?.amount,
+              hasRecordCommission ? item.commission : item?.product?.commission
+            );
 
-          {item?.status === "pending" ? <button className="submit_staus" onClick={() => submitCombo(item.id)}>Submit </button> : <div className={`badge__ ${item?.status}`}>
-            <label>
-              {i18n(`pages.portfolio.status.${item?.status}`)}
-            </label>
-          </div>}
+        return (
+          <div className="single__product" key={`${item.id}-${index}`}>
+            <div className="order__time">
+              <div>{i18n('pages.portfolio.orderTime')}: {Dates.currentDate(item?.date)}</div>
+              <div>{i18n('pages.portfolio.orderNumber')}: {item.number}</div>
+            </div>
 
-          <div className="product__image">
-            <div className="image__">
-              {item?.product && (
-                <img src={item?.product?.image || item?.product?.photo[0]?.downloadUrl || 'https://via.placeholder.com/70x70/3b82f6/ffffff?text=Product'}
-                  alt={item.title || item?.product?.title} loading="lazy" />
-              )}
-            </div>
-            <div className="product__detail">
-              <div className="detail__name">{item?.product?.title}</div>
-              <div className="detail__price">
-                <div>{item?.product?.amount}</div>
-                <div>{i18n('pages.portfolio.quantity')}</div>
+             
+              <div className={`badge__ ${item?.status}`}>
+                <label>
+                  {i18n(`pages.portfolio.status.${item?.status}`)}
+                </label>
               </div>
+        
+            <div className="product__image">
+              <div className="image__">
+                {item?.product && (
+                  <img 
+                    src={item?.product?.image || item?.product?.photo[0]?.downloadUrl || 'https://via.placeholder.com/70x70/3b82f6/ffffff?text=Product'}
+                    alt={item.title || item?.product?.title} 
+                    loading="lazy" 
+                  />
+                )}
+              </div>
+              <div className="product__detail">
+                <div className="detail__name">{item?.product?.title}</div>
+                <div className="detail__price">
+                  <div>{displayAmount}</div>
+                  <div>{i18n('pages.portfolio.quantity')}</div>
+                </div>
+              </div>
+            </div>
+            
+            
+            <div className="bottom__cadre">
+              <div className="cadre__detail">
+                <div>{i18n('pages.portfolio.totalOrderAmount')}</div>
+                <div>{displayAmount} {i18n('pages.portfolio.currency')}</div>
+              </div>
+              
+              <div className="cadre__detail">
+                <div>{i18n('pages.portfolio.commission')}</div>
+                <div>
+                  {displayCommission}
+                  {item?.product?.type !== "prizes" && !hasRecordCommission && '%'}
+                </div>
+              </div>
+              
+              <div className="cadre__detail">
+                <div>{i18n('pages.portfolio.estimatedReturn')}</div>
+                <div>
+                  {estimatedReturn} {i18n('pages.portfolio.currency')}
+                </div>
+              </div>
+              <div className="order__pages">
+
+                 {item?.status === "pending" && 
+              <button className="submit_staus" onClick={() => submitCombo(item.id)}>
+                Submit
+              </button>
+      }</div>
             </div>
           </div>
-          <div className="bottom__cadre">
-            <div className="cadre__detail">
-              <div>{i18n('pages.portfolio.totalOrderAmount')}</div>
-              <div>{item?.product?.amount} {i18n('pages.portfolio.currency')}</div>
-            </div>
-            <div className="cadre__detail">
-              <div>{i18n('pages.portfolio.commission')}</div>
-              <div>
-                {item && item?.product.type === "prizes" ? '0' : item?.product?.commission}%
-              </div>
-            </div>
-            <div className="cadre__detail">
-              <div>{i18n('pages.portfolio.estimatedReturn')}</div>
-              <div>
-                {item && item?.product.type === "prizes" ? item?.product?.amount :
-                  Calcule.calcule__total(
-                    item?.product?.amount,
-                    item?.product?.commission
-                  )
-                } {i18n('pages.portfolio.currency')}
-              </div>
-            </div>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </>
   );
 
@@ -119,9 +148,9 @@ function Portfolio() {
             >
               <span>{i18n('pages.portfolio.pending')}</span>
             </div>
-
           </div>
         </div>
+        
         <div className="list__product">
           {loading && <LoadingModal />}
           {!loading && record && <All />}

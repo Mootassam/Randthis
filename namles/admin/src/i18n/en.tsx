@@ -2652,15 +2652,13 @@ const en = {
       permissions: 'Permissions',
       additionalInfo: 'VIP + COMBO',
       prizeInfo: 'Prizes'
-
-
-
     },
+    
     fields: {
       currentrecord: 'Tasks Done',
       freezeblance: 'Freeze Balance',
       couponcode: 'couponcode',
-
+      minbalance: "Minimum start-up amount",
       photo: 'photo',
       id: 'Id',
       avatars: 'Avatar',

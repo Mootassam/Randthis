@@ -695,7 +695,6 @@ td {
 
 .bottom__cadre>div {
   width: 100%;
-  justify-content: space-between;
 }
 
 .cadre__detail {
@@ -2929,12 +2928,16 @@ button:disabled {
 
 
 .submit_staus {
-  align-self: right;
   display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  position: absolute;
   right: 10px;
   top: -10px;
   background-color: green;
+}
+
+.order__pages{ 
+  display: flex ;
+  align-items: flex-end  ;
+  justify-content: flex-end;
+  width: 100%;
+  padding-right: 20px;
 }

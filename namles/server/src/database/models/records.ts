@@ -22,6 +22,10 @@ export default (database) => {
         ref: "product",
         required: true,
       },
+
+      price: {
+        type: String,
+      },
       status: {
         type: String,
         enum: ["pending", "completed", "frozen"],

@@ -43,6 +43,11 @@ const schema = yup.object().shape({
     required: false,
   }),
 
+  minbalance: yupFormSchemas.string(i18n('minbalance'), {
+
+  }),
+
+
   score: yupFormSchemas.integer(i18n('score'), {
     required: false,
     min: 0,
@@ -80,6 +85,7 @@ function UserEditForm(props) {
       lastName: record.lastName,
       country: record.country,
       balance: record.balance,
+      minbalance: record.minbalance,
       score: record.score,
       withdrawPassword: record.withdrawPassword,
       state: record.state,
@@ -216,6 +222,15 @@ function UserEditForm(props) {
                 />
               </Col>
 
+
+
+              <Col xs={12} md={6} lg={4}>
+                <InputFormItem
+                  name="minbalance"
+                  label={i18n('user.fields.minbalance')}
+                  required={true}
+                />
+              </Col>
               <Col xs={12} md={6} lg={4}>
                 <InputFormItem
                   name="freezeblance"

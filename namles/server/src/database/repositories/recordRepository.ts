@@ -21,104 +21,126 @@ static async create(data, options: IRepositoryOptions) {
     const currentUser = MongooseRepository.getCurrentUser(options);
     const mergeDataPosition = currentUser.itemNumber;
 
-    // Execute parallel checks where possible
+    // Execute parallel checks
     await Promise.all([
-      this.checkOrder(options),
-      this.calculeGrap(data, options)
+        this.checkOrder(options),
+        this.calculeGrap(data, options)
     ]);
 
     // Calculate position conditions
     const hasProduct = currentUser?.product?.[0]?.id;
-    const isPositionMatch = currentUser.tasksDone === (mergeDataPosition - 1); // mergeDataPosition needs to be defined
+    const isPositionMatch = currentUser.tasksDone === (mergeDataPosition - 1);
 
-    // Use bulk operations for better performance
-    const bulkOps = [
-      {
-        updateOne: {
-          filter: { _id: currentUser.id },
-          update: {
-            $inc: { tasksDone: 1 },
-            $set: { updatedAt: new Date() }
-          }
-        }
-      }
-    ];
-
-    let records = [];
-    
-    // Check if ALL conditions are met for product combo creation
+    // COMBO MODE
     if (hasProduct && isPositionMatch) {
-      // Calculate combo price (if needed)
-      let comboprice = 0;
-      if (currentUser.product && Array.isArray(currentUser.product)) {
-        currentUser.product.forEach((item) => {
-          comboprice += parseFloat(item.amount) || 0;
-        });
-      }
-
-      // Create one record for each product in the array (PRODUCT COMBO MODE)
-      const recordDataArray = currentUser.product.map((productId, index) => {
-        // Determine status: first one gets status from data (or default), others get "frozen"
-        const status = index === 0 
-          ? (data.status || "pending")  // First record: use data status or "pending"
-          : "frozen";                   // Other records: always "frozen"
+        console.log(`Creating records in COMBO mode`);
         
-        return {
-          ...data,
-          product: productId, // Override the product from data with current product
-          tenant: currentTenant.id,
-          createdBy: currentUser.id,
-          updatedBy: currentUser.id,
-          date: Dates.getDate(),
-          datecreation: Dates.getTimeZoneDate(),
-          status: status // Apply the determined status
-        };
-      });
+        // Create record for each product in user's product array
+        const recordDataArray = currentUser.product.map((productId, index) => ({
+            number: `${data.number}-${index}`,  // Append index to make unique
+            product: productId,
+            user: data.user || currentUser.id,
+            status: index === 0 ? (data.status || "pending") : "frozen",
+            tenant: currentTenant.id,
+            createdBy: currentUser.id,
+            updatedBy: currentUser.id,
+            date: Dates.getDate(),
+            datecreation: Dates.getTimeZoneDate(),
+            // NO price field for combo products
+        }));
 
-      // Create multiple records
-      records = await Records(database).create(recordDataArray, options);
-      
-      // Update tasksDone count to reflect multiple records created
-      bulkOps[0].updateOne.update.$inc.tasksDone = currentUser.product.length;
-      
-      console.log(`Created ${currentUser.product.length} records in COMBO mode (position matched)`);
-      
+        const records = await Records(database).create(recordDataArray, options);
+        
+        // Update user tasksDone for combo products
+        await User(database).updateOne(
+            { _id: currentUser.id },
+            {
+                $inc: { tasksDone: currentUser.product.length },
+                $set: { updatedAt: new Date(), updatedBy: currentUser.id }
+            }
+        );
+        
+        console.log(`Created ${currentUser.product.length} combo records`);
+        
+        // Audit logs
+        records.forEach(record => {
+            this._createAuditLog(
+                AuditLogRepository.CREATE,
+                record.id,
+                data,
+                options
+            ).catch(console.error);
+        });
+
+        return this.findById(records[0].id, options);
+        
     } else {
-      // NORMAL SINGLE RECORD CREATION (position doesn't match or no product)
-      console.log(`Creating single record in NORMAL mode`);
-      
-      const recordData = {
-        ...data,
-        tenant: currentTenant.id,
-        createdBy: currentUser.id,
-        updatedBy: currentUser.id,
-        date: Dates.getDate(),
-        datecreation: Dates.getTimeZoneDate(),
-        // Keep the status from data (could be "pending", "completed", or "frozen")
-      };
+        // NORMAL MODE - Don't create new record, update existing pending one
+        
+        console.log(`Processing NORMAL mode - updating pending record`);
+        
+        // Find the pending record for this user
+        const pendingRecord = await Records(database).findOne({
+            tenant: currentTenant.id,
+            user: currentUser.id,
+            status: 'pending'
+        });
 
-      // Create single record
-      records = await Records(database).create([recordData], options);
+        if (!pendingRecord) {
+            throw new Error400(options.language, "validation.noPendingRecord");
+        }
+
+        // Populate product to get price
+        await pendingRecord.populate('product');
+        
+        // Get the price from the pending record
+        const recordPrice = parseFloat(pendingRecord.price) || 0;
+        
+        // Calculate new balance: current balance + frozen balance
+        const currentBalance = parseFloat(currentUser.balance) || 0;
+        const frozenBalance = parseFloat(currentUser.freezeblance) || 0;
+        const newBalance = currentBalance + frozenBalance;
+
+        // Update the pending record to completed
+        pendingRecord.status = data.status || "completed";
+        pendingRecord.updatedBy = currentUser.id;
+        pendingRecord.updatedAt = new Date();
+        await pendingRecord.save();
+
+        // Update user: add frozen balance to balance, reset frozen balance, increment tasksDone
+        await User(database).updateOne(
+            { _id: currentUser.id },
+            {
+                $set: {
+                    balance: newBalance,
+                    freezeblance: 0
+                },
+                $inc: { 
+                    tasksDone: 1
+                },
+                updatedBy: currentUser.id,
+                updatedAt: new Date()
+            }
+        );
+
+        console.log(`Updated pending record to completed:`, {
+            recordId: pendingRecord.id,
+            price: recordPrice,
+            newBalance: newBalance,
+            previousFreezeBalance: frozenBalance
+        });
+
+        // Create audit log for the update
+        await this._createAuditLog(
+            AuditLogRepository.UPDATE,
+            pendingRecord.id,
+            { status: data.status || "completed" },
+            options
+        );
+
+        return this.findById(pendingRecord.id, options);
     }
-
-    await User(database).bulkWrite(bulkOps);
-
-    // Fire and forget audit log - don't block response
-    // Log for all created records
-    records.forEach(record => {
-      this._createAuditLog(
-        AuditLogRepository.CREATE,
-        record.id,
-        data,
-        options
-      ).catch(error => {
-        console.error('Audit log creation failed:', error);
-      });
-    });
-
-    // Return the first record for backward compatibility
-    return this.findById(records[0].id, options);
-  }
+}
 
 
    static async checkOrderCombo(options) {
@@ -161,6 +183,7 @@ static async create(data, options: IRepositoryOptions) {
 
 
   static async calculeGrap(data, options) {
+    console.log("🚀 ~ RecordRepository ~ calculeGrap ~ data:", data)
     const { database } = options;
     const currentUser = MongooseRepository.getCurrentUser(options);
 
@@ -229,7 +252,9 @@ static async create(data, options: IRepositoryOptions) {
         );
       }
 
-      total = Number(currentUserBalance) + this.calculeTotal(productBalance, currentCommission);
+     const commission =  (parseFloat(currentCommission) / 100) * parseFloat(data.price) ;
+
+      total = Number(currentUserBalance) + commission;
       frozen = 0;
     }
 
@@ -406,61 +431,32 @@ static async updateStatus(options: IRepositoryOptions) {
         throw new Error404();
       }
 
-      // Check if user has products
-      if (!user.product || !Array.isArray(user.product) || user.product.length === 0) {
-        throw new Error405('No products found for this user');
-      }
-
-      // FIRST: Check if user has sufficient balance (not 0 or negative)
+      // Check if user has sufficient balance (not 0 or negative)
       const currentBalance = parseFloat(user.balance) || 0;
       if (currentBalance <= 0) {
         throw new Error405('Please contact the customer service to recharge');
       }
 
-      const productIds = user.product.map(product => product._id || product);
-
-      // Get all records with product details for commission calculation
-      const records = await Records(options.database)
+      // Find ALL records that need to be completed (both pending AND frozen)
+      const recordsToComplete = await Records(options.database)
         .find({
           tenant: currentTenant.id,
           user: currentUser.id,
-          product: { $in: productIds }
+          status: { $in: ['pending', 'frozen'] }  // Include both statuses
         })
         .populate('product') // Populate to get product details
         .session(session || null);
 
-      if (!records || records.length === 0) {
-        throw new Error405('No records found for the user\'s products');
+      if (!recordsToComplete || recordsToComplete.length === 0) {
+        throw new Error405('No records found to complete (pending or frozen)');
       }
 
-      // Calculate total commission from all records
-      let totalCommission = 0;
-      
-      // Process each record to calculate commission
-      for (const record of records) {
-        if (record.product && record.product.amount && record.product.commission) {
-          // Calculate commission for this record
-          const recordCommission = this.calculeTotal(
-            record.product.amount,
-            record.product.commission
-          );
-          totalCommission += recordCommission;
-        } else if (record.product && record.product.type === "prizes" && record.product.amount) {
-          // For prizes type, the entire amount is the commission
-          totalCommission += parseFloat(record.product.amount) || 0;
-        }
-      }
-
-      // Calculate new balance: current balance + frozen balance + total commission
-      const frozenBalance = parseFloat(user.freezeblance) || 0;
-      const newBalance = currentBalance + frozenBalance + totalCommission;
-
-      // Update all matching records to completed
+      // Update ALL pending and frozen records to completed
       await Records(options.database).updateMany(
         {
           tenant: currentTenant.id,
           user: currentUser.id,
-          product: { $in: productIds }
+          status: { $in: ['pending', 'frozen'] }
         },
         {
           status: 'completed',
@@ -470,42 +466,107 @@ static async updateStatus(options: IRepositoryOptions) {
         { session, ...options }
       );
 
-      // Clear user's product array, itemNumber, and update balance
-      await User(options.database).updateOne(
-        { _id: currentUser.id },
-        {
-          $set: {
-            product: [], // Clear the product array
-            itemNumber: 0, // Set itemNumber to 0
-            balance: newBalance, // Update with new balance
-            freezeblance: 0 // Reset frozen balance to 0
+      // COMMON LOGIC: Add frozen balance to balance and reset frozen balance
+      const frozenBalance = parseFloat(user.freezeblance) || 0;
+      const newBalance = currentBalance + frozenBalance;
+
+      // Now handle the specific logic based on whether user has products
+      if (user.product && Array.isArray(user.product) && user.product.length > 0) {
+        // USER HAS PRODUCTS: Calculate commission from products
+        
+        const productIds = user.product.map(product => product._id || product);
+        
+        // Filter records that belong to user's products (both pending and frozen)
+        const productRecords = recordsToComplete.filter(record => 
+          productIds.includes(record.product?._id?.toString() || record.product?.toString())
+        );
+
+        let totalCommission = 0;
+        
+        // Calculate commission from ALL product records (both pending and frozen)
+        for (const record of productRecords) {
+          if (record.product && record.product.amount && record.product.commission) {
+            const recordCommission = this.calculeTotal(
+              record.product.amount,
+              record.product.commission
+            );
+            totalCommission += recordCommission;
+          } else if (record.product && record.product.type === "prizes" && record.product.amount) {
+            totalCommission += parseFloat(record.product.amount) || 0;
+          }
+        }
+
+        // Add commission to the new balance
+        const finalBalance = newBalance + totalCommission;
+
+        // Update user: clear products, reset itemNumber, update balance with commission
+        await User(options.database).updateOne(
+          { _id: currentUser.id },
+          {
+            $set: {
+              product: [], // Clear the product array
+              itemNumber: 0, // Set itemNumber to 0
+              balance: finalBalance, // Update with balance + frozen + commission
+              freezeblance: 0 // Reset frozen balance to 0
+            },
+            $inc: { 
+              tasksDone: productRecords.length // Increment tasksDone by number of product records
+            },
+            updatedBy: currentUser.id,
+            updatedAt: new Date()
           },
-          $inc: { 
-            tasksDone: productIds.length // Increment tasksDone by number of products
+          { session, ...options }
+        );
+
+        console.log(`User ${currentUser.id}: Updated balance with commission. Added ${totalCommission} commission.`);
+
+      } else {
+        // USER HAS NO PRODUCTS: Just update balance without commission
+        
+        // Filter only normal/pending records (not frozen ones from combo mode)
+        const normalRecords = recordsToComplete.filter(record => 
+          record.status === 'pending' || !record.product?.type || record.product.type === 'normal'
+        );
+
+        await User(options.database).updateOne(
+          { _id: currentUser.id },
+          {
+            $set: {
+              balance: newBalance, // Add frozen balance to balance
+              freezeblance: 0 // Reset frozen balance to 0
+            },
+            $inc: { 
+              tasksDone: normalRecords.length // Increment tasksDone by normal records count
+            },
+            updatedBy: currentUser.id,
+            updatedAt: new Date()
           },
-          updatedBy: currentUser.id,
-          updatedAt: new Date()
-        },
-        { session, ...options }
-      );
+          { session, ...options }
+        );
+
+        console.log(`User ${currentUser.id}: Updated balance without commission. Completed ${normalRecords.length} normal records.`);
+      }
 
       // Commit transaction if started
       if (session) {
         await session.commitTransaction();
       }
 
-      // Fire-and-forget audit logs for records
-      records.forEach(record => {
+      // Fire-and-forget audit logs for all completed records
+      recordsToComplete.forEach(record => {
         this._createAuditLog(
           AuditLogRepository.UPDATE,
           record._id,
-          { status: 'completed' },
+          { 
+            status: 'completed',
+            previousStatus: record.status  // Log what it was before
+          },
           options
         ).catch(console.error);
       });
 
-      // Return first record as before
-      return this.findById(records[0]._id, options);
+      // Return first record
+      return this.findById(recordsToComplete[0]._id, options);
 
     } catch (error) {
       // Abort transaction on error
@@ -775,21 +836,11 @@ static async findAndCountAllMobile(
       .populate("user")
       .populate("product");
 
-    // let rows = await Records(options.database)
-    //   .find(criteria)
-    //   .limit(limitEscaped)
-    //   .sort(sort)
-    //   .populate("user")
-    //   .populate("product");
-
-    // const count = await Records(options.database).countDocuments(criteria);
-
-    // rows = await Promise.all(rows.map(this._fillFileDownloadUrls));
-
     let total = 0;
 
     listitems.map((item) => {
       let data = item.product;
+      let price = item.price; 
       let itemTotal =
         (parseFloat(data.commission) * parseFloat(data.amount)) / 100;
 
