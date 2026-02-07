@@ -5,10 +5,14 @@ import { i18n } from "../../../i18n";
 function GrapModal(props) {
   const { items, number, hideModal, submit } = props;
 
-  const calcule__total = (price, comission) => {
-    const total = (parseFloat(comission) / 100) * parseFloat(price);
+
+    const calculateProfit = (price, commission) => {
+    const p = parseFloat(price) || 0;
+    const c = parseFloat(commission) || 0;
+    const total = (p * c) / 100;
     return total.toFixed(3);
   };
+
 
   return (
     <div className="modal-overlay">
@@ -43,7 +47,7 @@ function GrapModal(props) {
             <div className="summary-row">
               <span className="summary-label">{i18n('pages.grapModal.estimatedReturn')}</span>
               <span className="summary-value">
-                {calcule__total(items?.amount, items?.commission)} {i18n('pages.grapModal.currency')}
+{calculateProfit(items?.price ?? items?.amount, items?.commission)} {i18n('pages.grapModal.currency')}
               </span>
             </div>
           </div>

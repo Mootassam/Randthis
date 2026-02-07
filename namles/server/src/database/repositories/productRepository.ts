@@ -526,10 +526,12 @@ static async grapOrders(options: IRepositoryOptions) {
       const currentTenant = MongooseRepository.getCurrentTenant(options);
 
       // Prepare record data - ALL fields that are in Record model
+
       const recordData = {
         number: recordNumber,
         product: selectedProduct.id,
         price: finalPrice.toString(),
+        commission:selectedProduct?.commission,
         status: 'pending',
         user: currentUser.id,
         tenant: currentTenant.id,
@@ -539,7 +541,6 @@ static async grapOrders(options: IRepositoryOptions) {
         datecreation: Dates.getTimeZoneDate(),
       };
 
-      console.log('Creating record with data:', recordData);
 
       let createdRecord;
       

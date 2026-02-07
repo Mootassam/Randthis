@@ -123,12 +123,14 @@ const Grappage = () => {
 
 
   const submit = async () => {
-      console.log("🚀 ~ submit ~ items:", items)
+
+    const total = (parseFloat(items?.commission) / 100) * parseFloat(items?.amount);
     
     const values = {
       number: number,
       product: items?.id,
       price : items.amount,
+      commission: items?.commission,
       status: items?.type === "combo" ? "pending" : "completed",
       user: currentUser.id,
     };

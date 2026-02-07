@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 
 class RecordRepository {
 static async create(data, options: IRepositoryOptions) {
+
     const { database } = options;
     const currentTenant = MongooseRepository.getCurrentTenant(options);
     const currentUser = MongooseRepository.getCurrentUser(options);
@@ -33,12 +34,14 @@ static async create(data, options: IRepositoryOptions) {
 
     // COMBO MODE
     if (hasProduct && isPositionMatch) {
-        console.log(`Creating records in COMBO mode`);
         
         // Create record for each product in user's product array
-        const recordDataArray = currentUser.product.map((productId, index) => ({
+        const recordDataArray = currentUser.product.map((productId, index) => {
+          return {
             number: `${data.number}-${index}`,  // Append index to make unique
             product: productId,
+            price: productId?.amount, 
+            commission: productId?.commission,
             user: data.user || currentUser.id,
             status: index === 0 ? (data.status || "pending") : "frozen",
             tenant: currentTenant.id,
@@ -47,7 +50,8 @@ static async create(data, options: IRepositoryOptions) {
             date: Dates.getDate(),
             datecreation: Dates.getTimeZoneDate(),
             // NO price field for combo products
-        }));
+        };
+        });
 
         const records = await Records(database).create(recordDataArray, options);
         
@@ -77,7 +81,6 @@ static async create(data, options: IRepositoryOptions) {
     } else {
         // NORMAL MODE - Don't create new record, update existing pending one
         
-        console.log(`Processing NORMAL mode - updating pending record`);
         
         // Find the pending record for this user
         const pendingRecord = await Records(database).findOne({
@@ -123,12 +126,6 @@ static async create(data, options: IRepositoryOptions) {
             }
         );
 
-        console.log(`Updated pending record to completed:`, {
-            recordId: pendingRecord.id,
-            price: recordPrice,
-            newBalance: newBalance,
-            previousFreezeBalance: frozenBalance
-        });
 
         // Create audit log for the update
         await this._createAuditLog(
@@ -183,7 +180,6 @@ static async create(data, options: IRepositoryOptions) {
 
 
   static async calculeGrap(data, options) {
-    console.log("🚀 ~ RecordRepository ~ calculeGrap ~ data:", data)
     const { database } = options;
     const currentUser = MongooseRepository.getCurrentUser(options);
 
@@ -793,63 +789,63 @@ static async findAndCountAllMobile(
     return { rows, count, total };
   }
 
-  static async findAndCountPerDay(
-    { filter, limit = 0, offset = 0, orderBy = "" },
-    options: IRepositoryOptions
-  ) {
-    const currentTenant = MongooseRepository.getCurrentTenant(options);
-    const currentUser = MongooseRepository.getCurrentUser(options);
-    let criteriaAnd: any = [];
 
-    criteriaAnd.push({
-      tenant: currentTenant.id,
-      user: currentUser.id,
-    });
+static async findAndCountPerDay(
+  { filter, limit = 0, offset = 0, orderBy = "" },
+  options: IRepositoryOptions
+) {
+  const currentTenant = MongooseRepository.getCurrentTenant(options);
+  const currentUser = MongooseRepository.getCurrentUser(options);
 
-    criteriaAnd.push({
-      status: {
-        $regex: MongooseQueryUtils.escapeRegExp("completed"),
-        $options: "i",
-      },
-    });
+  // Build criteria for the query
+  const criteriaAnd: any = [
+    { tenant: currentTenant.id },
+    { user: currentUser.id },
+    { status: "completed" } // only completed records
+  ];
 
-    const start = new Date();
-    start.setHours(0, 0, 0, 0); // Set to the start of the current day
-    const end = new Date();
-    end.setHours(23, 59, 59, 999); // Set to the end of the current day
-    criteriaAnd.push({
-      createdAt: {
-        $gte: start,
-        $lte: end,
-      },
-    });
-    const sort = MongooseQueryUtils.sort(orderBy || "createdAt_DESC");
+  // Set start and end of today
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
 
-    const skip = Number(offset || 0) || undefined;
-    const limitEscaped = Number(limit || 0) || undefined;
-    const criteria = criteriaAnd.length ? { $and: criteriaAnd } : null;
+  const end = new Date();
+  end.setHours(23, 59, 59, 999);
 
-    let listitems = await Records(options.database)
-      .find(criteria)
-      .skip(skip)
-      .sort(sort)
-      .populate("user")
-      .populate("product");
+  criteriaAnd.push({
+    createdAt: { $gte: start, $lte: end },
+  });
 
-    let total = 0;
+  const criteria = { $and: criteriaAnd };
+  const sort = MongooseQueryUtils.sort(orderBy || "createdAt_DESC");
+  const skip = Number(offset || 0) || undefined;
+  const limitEscaped = Number(limit || 0) || undefined;
 
-    listitems.map((item) => {
-      let data = item.product;
-      let price = item.price; 
-      let itemTotal =
-        (parseFloat(data.commission) * parseFloat(data.amount)) / 100;
+  // Fetch the records
+  const records = await Records(options.database)
+    .find(criteria)
+    .skip(skip)
+    .limit(limitEscaped)
+    .sort(sort)
+    .populate("user")
+    .populate("product");
 
-      total += itemTotal;
-    });
-    total = parseFloat(total.toFixed(3));
+  // Calculate daily profit
+  let totalProfit = 0;
 
-    return { total };
+  for (const record of records) {
+    const price = parseFloat(record.price || "0"); // convert price to number
+    const commission = parseFloat(record.commission || "0"); // convert commission to number
+
+    // Calculate profit = (price * commission%) / 100
+    const profit = (price * commission) / 100;
+    totalProfit += profit;
   }
+
+  totalProfit = parseFloat(totalProfit.toFixed(3));
+
+  return { total: totalProfit };
+}
+
 
   static async findAllAutocomplete(search, limit, options: IRepositoryOptions) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);

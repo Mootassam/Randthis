@@ -26,6 +26,10 @@ export default (database) => {
       price: {
         type: String,
       },
+
+      commission: {
+        type: String,
+      },
       status: {
         type: String,
         enum: ["pending", "completed", "frozen"],
