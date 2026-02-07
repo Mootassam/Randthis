@@ -136,17 +136,17 @@ function UserToolbar(props) {
         </Link>
       )} */}
 
-      {renderDestroyButton()}
-
+      {/* {renderDestroyButton()} */}
+{/* 
       {hasPermissionToAuditLogs && (
         <Link to="/audit-logs?entityNames=user">
           <button className="btn btn-light" type="button">
             <ButtonIcon iconClass="fas fa-history" />
           </button>
         </Link>
-      )}
+      )} */}
 
-      {renderExportButton()}
+      {/* {renderExportButton()} */}
     </Toolbar>
   );
 }

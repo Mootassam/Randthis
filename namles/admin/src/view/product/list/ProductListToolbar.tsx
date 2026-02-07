@@ -157,7 +157,7 @@ function CouponsToolbar(props) {
           </span>
         </Link>
       )}
-
+{/* 
       {hasPermissionToImport && (
         <Link to="/product/importer">
           <span
@@ -173,10 +173,10 @@ function CouponsToolbar(props) {
             <ReactTooltip id="charge-list-toolbar-import-tooltip" />
           </span>
         </Link>
-      )}
+      )} */}
 
       {renderDestroyButton()}
-
+{/* 
       {hasPermissionToAuditLogs && (
         <Link to="/audit-logs?entityNames=coupons">
           <span
@@ -194,7 +194,7 @@ function CouponsToolbar(props) {
         </Link>
       )}
 
-      {renderExportButton()}
+      {renderExportButton()} */}
 
       {destroyAllConfirmVisible && (
         <ConfirmModal

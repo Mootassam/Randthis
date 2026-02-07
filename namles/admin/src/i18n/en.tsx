@@ -1,6 +1,7 @@
 
 const en = {
   common: {
+    actions:"actions",
     or: 'Or',
     cancel: 'Cancel',
     reset: 'Reset',
@@ -2653,7 +2654,7 @@ const en = {
       additionalInfo: 'VIP + COMBO',
       prizeInfo: 'Prizes'
     },
-    
+
     fields: {
       currentrecord: 'Tasks Done',
       freezeblance: 'Freeze Balance',
@@ -2665,7 +2666,7 @@ const en = {
       email: 'Email',
       tasksDone: "tasksDone",
       username: 'Username',
-      refcode: 'refcode',
+           refcode: 'Invitation Code',
       score: 'Score',
       grab: 'Grab',
       withdraw: 'Withdraw',
@@ -2909,10 +2910,10 @@ const en = {
     valider: 'validate',
     file: 'No file selected',
     typecsv: 'Invalid file type. Please select a CSV file.',
-    menu: 'Dashboard',
+    menu: 'Users',
     reset: 'Reset',
     phone: 'Visa',
-    check: 'Social Media',
+    check: 'Customer Support',
     company: 'company',
     record: 'record',
     product: 'Product',

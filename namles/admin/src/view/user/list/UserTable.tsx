@@ -90,360 +90,181 @@ function UserTable() {
   const oneClick = async (id) => {
     await UserService.doOneClickLogin(id);
   };
+  
   return (
-    <>
-      <style>{`
-        .user-table-actions {
-          position: sticky;
-          right: 0;
-          background: white;
-          z-index: 10;
-          min-width: 280px;
-          white-space: nowrap;
-          box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-        }
-        
-        .user-table-actions-content {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          flex-wrap: nowrap;
-          padding: 8px;
-        }
-        
-        .user-table-action-btn {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          padding: 6px 10px;
-          border: none;
-          border-radius: 6px;
-          font-size: 12px;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.2s ease;
-          text-decoration: none;
-          min-width: auto;
-          white-space: nowrap;
-        }
-        
-        .user-table-action-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .user-table-action-btn.primary {
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-        }
-        
-        .user-table-action-btn.success {
-          background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-          color: white;
-        }
-        
-        .user-table-action-btn.warning {
-          background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-          color: white;
-        }
-        
-        .user-table-action-btn.danger {
-          background: linear-gradient(135deg, #ff5858 0%, #f09819 100%);
-          color: white;
-        }
-        
-        .user-table-action-btn.info {
-          background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-          color: #333;
-        }
-        
-        .user-table-action-icon {
-          margin-right: 4px;
-          font-size: 12px;
-        }
-        
-        .user-table-modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0,0,0,0.5);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-        }
-        
-        .user-table-modal-content {
-          background: white;
-          padding: 30px;
-          border-radius: 12px;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-          position: relative;
-          min-width: 300px;
-          text-align: center;
-        }
-        
-        .user-table-modal-close {
-          position: absolute;
-          top: 15px;
-          right: 15px;
-          background: none;
-          border: none;
-          font-size: 20px;
-          cursor: pointer;
-          color: #666;
-          transition: color 0.2s;
-        }
-        
-        .user-table-modal-close:hover {
-          color: #333;
-        }
-        
-        .user-table-modal-text {
-          font-size: 18px;
-          font-weight: 600;
-          color: #333;
-          margin: 0;
-        }
-        
-        .user-table-progress {
-          font-size: 24px;
-          font-weight: bold;
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-        
-        .table-responsive {
-          overflow-x: auto;
-        }
-        
-        .user-table-sticky-actions {
-          position: sticky;
-          right: 0;
-          background: inherit;
-        }
-      `}</style>
-
+    <div className="user-list-container">
       <TableWrapper>
         <div className="table-responsive">
-          <table className="table table-striped user-table">
-            <thead className="thead">
+          <table className="user-list-table">
+            <thead className="table-header">
               <tr>
-                <TableColumnHeader className="th-checkbox">
-                  {hasRows && (
-                    <div className="adherent-control adherent-checkbox">
-                      <input
-                        type="checkbox"
-                        className="adherent-control-input"
-                        id="table-header-checkbox"
-                        checked={Boolean(isAllSelected)}
-                        onChange={doToggleAllSelected}
-                      />
-                      <label
-                        htmlFor="table-header-checkbox"
-                        className="adherent-control-label"
-                      >
-                        &#160;
-                      </label>
-                    </div>
+             
+                <th className="sortable-header" onClick={() => doChangeSort('email')}>
+                  {i18n('user.fields.email')}
+                  {sorter.field === 'email' && (
+                    <span className="sort-icon">
+                      {sorter.order === 'ascend' ? '↑' : '↓'}
+                    </span>
                   )}
-                </TableColumnHeader>
-
-                <TableColumnHeader
-                  onSort={doChangeSort}
-                  hasRows={hasRows}
-                  sorter={sorter}
-                  name={'email'}
-                  label={i18n('user.fields.email')}
-                />
-                <TableColumnHeader
-                  onSort={doChangeSort}
-                  hasRows={hasRows}
-                  sorter={sorter}
-                  name={'phoneNumber'}
-                  label={i18n('user.fields.phoneNumber')}
-                />
-                <TableColumnHeader
-                  onSort={doChangeSort}
-                  hasRows={hasRows}
-                  sorter={sorter}
-                  name={'invitationcode'}
-                  label={i18n('user.fields.invitationcode')}
-                />
-
-                <TableColumnHeader
-                  onSort={doChangeSort}
-                  hasRows={hasRows}
-                  sorter={sorter}
-                  name={'refcode'}
-                  label={i18n('user.fields.refcode')}
-                />
-                <TableColumnHeader
-                  onSort={doChangeSort}
-                  hasRows={hasRows}
-                  sorter={sorter}
-                  name={'couponcode'}
-                  label={i18n('user.fields.couponcode')}
-                />
-
-                <TableColumnHeader
-                  label={i18n('user.fields.roles')}
-                ></TableColumnHeader>
-                <TableColumnHeader
-                  className="text-center"
-                  label={i18n('user.fields.status')}
-                />
-                <TableColumnHeader
-                  className="text-center"
-                  label={i18n('user.fields.country')}
-                />
-                <TableColumnHeader
-                  className="user-table-sticky-actions"
-                  label={i18n('common.actions')}
-                />
+                </th>
+                
+                <th className="sortable-header" onClick={() => doChangeSort('invitationcode')}>
+                  {i18n('user.fields.invitationcode')}
+                  {sorter.field === 'invitationcode' && (
+                    <span className="sort-icon">
+                      {sorter.order === 'ascend' ? '↑' : '↓'}
+                    </span>
+                  )}
+                </th>
+                <th className="sortable-header" onClick={() => doChangeSort('refcode')}>
+                  {i18n('user.fields.refcode')}
+                  {sorter.field === 'refcode' && (
+                    <span className="sort-icon">
+                      {sorter.order === 'ascend' ? '↑' : '↓'}
+                    </span>
+                  )}
+                </th>
+         
+                <th className="table-header">
+                  {i18n('user.fields.roles')}
+                </th>
+                <th className="table-header text-center">
+                  {i18n('user.fields.status')}
+                </th>
+                <th className="table-header text-center">
+                  {i18n('user.fields.country')}
+                </th>
+                <th className="actions-header user-table-actions-header">Actions</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="table-body">
               {loading && (
                 <tr>
-                  <td colSpan={100}>
-                    <Spinner />
+                  <td colSpan={10} className="loading-cell">
+                    <div className="loading-container">
+                      <Spinner />
+                      <span className="loading-text">
+                        Loading data...
+                      </span>
+                    </div>
                   </td>
                 </tr>
               )}
               {!loading && !hasRows && (
                 <tr>
-                  <td colSpan={100}>
-                    <div className="d-flex justify-content-center">
-                      {i18n('table.noData')}
+                  <td colSpan={10} className="no-data-cell">
+                    <div className="no-data-content">
+                      <i className="fas fa-database no-data-icon"></i>
+                      <p>{i18n('table.noData')}</p>
                     </div>
                   </td>
                 </tr>
               )}
               {!loading &&
                 rows.map((row) => (
-                  <tr key={row.id}>
-                    <th className="th-checkbox" scope="row">
-                      <div className="adherent-control adherent-checkbox">
-                        <input
-                          type="checkbox"
-                          className="adherent-control-input"
-                          id={`table-header-checkbox-${row.id}`}
-                          checked={selectedKeys.includes(
-                            row.id,
-                          )}
-                          onChange={() =>
-                            doToggleOneSelected(row.id)
-                          }
-                        />
-                        <label
-                          htmlFor={`table-header-checkbox-${row.id}`}
-                          className="adherent-control-label"
-                        >
-                          &#160;
-                        </label>
-                      </div>
-                    </th>
-                    <td>{row.email}</td>
-                    <td>{row.phoneNumber}</td>
-                    <td>{row.invitationcode}</td>
-                    <td>{row.refcode}</td>
-                    <td>{row.couponcode}</td>
+                  <tr key={row.id} className="table-row">
+                
+                    <td className="table-cell">{row.email}</td>
+                    <td className="table-cell">{row.invitationcode}</td>
+                    <td className="table-cell">{row.refcode}</td>
 
-                    <td>
+                    <td className="table-cell">
                       {row.roles.map((roleId) => (
                         <div key={roleId}>
-                          <span>
-                            {Roles.labelOf(roleId)}
-                          </span>
+                          <span>{Roles.labelOf(roleId)}</span>
                         </div>
                       ))}
                     </td>
-                    <td className="text-center">
+                    <td className="table-cell text-center">
                       <UserStatusView value={row.status} />
                     </td>
-
-                    <td className="text-center">
+                    <td className="table-cell text-center">
                       <span>{row.country} <br />{row.ipAddress}</span>
                     </td>
+                 <td className="user-table-actions">
+  <div className="user-table-actions-content">
 
-                    <td className="user-table-actions">
-                      <div className="user-table-actions-content">
-                        <button
-                          className="user-table-action-btn primary"
-                          onClick={() => oneClick(row.id)}
-                        >
-                          <i className="fas fa-sign-in-alt user-table-action-icon" />
-                          Login
-                        </button>
+    {/* Login */}
+    <button
+      className="user-table-action-btn primary"
+      onClick={() => oneClick(row.id)}
+    >
+      <i className="fas fa-sign-in-alt user-table-action-icon" />
+      Login
+    </button>
 
-                        <button
-                          className="user-table-action-btn success"
-                          onClick={() =>
-                            showThecurrentRecord(
-                              row.id,
-                              row?.vip?.dailyorder,
-                            )
-                          }
-                        >
-                          <i className="fas fa-tasks user-table-action-icon" />
-                          Tasks
-                        </button>
+    {/* Tasks */}
+    <button
+      className="user-table-action-btn success"
+      onClick={() =>
+        showThecurrentRecord(
+          row.id,
+          row?.vip?.dailyorder,
+        )
+      }
+    >
+      <i className="fas fa-tasks user-table-action-icon" />
+      Tasks
+    </button>
 
-                        <Link
-                          className="user-table-action-btn info"
-                          to={`/password-reset/${row.id}`}
-                        >
-                          <i className="fas fa-key user-table-action-icon" />
-                          Password
-                        </Link>
+    {/* Password */}
+    <Link
+      className="user-table-action-btn info"
+      to={`/password-reset/${row.id}`}
+    >
+      <i className="fas fa-key user-table-action-icon" />
+      Password
+    </Link>
 
-                        <Link
-                          className="user-table-action-btn warning"
-                          to={`/user/${row.id}`}
-                        >
-                          <i className="fas fa-eye user-table-action-icon" />
-                          View
-                        </Link>
+    {/* View */}
+    <Link
+      className="user-table-action-btn warning"
+      to={`/user/${row.id}`}
+    >
+      <i className="fas fa-eye user-table-action-icon" />
+      View
+    </Link>
 
-                        {hasPermissionToEdit && (
-                          <Link
-                            className="user-table-action-btn primary"
-                            to={`/user/${row.id}/edit`}
-                          >
-                            <i className="fas fa-edit user-table-action-icon" />
-                            Edit
-                          </Link>
-                        )}
+    {/* Edit */}
+    {hasPermissionToEdit && (
+      <Link
+        className="user-table-action-btn primary"
+        to={`/user/${row.id}/edit`}
+      >
+        <i className="fas fa-edit user-table-action-icon" />
+        Edit
+      </Link>
+    )}
 
-                        {hasPermissionToDestroy && (
-                          <button
-                            className="user-table-action-btn danger"
-                            onClick={() =>
-                              setRecordIdToDestroy(row.id)
-                            }
-                          >
-                            <i className="fas fa-lock user-table-action-icon" />
-                            Freeze
-                          </button>
-                        )}
-                      </div>
-                    </td>
+    {/* Freeze */}
+    {hasPermissionToDestroy && (
+      <button
+        className="user-table-action-btn danger"
+        onClick={() =>
+          setRecordIdToDestroy(row.id)
+        }
+      >
+        <i className="fas fa-lock user-table-action-icon" />
+        Freeze
+      </button>
+    )}
+
+  </div>
+</td>
+
                   </tr>
                 ))}
             </tbody>
           </table>
         </div>
 
-        <Pagination
-          onChange={doChangePagination}
-          disabled={loading}
-          pagination={pagination}
-        />
+        <div className="pagination-container">
+          <Pagination
+            onChange={doChangePagination}
+            disabled={loading}
+            pagination={pagination}
+          />
+        </div>
       </TableWrapper>
 
       {recordIdToDestroy && (
@@ -475,7 +296,310 @@ function UserTable() {
           </div>
         </div>
       )}
-    </>
+
+      <style>{`
+        .user-list-container {
+          width: 100%;
+        }
+
+        .sort-icon {
+          margin-left: 8px;
+          font-size: 12px;
+        }
+
+        .checkbox-column {
+          width: 40px;
+          padding: 16px 8px !important;
+        }
+
+        .checkbox-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .form-checkbox {
+          width: 16px;
+          height: 16px;
+          cursor: pointer;
+        }
+
+        .table-header {
+          background: #f8fafc;
+          border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table-header th {
+          padding: 16px 12px;
+          font-weight: 600;
+          color: #475569;
+          font-size: 12px;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          border-bottom: 2px solid #e2e8f0;
+        }
+
+        .sortable-header {
+          cursor: pointer;
+          transition: background-color 0.2s ease;
+          user-select: none;
+        }
+
+        .sortable-header:hover {
+          background: #f1f5f9;
+        }
+
+        .table-body {
+          background: white;
+        }
+
+        .table-row {
+          transition: background-color 0.2s ease;
+          border-bottom: 1px solid #f1f5f9;
+        }
+
+        .table-row:hover {
+          background: #f8fafc;
+        }
+
+        .table-cell {
+          padding: 16px 12px;
+          font-size: 14px;
+          color: #475569;
+          vertical-align: middle;
+        }
+
+        .text-center {
+          text-align: center;
+        }
+
+        .loading-cell {
+          text-align: center;
+          padding: 40px !important;
+        }
+
+        .loading-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .loading-text {
+          color: #6c757d;
+          font-size: 14px;
+        }
+
+        .no-data-cell {
+          text-align: center;
+          padding: 60px 20px !important;
+        }
+
+        .no-data-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+          color: #6c757d;
+        }
+
+        .no-data-icon {
+          font-size: 48px;
+          color: #adb5bd;
+        }
+
+        .no-data-content p {
+          margin: 0;
+          font-size: 14px;
+        }
+
+        .actions-header {
+          width: 200px;
+        }
+
+        .user-table-actions-header {
+          background: #f8fafc;
+        }
+
+        .user-table-actions {
+          position: sticky;
+          right: 0;
+          background: white;
+          z-index: 10;
+          min-width: 280px;
+          white-space: nowrap;
+          box-shadow: -2px 0 8px rgba(0,0,0,0.06);
+          border-left: 2px solid #f1f5f9;
+        }
+        
+        .user-table-actions-content {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          flex-wrap: nowrap;
+          padding: 8px;
+        }
+        
+        .user-table-action-btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 6px 10px;
+          border: none;
+          border-radius: 8px;
+          font-size: 11px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          text-decoration: none;
+          min-width: auto;
+          white-space: nowrap;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .user-table-action-btn:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .user-table-action-btn.primary {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+        }
+        
+        .user-table-action-btn.success {
+          background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+          color: white;
+        }
+        
+        .user-table-action-btn.warning {
+          background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+          color: white;
+        }
+        
+        .user-table-action-btn.danger {
+          background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+          color: white;
+        }
+        
+        .user-table-action-btn.info {
+          background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+          color: white;
+        }
+        
+        .user-table-action-icon {
+          margin-right: 4px;
+          font-size: 10px;
+          width: 10px;
+        }
+
+        /* Pagination Styles */
+        .pagination-container {
+          margin-top: 20px;
+          display: flex;
+          justify-content: center;
+        }
+
+        /* Modal Styles */
+        .user-table-modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0,0,0,0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          backdrop-filter: blur(4px);
+        }
+        
+        .user-table-modal-content {
+          background: white;
+          padding: 30px;
+          border-radius: 16px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+          position: relative;
+          min-width: 300px;
+          text-align: center;
+          animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        
+        .user-table-modal-close {
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: #f8fafc;
+          border: none;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          font-size: 14px;
+          cursor: pointer;
+          color: #64748b;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        
+        .user-table-modal-close:hover {
+          background: #e2e8f0;
+          color: #475569;
+        }
+        
+        .user-table-modal-text {
+          font-size: 18px;
+          font-weight: 600;
+          color: #1e293b;
+          margin: 0 0 15px 0;
+        }
+        
+        .user-table-progress {
+          font-size: 32px;
+          font-weight: bold;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          margin: 10px 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+          .user-table-actions-content {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          
+          .user-table-action-btn {
+            justify-content: center;
+            padding: 8px 12px;
+          }
+          
+          .user-table-modal-content {
+            margin: 10px;
+            max-width: calc(100vw - 20px);
+          }
+          
+          .user-table-actions {
+            min-width: 200px;
+          }
+        }
+      `}</style>
+    </div>
   );
 }
 

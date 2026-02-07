@@ -60,10 +60,7 @@ function Header(props) {
       </button>
 
       <div>
-        <span className="i18n-select">
-          <I18nSelect />
-        </span>
-
+      
         <div className="dropdown">
           <span
             className="user-dropdown"

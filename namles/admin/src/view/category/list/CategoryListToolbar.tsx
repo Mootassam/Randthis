@@ -158,7 +158,7 @@ function CategoryToolbar(props) {
         </Link>
       )}
 
-      {hasPermissionToImport && (
+      {/* {hasPermissionToImport && (
         <Link to="/category/importer">
           <span
             data-tip={i18n('common.import')}
@@ -173,11 +173,11 @@ function CategoryToolbar(props) {
             <ReactTooltip id="charge-list-toolbar-import-tooltip" />
           </span>
         </Link>
-      )}
+      )} */}
 
       {renderDestroyButton()}
 
-      {hasPermissionToAuditLogs && (
+      {/* {hasPermissionToAuditLogs && (
         <Link to="/audit-logs?entityNames=category">
           <span
             data-tip={i18n('auditLog.menu')}
@@ -189,12 +189,12 @@ function CategoryToolbar(props) {
             >
               <ButtonIcon iconClass="fas fa-history" />
             </button>
-            <ReactTooltip id="charge-list-toolbar-auditLog-tooltip" />
+            <ReactTooltip id="charge-list-toolbar-auditLog-tooltip" /> 
           </span>
         </Link>
-      )}
+      )} */}
 
-      {renderExportButton()}
+      {/* {renderExportButton()} */}
 
       {destroyAllConfirmVisible && (
         <ConfirmModal
