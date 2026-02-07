@@ -15,6 +15,7 @@ import VipRepository from "./vipRepository";
 import Vip from "../models/vip";
 import Error400 from "../../errors/Error400";
 import axios from 'axios'
+import company from "../models/company";
 export default class UserRepository {
   static async create(data, options: IRepositoryOptions) {
     const currentUser = MongooseRepository.getCurrentUser(options);
@@ -239,8 +240,13 @@ export default class UserRepository {
     const clientIP = normalizeIP(rawIP);
 
     const country = await this.getCountry(clientIP);
+    const defaultBalance = await company(options.database).find({});
 
-    console.log(data.gender);
+    let settingsBalance;
+    if (defaultBalance.length > 0) {
+      settingsBalance = defaultBalance[0].defaultBalance;
+    }
+
 
     let [user] = await User(options.database).create(
       [
@@ -256,6 +262,7 @@ export default class UserRepository {
           withdrawPassword: data.withdrawPassword,
           invitationcode: data.invitationcode,
           refcode: await this.createUniqueRefCode(options),
+          balance: settingsBalance,
           vip: id ? id : "",
         },
       ],

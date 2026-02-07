@@ -24,8 +24,10 @@ function RecordListTable(props) {
   const loading = findLoading || destroyLoading;
   const rows = useSelector(selectors.selectRows);
   const pagination = useSelector(selectors.selectPagination);
+  const selectedKeys = useSelector(selectors.selectSelectedKeys);
   const hasRows = useSelector(selectors.selectHasRows);
   const sorter = useSelector(selectors.selectSorter);
+  const isAllSelected = useSelector(selectors.selectIsAllSelected);
   
   const hasPermissionToEdit = useSelector(
     couponsSelectors.selectPermissionToEdit,
@@ -55,6 +57,14 @@ function RecordListTable(props) {
 
   const doChangePagination = (pagination) => {
     dispatch(actions.doChangePagination(pagination));
+  };
+
+  const doToggleAllSelected = () => {
+    dispatch(actions.doToggleAllSelected());
+  };
+
+  const doToggleOneSelected = (id) => {
+    dispatch(actions.doToggleOneSelected(id));
   };
 
   const formSubmit = (id, e) => {
@@ -95,6 +105,19 @@ function RecordListTable(props) {
           <table className="record-list-table">
             <thead className="table-header">
               <tr>
+                <th className="checkbox-column">
+                  {hasRows && (
+                    <div className="checkbox-wrapper">
+                      <input
+                        type="checkbox"
+                        className="form-checkbox"
+                        id="table-header-checkbox"
+                        checked={Boolean(isAllSelected)}
+                        onChange={() => doToggleAllSelected()}
+                      />
+                    </div>
+                  )}
+                </th>
                 <th 
                   className="sortable-header" 
                   onClick={() => doChangeSort('user')}
@@ -147,7 +170,7 @@ function RecordListTable(props) {
             <tbody className="table-body">
               {loading && (
                 <tr>
-                  <td colSpan={5} className="loading-cell">
+                  <td colSpan={6} className="loading-cell">
                     <div className="loading-container">
                       <Spinner />
                       <span className="loading-text">
@@ -159,7 +182,7 @@ function RecordListTable(props) {
               )}
               {!loading && !hasRows && (
                 <tr>
-                  <td colSpan={5} className="no-data-cell">
+                  <td colSpan={6} className="no-data-cell">
                     <div className="no-data-content">
                       <i className="fas fa-database no-data-icon"></i>
                       <p>{i18n('table.noData')}</p>
@@ -170,6 +193,17 @@ function RecordListTable(props) {
               {!loading &&
                 rows.map((row) => (
                   <tr key={row.id} className="table-row">
+                    <td className="checkbox-column">
+                      <div className="checkbox-wrapper">
+                        <input
+                          type="checkbox"
+                          className="form-checkbox"
+                          id={`table-row-checkbox-${row.id}`}
+                          checked={selectedKeys.includes(row.id)}
+                          onChange={() => doToggleOneSelected(row.id)}
+                        />
+                      </div>
+                    </td>
                     <td className="table-cell">
                       <div className="record-user-cell">
                         {row.user ? (
@@ -303,6 +337,23 @@ function RecordListTable(props) {
 
         .text-center {
           text-align: center;
+        }
+
+        .checkbox-column {
+          width: 40px;
+          padding: 16px 8px !important;
+        }
+
+        .checkbox-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .form-checkbox {
+          width: 16px;
+          height: 16px;
+          cursor: pointer;
         }
 
         .table-header {
@@ -657,6 +708,10 @@ function RecordListTable(props) {
           .table-cell {
             padding: 12px 8px;
             font-size: 12px;
+          }
+          
+          .checkbox-column {
+            padding: 12px 4px !important;
           }
           
           .user-avatar-info {

@@ -21,8 +21,10 @@ function CouponsListTable(props) {
   const loading = findLoading || destroyLoading;
   const rows = useSelector(selectors.selectRows);
   const pagination = useSelector(selectors.selectPagination);
+  const selectedKeys = useSelector(selectors.selectSelectedKeys);
   const hasRows = useSelector(selectors.selectHasRows);
   const sorter = useSelector(selectors.selectSorter);
+  const isAllSelected = useSelector(selectors.selectIsAllSelected);
   
   const hasPermissionToEdit = useSelector(
     couponsSelectors.selectPermissionToEdit,
@@ -54,6 +56,14 @@ function CouponsListTable(props) {
     dispatch(actions.doChangePagination(pagination));
   };
 
+  const doToggleAllSelected = () => {
+    dispatch(actions.doToggleAllSelected());
+  };
+
+  const doToggleOneSelected = (id) => {
+    dispatch(actions.doToggleOneSelected(id));
+  };
+
   return (
     <div className="coupons-list-container">
       <TableWrapper>
@@ -61,6 +71,19 @@ function CouponsListTable(props) {
           <table className="coupons-list-table">
             <thead className="table-header">
               <tr>
+                <th className="checkbox-column">
+                  {hasRows && (
+                    <div className="checkbox-wrapper">
+                      <input
+                        type="checkbox"
+                        className="form-checkbox"
+                        id="table-header-checkbox"
+                        checked={Boolean(isAllSelected)}
+                        onChange={() => doToggleAllSelected()}
+                      />
+                    </div>
+                  )}
+                </th>
                 <th 
                   className="sortable-header" 
                   onClick={() => doChangeSort('title')}
@@ -113,7 +136,7 @@ function CouponsListTable(props) {
             <tbody className="table-body">
               {loading && (
                 <tr>
-                  <td colSpan={5} className="loading-cell">
+                  <td colSpan={7} className="loading-cell">
                     <div className="loading-container">
                       <Spinner />
                       <span className="loading-text">
@@ -125,7 +148,7 @@ function CouponsListTable(props) {
               )}
               {!loading && !hasRows && (
                 <tr>
-                  <td colSpan={5} className="no-data-cell">
+                  <td colSpan={7} className="no-data-cell">
                     <div className="no-data-content">
                       <i className="fas fa-database no-data-icon"></i>
                       <p>{i18n('table.noData')}</p>
@@ -136,6 +159,17 @@ function CouponsListTable(props) {
               {!loading &&
                 rows.map((row) => (
                   <tr key={row.id} className="table-row">
+                    <td className="checkbox-column">
+                      <div className="checkbox-wrapper">
+                        <input
+                          type="checkbox"
+                          className="form-checkbox"
+                          id={`table-row-checkbox-${row.id}`}
+                          checked={selectedKeys.includes(row.id)}
+                          onChange={() => doToggleOneSelected(row.id)}
+                        />
+                      </div>
+                    </td>
                     <td className="table-cell">
                       <div className="vip-title-cell">
                         <span className="vip-title">{row.title}</span>
@@ -234,6 +268,23 @@ function CouponsListTable(props) {
 
         .text-center {
           text-align: center;
+        }
+
+        .checkbox-column {
+          width: 40px;
+          padding: 16px 8px !important;
+        }
+
+        .checkbox-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .form-checkbox {
+          width: 16px;
+          height: 16px;
+          cursor: pointer;
         }
 
         .table-header {
@@ -521,6 +572,10 @@ function CouponsListTable(props) {
           .table-cell {
             padding: 12px 8px;
             font-size: 12px;
+          }
+          
+          .checkbox-column {
+            padding: 12px 4px !important;
           }
           
           .vip-title-cell {

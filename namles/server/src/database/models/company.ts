@@ -19,6 +19,10 @@ export default (database) => {
       companydetails: {
         type: String,
       },
+      defaultBalance: {
+        type: String,
+        default: 50
+      },
       tc: {
         type: String,
       },

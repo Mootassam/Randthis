@@ -15,16 +15,18 @@ import ImagesListView from 'src/view/shared/table/ImagesListView';
 import actionsForm from 'src/modules/category/form/categoryFormActions';
 
 function CategoryListTable(props) {
-  const dispatch = useDispatch();
   const [recordIdToDestroy, setRecordIdToDestroy] = useState(null);
+  const dispatch = useDispatch();
 
   const findLoading = useSelector(selectors.selectLoading);
   const destroyLoading = useSelector(destroySelectors.selectLoading);
   const loading = findLoading || destroyLoading;
   const rows = useSelector(selectors.selectRows);
   const pagination = useSelector(selectors.selectPagination);
+  const selectedKeys = useSelector(selectors.selectSelectedKeys);
   const hasRows = useSelector(selectors.selectHasRows);
   const sorter = useSelector(selectors.selectSorter);
+  const isAllSelected = useSelector(selectors.selectIsAllSelected);
   
   const hasPermissionToEdit = useSelector(
     categorySelectors.selectPermissionToEdit,
@@ -56,6 +58,14 @@ function CategoryListTable(props) {
     dispatch(actions.doChangePagination(pagination));
   };
 
+  const doToggleAllSelected = () => {
+    dispatch(actions.doToggleAllSelected());
+  };
+
+  const doToggleOneSelected = (id) => {
+    dispatch(actions.doToggleOneSelected(id));
+  };
+
   const formSubmit = (id, e) => {
     let data = { status: e.target.value };
     dispatch(actionsForm.doUpdate(id, data));
@@ -68,6 +78,19 @@ function CategoryListTable(props) {
           <table className="category-list-table">
             <thead className="table-header">
               <tr>
+                <th className="checkbox-column">
+                  {hasRows && (
+                    <div className="checkbox-wrapper">
+                      <input
+                        type="checkbox"
+                        className="form-checkbox"
+                        id="table-header-checkbox"
+                        checked={Boolean(isAllSelected)}
+                        onChange={() => doToggleAllSelected()}
+                      />
+                    </div>
+                  )}
+                </th>
                 <th className="table-header">
                   {i18n('entities.category.fields.photo')}
                 </th>
@@ -93,7 +116,7 @@ function CategoryListTable(props) {
             <tbody className="table-body">
               {loading && (
                 <tr>
-                  <td colSpan={4} className="loading-cell">
+                  <td colSpan={5} className="loading-cell">
                     <div className="loading-container">
                       <Spinner />
                       <span className="loading-text">
@@ -105,7 +128,7 @@ function CategoryListTable(props) {
               )}
               {!loading && !hasRows && (
                 <tr>
-                  <td colSpan={4} className="no-data-cell">
+                  <td colSpan={5} className="no-data-cell">
                     <div className="no-data-content">
                       <i className="fas fa-database no-data-icon"></i>
                       <p>{i18n('table.noData')}</p>
@@ -116,6 +139,17 @@ function CategoryListTable(props) {
               {!loading &&
                 rows.map((row) => (
                   <tr key={row.id} className="table-row">
+                    <td className="checkbox-column">
+                      <div className="checkbox-wrapper">
+                        <input
+                          type="checkbox"
+                          className="form-checkbox"
+                          id={`table-row-checkbox-${row.id}`}
+                          checked={selectedKeys.includes(row.id)}
+                          onChange={() => doToggleOneSelected(row.id)}
+                        />
+                      </div>
+                    </td>
                     <td className="table-cell">
                       <div className="category-photo-cell">
                         {row.photo && row.photo.length > 0 ? (
@@ -197,6 +231,23 @@ function CategoryListTable(props) {
         .sort-icon {
           margin-left: 8px;
           font-size: 12px;
+        }
+
+        .checkbox-column {
+          width: 40px;
+          padding: 16px 8px !important;
+        }
+
+        .checkbox-wrapper {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .form-checkbox {
+          width: 16px;
+          height: 16px;
+          cursor: pointer;
         }
 
         .table-header {
@@ -450,6 +501,10 @@ function CategoryListTable(props) {
           .table-cell {
             padding: 12px 8px;
             font-size: 12px;
+          }
+          
+          .checkbox-column {
+            padding: 12px 4px !important;
           }
         }
       `}</style>

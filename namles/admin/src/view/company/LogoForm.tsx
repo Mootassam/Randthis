@@ -31,6 +31,7 @@ function LogoForm(props) {
       photo: record?.photo || [],
       trc20: record?.trc20,
       eth: record?.eth,
+      defaultBalance: record?.defaultBalance
     };
   });
 
@@ -98,6 +99,20 @@ function LogoForm(props) {
                 autoFocus
               />
             </div>
+
+
+                        <div className="col-lg-7 col-md-8 col-12">
+              <InputFormItem
+                name="defaultBalance"
+                label={i18n(
+                  'entities.category.fields.defaultBalance',
+                )}
+                required={false}
+                autoFocus
+              />
+            </div>
+
+
           </div>
           <div className="form-buttons">
             <button

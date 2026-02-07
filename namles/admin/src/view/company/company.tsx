@@ -8,8 +8,8 @@ function Company() {
   const menuItems = [
     {
       path: '/logo',
-      icon: 'fa-solid fa-building',
-      title: 'Company',
+      icon: 'fa-solid fa-cog',
+      title: 'Settings',
       color: '#3B82F6'
     },
     {
