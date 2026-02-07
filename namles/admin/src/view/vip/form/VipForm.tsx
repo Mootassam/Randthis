@@ -11,6 +11,7 @@ import InputNumberFormItem from 'src/view/shared/form/items/InputNumberFormItem'
 
 import ImagesFormItem from 'src/view/shared/form/items/ImagesFormItem';
 import Storage from 'src/security/storage';
+import CheckboxFormItem from 'src/view/shared/form/items/CheckboxFormItem';
 
 const schema = yup.object().shape({
   title: yupFormSchemas.string(
@@ -100,6 +101,7 @@ function VipForm(props) {
       dailyorder: record.dailyorder,
       comisionrate: record.comisionrate,
       commissionmergedata: record.commissionmergedata,
+      isFixedAmount:record.isFixedAmount,
       min: record.min,
       max: record.max,
       handlingfee: record.handlingfee,
@@ -222,7 +224,15 @@ function VipForm(props) {
                 required={true}
               />
             </div>
-
+            <div className="col-lg-7 col-md-8 col-12">
+              <CheckboxFormItem
+                name="isFixedAmount"
+                label={i18n(
+                  'entities.vip.fields.isFixedAmount',
+                )}
+                required={true}
+              />
+            </div>
             <div className="col-lg-7 col-md-8 col-12">
               <InputFormItem
                 name="min"

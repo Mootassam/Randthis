@@ -117,6 +117,7 @@ const en = {
         setperday: 'sets of data everyday',
         withdrawperday: 'Withdraw per day',
         photo: "photo",
+        isFixedAmount:"Use fixed amount (checked = price, unchecked = % of balance)",
         min: "Minimum product price for this VIP ",
         max: "Maximum product price for this VIP"
       },

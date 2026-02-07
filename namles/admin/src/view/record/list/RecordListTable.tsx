@@ -140,17 +140,7 @@ function RecordListTable(props) {
                     </span>
                   )}
                 </th>
-                <th 
-                  className="sortable-header text-center" 
-                  onClick={() => doChangeSort('number')}
-                >
-                  {i18n('entities.record.fields.number')}
-                  {sorter.field === 'number' && (
-                    <span className="sort-icon">
-                      {sorter.order === 'ascend' ? '↑' : '↓'}
-                    </span>
-                  )}
-                </th>
+              
                 <th 
                   className="sortable-header text-center" 
                   onClick={() => doChangeSort('status')}
@@ -238,28 +228,13 @@ function RecordListTable(props) {
                         {row.product ? (
                           <>
                             <div className="product-title">{row.product.title}</div>
-                            {row.product.amount && (
-                              <div className="product-amount">
-                                <i className="fas fa-dollar-sign amount-icon"></i>
-                                {row.product.amount}
-                              </div>
-                            )}
                           </>
                         ) : (
                           <span className="no-product">No product</span>
                         )}
                       </div>
                     </td>
-                    <td className="table-cell text-center">
-                      <div className="record-number-display">
-                        <div className="number-badge">
-                          {row.number}
-                        </div>
-                        {row.type && (
-                          <div className="record-type">{row.type}</div>
-                        )}
-                      </div>
-                    </td>
+                 
                     <td className="table-cell text-center">
                       <div className={`status-badge ${getStatusClass(row.status)}`}>
                         <i className={`status-icon ${getStatusIcon(row.status)}`}></i>

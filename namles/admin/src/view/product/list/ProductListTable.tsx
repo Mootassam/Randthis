@@ -198,14 +198,24 @@ function ProductListTable(props) {
                       </div>
                     </td>
                     <td className="table-cell text-right">
-                      <div className="amount-display">
-                        <i className="fas fa-dollar-sign amount-icon"></i>
-                        <span className="amount-value">{row.amount}</span>
-                        {row.currency && (
-                          <span className="amount-currency">{row.currency}</span>
-                        )}
-                      </div>
-                    </td>
+  <div className="amount-display">
+    {row.vip?.isFixedAmount ? (
+      <>
+        <i className="fas fa-dollar-sign amount-icon"></i>
+        <span className="amount-value">{row.amount}</span>
+        {row.currency && (
+          <span className="amount-currency">{row.currency}</span>
+        )}
+      </>
+    ) : (
+      <>
+        <span className="amount-value">{row.amount}</span>
+        <span className="amount-unit">%</span>
+      </>
+    )}
+  </div>
+</td>
+
                     <td className="table-cell text-right">
                       <div className="commission-display">
                         <span className="commission-value">{row.commission}</span>

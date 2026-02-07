@@ -30,15 +30,16 @@ export default (database) => {
       setperday: {
         type: String,
       },
-      withdrawperday:{
-        type:String
+      withdrawperday: {
+        type: String
       },
       commissionmergedata: {
         type: String,
       },
+      isFixedAmount: { type: Boolean, default: true }, // ✅ new field
       min: { type: String },
       max: { type: String },
-      
+
 
       handlingfee: { type: String },
       withdrawlimit: { type: String },

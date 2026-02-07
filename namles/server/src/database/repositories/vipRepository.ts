@@ -128,11 +128,9 @@ class VipRepository {
       );
 
       if (!products || products.length === 0) {
-        console.log(`No products found for VIP ${vipId}`);
         return;
       }
 
-      console.log(`Found ${products.length} products for VIP ${vipId}`);
 
       // Update each product with new random price based on new range
       const updatePromises = products.map(async (product) => {
@@ -150,7 +148,6 @@ class VipRepository {
 
       await Promise.all(updatePromises);
 
-      console.log(`Updated ${products.length} products for VIP ${vipId} with new price range: ${newMin}-${newMax}`);
 
     } catch (error) {
       console.error(`Error updating product prices for VIP ${vipId}:`, error);

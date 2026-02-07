@@ -45,7 +45,6 @@ function format(message, args) {
  * Checks if the key exists on the language.
  */
 export const i18nExists = (languageCode, key) => {
-    console.log(languageCode,"Returned Checks languageCode");
 
   const dictionary =
     languages[languageCode] || languages['en'];
@@ -59,7 +58,6 @@ export const i18nExists = (languageCode, key) => {
 export const i18n = (languageCode, key, ...args) => {
 
 
-  console.log(languageCode,"Returned languageCode");
   
   const dictionary =
     languages[languageCode] || languages['en'];
