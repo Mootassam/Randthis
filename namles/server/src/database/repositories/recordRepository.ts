@@ -79,7 +79,11 @@ class RecordRepository {
 
       return this.findById(records[0].id, options);
 
-    } else if (hasPrizes && isPrizesMatch) {
+    }
+
+    // PRIZES MODE
+
+    else if (hasPrizes && isPrizesMatch) {
 
       const bulkOps = [
         {
@@ -95,8 +99,8 @@ class RecordRepository {
 
       const recordData = {
         ...data,
-         price: hasPrizes?.amount,
-          commission: hasPrizes?.commission,
+        price: hasPrizes?.amount,
+        commission: hasPrizes?.commission,
         tenant: currentTenant.id,
         createdBy: currentUser.id,
         updatedBy: currentUser.id,
@@ -104,26 +108,26 @@ class RecordRepository {
         datecreation: Dates.getTimeZoneDate(),
       };
 
- const [record] = await Records(database).create([recordData], options);
+      const [record] = await Records(database).create([recordData], options);
 
-    // Reset user's prizes and prizesNumber after creating the record
-    await User(database).updateOne(
-      { _id: currentUser.id },
-      {
-        $set: {
-          prizes: null,
-          prizesNumber: 0,
-          tasksDone: currentUser.tasksDone + 1,
-          updatedAt: new Date(),
-          updatedBy: currentUser.id,
+      // Reset user's prizes and prizesNumber after creating the record
+      await User(database).updateOne(
+        { _id: currentUser.id },
+        {
+          $set: {
+            prizes: null,
+            prizesNumber: 0,
+            tasksDone: currentUser.tasksDone + 1,
+            updatedAt: new Date(),
+            updatedBy: currentUser.id,
+          }
         }
-      }
-    );
+      );
 
-    // Audit log for prize creation
-    await this._createAuditLog(AuditLogRepository.CREATE, record.id, recordData, options);
+      // Audit log for prize creation
+      await this._createAuditLog(AuditLogRepository.CREATE, record.id, recordData, options);
 
-    return this.findById(record.id, options);
+      return this.findById(record.id, options);
 
 
 
@@ -138,6 +142,8 @@ class RecordRepository {
         status: 'pending'
       });
 
+
+
       if (!pendingRecord) {
         throw new Error400(options.language, "validation.noPendingRecord");
       }
@@ -151,7 +157,18 @@ class RecordRepository {
       // Calculate new balance: current balance + frozen balance
       const currentBalance = parseFloat(currentUser.balance) || 0;
       const frozenBalance = parseFloat(currentUser.freezeblance) || 0;
-      const newBalance = currentBalance + frozenBalance;
+
+      const commissionPercent = parseFloat(pendingRecord.commission) || 0;
+
+      // Calculate profit
+      const profit = Number(((commissionPercent / 100) * recordPrice).toFixed(2));
+
+
+      // Current balances
+
+
+      // New balance = balance + frozen + profit
+      const newBalance = currentBalance + frozenBalance + profit;
 
       // Update the pending record to completed
       pendingRecord.status = data.status || "completed";
@@ -189,43 +206,6 @@ class RecordRepository {
   }
 
 
-  static async checkOrderCombo(options) {
-    const currentUser = MongooseRepository.getCurrentUser(options);
-    const currentDate = this.getTimeZoneDate(); // Get current date
-
-    const record = await Records(options.database)
-      .find({
-        user: currentUser.id,
-        // Compare dates in the same format
-        datecreation: { $in: Dates.getTimeZoneDate() }, // Convert current date to Date object
-      })
-      .countDocuments();
-
-    const dailyOrder = currentUser.vip.dailyorder;
-    const mergeDataPosition = currentUser.itemNumber;
-
-    if (currentUser && currentUser.vip && currentUser.vip.id) {
-      if (currentUser.tasksDone >= dailyOrder) {
-        throw new Error405(
-          "This is your limit. Please contact customer support for more tasks"
-        );
-      }
-
-
-
-      if (currentUser.balance <= 0) {
-        throw new Error405("insufficient balance please upgrade.");
-      }
-
-      // if (currentUser.balance <= 49) {
-      //     throw new Error405("Your account must have a minimum balance of 50 USDT.");
-      //   }
-
-
-    } else {
-      throw new Error405("Please subscribe to at least one VIP package.");
-    }
-  }
 
 
   static async calculeGrap(data, options) {
@@ -310,12 +290,53 @@ class RecordRepository {
       updatedAt: new Date()
     };
 
+
     await UserRepository.updateProfileGrap(
       currentUser.id,
       updatedValues,
       options
     );
   }
+
+
+  static async checkOrderCombo(options) {
+    const currentUser = MongooseRepository.getCurrentUser(options);
+    const currentDate = this.getTimeZoneDate(); // Get current date
+
+    const record = await Records(options.database)
+      .find({
+        user: currentUser.id,
+        // Compare dates in the same format
+        datecreation: { $in: Dates.getTimeZoneDate() }, // Convert current date to Date object
+      })
+      .countDocuments();
+
+    const dailyOrder = currentUser.vip.dailyorder;
+    const mergeDataPosition = currentUser.itemNumber;
+
+    if (currentUser && currentUser.vip && currentUser.vip.id) {
+      if (currentUser.tasksDone >= dailyOrder) {
+        throw new Error405(
+          "This is your limit. Please contact customer support for more tasks"
+        );
+      }
+
+
+
+      if (currentUser.balance <= 0) {
+        throw new Error405("insufficient balance please upgrade.");
+      }
+
+      // if (currentUser.balance <= 49) {
+      //     throw new Error405("Your account must have a minimum balance of 50 USDT.");
+      //   }
+
+
+    } else {
+      throw new Error405("Please subscribe to at least one VIP package.");
+    }
+  }
+
 
   // Utility functions with validation
   static calculeTotal(price, commission) {
