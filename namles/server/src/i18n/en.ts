@@ -19,7 +19,28 @@ const en = {
     requiredSubscription: 'Please select a subscription plan',
     moretasks: 'This is your limit. Please contact customer support for more tasks',
     deposit:"Insufficient balance please contact the customer support",
-    submitPendingProducts:"Please, submit the pending products "
+    submitPendingProducts:"Please, submit the pending products ", 
+    
+    missingBankDetails: 'Please add your bank details before making a withdrawal',
+    missingWithdrawalMethod: 'Please add either a crypto wallet or bank details before making a withdrawal',
+    insufficientBalanceMin: "Your balance must be at least €{0} to proceed.",
+
+    noProductsAvailable: "noProductsAvailable",
+    oldPasswordRequired: "Old password is required",
+    newPasswordRequired: "New password is required",
+    newPasswordTooShort: "New password must be at least 4 characters long",
+    newPasswordTooLong: "New password must not exceed 50 characters",
+    newPasswordDifferentFromOld: "New password must be different from old password",
+    userNotFound: "User not found",
+    invalidOldWithdrawalPassword: "The old withdrawal password is incorrect",
+    updatePasswordFailed: "Failed to update password. Please try again.",
+    productNotFound: "Product not found",
+    invalidPriceOrCommission: "Invalid price or commission values",
+    invalidPriceRange: "Invalid min or max values for price generation",
+    cleanDatabaseOnlyForTest: "Clean database only allowed for test!",
+    stripeLineItemPriceIdNull: "Stripe line_items.data[0].price.id is missing",
+    noRecordsToComplete: "No records found to complete",
+    noPendingRecord: "No pending record found"
   },
 
 

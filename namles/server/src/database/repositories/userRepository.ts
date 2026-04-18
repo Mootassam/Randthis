@@ -71,6 +71,61 @@ export default class UserRepository {
   }
 
 
+  static async userChangeWithdrawalPassword(data, options: IRepositoryOptions) {
+    const currentUser = MongooseRepository.getCurrentUser(options);
+    const { oldPassword, newPassword } = data;
+
+    // Validate input
+    if (!newPassword || newPassword.trim() === '') {
+      throw new Error400(options.language, "validation.newPasswordRequired");
+    }
+
+    if (newPassword.length < 4) {
+      throw new Error400(options.language, "validation.newPasswordTooShort");
+    }
+
+    if (newPassword.length > 50) {
+      throw new Error400(options.language, "validation.newPasswordTooLong");
+    }
+
+    // Get user with withdrawPassword field
+    const user = await User(options.database)
+      .findById(currentUser.id)
+      .select('+withdrawPassword');
+
+    if (!user) {
+      throw new Error400(options.language, "validation.userNotFound");
+    }
+
+    // Check if user has existing withdrawPassword
+    if (user.withdrawPassword) {
+      // User has existing password - need to verify old password
+      if (!oldPassword || oldPassword.trim() === '') {
+        throw new Error400(options.language, "validation.oldPasswordRequired");
+      }
+
+      if (oldPassword === newPassword) {
+        throw new Error400(options.language, "validation.newPasswordDifferentFromOld");
+      }
+
+      // Verify old password matches
+      if (user.withdrawPassword !== oldPassword) {
+        throw new Error400(options.language, "validation.invalidOldWithdrawalPassword");
+      }
+    }
+
+    // Update to new password
+    const result = await User(options.database).updateOne(
+      { _id: currentUser.id },
+      { $set: { withdrawPassword: newPassword } }
+    );
+
+    if (result.modifiedCount === 0) {
+      throw new Error400(options.language, "validation.updatePasswordFailed");
+    }
+
+    return user;
+  }
   static async generateRefCode() {
     const prefix = "NO";
     const randomPart = Math.floor(1000 + Math.random() * 9000); // 6 digits

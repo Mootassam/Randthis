@@ -231,10 +231,6 @@ const Grappage = () => {
                       src={item.src}
                       alt={`Product ${index + 1}`}
                       className="slider-image"
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "/images/default-product.png";
-                      }}
                     />
                   </div>
                 </div>

@@ -1,3 +1,5 @@
+import ChangeWithdrawalPassword from "src/view/pages/Auth/ChangeWithdrawalPassword";
+
 const en = {
   common: {
     or: "Or",
@@ -142,6 +144,7 @@ const en = {
       transaction: "Transaction",
       tasksHistory: "Tasks History",
       security: "Security",
+      ChangeWithdrawalPassword: "Set Withdrawal Password",
       notifications: "Notifications",
       languages: "Languages",
 
@@ -284,6 +287,9 @@ const en = {
 
     changePassword: {
       title: "Change Password",
+      withdrawPassword: "Withdrawal Password",
+      ChangeWithdrawalPassword: "Change Withdrawal Password",
+      addWithdrawPassword: "Add Withdraw Password",
       header: "Change Password",
       oldPassword: "Old Password",
       newPassword: "New Password",

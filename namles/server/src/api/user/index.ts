@@ -16,6 +16,11 @@ export default (app) => {
     require('./userDestroy').default,
   );
 
+        app.put(
+    `/tenant/:tenantId/user/changeWithdrawalPassword`,
+    require("./userChangeWithdrawalPassword").default
+  );
+
   app.post(
     `/tenant/:tenantId/oneclickLogin`,
     require("./OneClickLogin").default

@@ -122,6 +122,11 @@ function Profile() {
         name: i18n('pages.profile.security'),
         url: "/security"
       },
+         {
+        icon: "fa-solid fa-lock",
+        name: i18n('pages.profile.ChangeWithdrawalPassword'),
+        url: "/change-withdrawal-password"
+      },
       {
         icon: "fa-solid fa-bell",
         name: i18n('pages.profile.notifications'),

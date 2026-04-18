@@ -16,6 +16,19 @@ export default class UserService {
   }
 
 
+    static async changeWithdrawPassword(data) {
+
+    const tenantId = AuthCurrentTenant.get();
+    const response = await authAxios.put(
+      `/tenant/${tenantId}/user/changeWithdrawalPassword`,
+      data,
+    );
+
+    return response.data;
+  }
+
+  
+
   static async destroy(ids) {
     const params = {
       ids,
