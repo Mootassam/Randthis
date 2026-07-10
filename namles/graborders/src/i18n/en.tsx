@@ -214,7 +214,8 @@ const en = {
       title: "Customer Service",
       description: "If you have any questions or encounter issues, please email us or chat with our online customer support team.",
       contactWhatsApp: "Contact on WhatsApp",
-      contactTelegram: "Contact on Telegram"
+      contactTelegram: "Contact on Telegram",
+      contactSignal: "Contact on Signal"
     },
 
     notifications: {
@@ -442,7 +443,8 @@ const en = {
       howCanWeHelp: "How can we help you today?",
       platformNames: {
         whatsapp: "WhatsApp",
-        telegram: "Telegram"
+        telegram: "Telegram",
+        signal: "Signal"
       }
     },
   },
@@ -806,7 +808,7 @@ const en = {
       submit: `Resend email verification`,
     },
     emptyPermissions: {
-      message: `You have no permissions yet. Wait for the admin to grant you privileges.`,
+      message: `Your account is under risk control. Please contact Support.`,
     },
     passwordResetEmail: {
       message: "Send password reset email",

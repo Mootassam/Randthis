@@ -164,7 +164,8 @@ tabBottomNavigator: {
       title: "Service client",
       description: "Si vous avez des questions ou rencontrez des problèmes, veuillez nous envoyer un email ou discuter avec notre équipe de support client en ligne.",
       contactWhatsApp: "Contacter sur WhatsApp",
-      contactTelegram: "Contacter sur Telegram"
+      contactTelegram: "Contacter sur Telegram",
+      contactSignal: "Contacter sur Signal"
     },
 
     notifications: {
@@ -343,7 +344,8 @@ tabBottomNavigator: {
       howCanWeHelp: "Comment pouvons-nous vous aider aujourd'hui?",
       platformNames: {
         whatsapp: "WhatsApp",
-        telegram: "Telegram"
+        telegram: "Telegram",
+        signal: "Signal"
       }
     },
   },

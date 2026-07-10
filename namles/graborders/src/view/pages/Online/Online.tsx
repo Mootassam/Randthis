@@ -66,8 +66,10 @@ function Online() {
               <div className={`platform-badge ${item.type}`}>
                 {item.type === "whatsApp" ? (
                   <i className="fa-brands fa-whatsapp"></i>
-                ) : (
+                ) : item.type === "telegram" ? (
                   <i className="fa-brands fa-telegram"></i>
+                ) : (
+                  <i className="fa-brands fa-signal-messenger"></i>
                 )}
               </div>
             </div>
@@ -93,7 +95,7 @@ function Online() {
                   <span>{i18n('pages.online.contactWhatsApp')}</span>
                   <i className="fa-solid fa-external-link action-arrow"></i>
                 </a>
-              ) : (
+              ) : item.type === "telegram" ? (
                 <a
                   href={`https://t.me/${item.number}`}
                   className="contact-button telegram-button"
@@ -102,6 +104,17 @@ function Online() {
                 >
                   <i className="fa-brands fa-telegram button-icon"></i>
                   <span>{i18n('pages.online.contactTelegram')}</span>
+                  <i className="fa-solid fa-external-link action-arrow"></i>
+                </a>
+              ) : (
+                <a
+                  href={`https://signal.me/#p/+${item.number}`}
+                  className="contact-button signal-button"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <i className="fa-brands fa-signal-messenger button-icon"></i>
+                  <span>{i18n('pages.online.contactSignal')}</span>
                   <i className="fa-solid fa-external-link action-arrow"></i>
                 </a>
               )}
@@ -331,6 +344,10 @@ function Online() {
           background: linear-gradient(135deg, #0088cc, #005c8a);
         }
 
+        .platform-badge.signal {
+          background: linear-gradient(135deg, #3a76f0, #1c50b9);
+        }
+
         /* Agent Profile */
         .agent-profile {
           position: relative;
@@ -391,6 +408,11 @@ function Online() {
 
         .telegram-button {
           background: linear-gradient(135deg, #0088cc, #005c8a);
+          color: white;
+        }
+
+        .signal-button {
+          background: linear-gradient(135deg, #3a76f0, #1c50b9);
           color: white;
         }
 

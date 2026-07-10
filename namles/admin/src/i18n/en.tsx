@@ -246,6 +246,7 @@ const en = {
         type: {
           whatsApp: 'whatsApp',
           telegram: 'Telegram',
+          signal: 'Signal',
         },
       },
       placeholders: {},

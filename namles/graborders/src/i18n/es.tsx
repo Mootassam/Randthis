@@ -186,7 +186,8 @@ const es = {
       title: "Servicio al Cliente",
       description: "Si tienes alguna pregunta o encuentras problemas, por favor envíanos un correo electrónico o chatea con nuestro equipo de soporte al cliente en línea.",
       contactWhatsApp: "Contactar por WhatsApp",
-      contactTelegram: "Contactar por Telegram"
+      contactTelegram: "Contactar por Telegram",
+      contactSignal: "Contactar por Signal"
     },
 
     notifications: {
@@ -365,7 +366,8 @@ const es = {
       howCanWeHelp: "¿Cómo podemos ayudarte hoy?",
       platformNames: {
         whatsapp: "WhatsApp",
-        telegram: "Telegram"
+        telegram: "Telegram",
+        signal: "Signal"
       }
     },
   },

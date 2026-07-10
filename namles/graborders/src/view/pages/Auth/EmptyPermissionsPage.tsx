@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { i18n } from "../../../i18n";
 import actions from "src/modules/auth/authActions";
+import CsPage from "./CsPage";
 
 function EmptyPermissionsPage() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function EmptyPermissionsPage() {
           {i18n("auth.signout")}
         </button>
       </div>
+      <CsPage />
     </div>
   );
 }

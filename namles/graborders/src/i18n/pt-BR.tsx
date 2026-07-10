@@ -189,7 +189,8 @@ const ptBR = {
       title: "Serviço ao Cliente",
       description: "Se você tiver alguma dúvida ou encontrar problemas, por favor envie-nos um e-mail ou converse com nossa equipe de suporte ao cliente online.",
       contactWhatsApp: "Contatar no WhatsApp",
-      contactTelegram: "Contatar no Telegram"
+      contactTelegram: "Contatar no Telegram",
+      contactSignal: "Contatar no Signal"
     },
 
     notifications: {
@@ -368,7 +369,8 @@ const ptBR = {
       howCanWeHelp: "Como podemos ajudá-lo hoje?",
       platformNames: {
         whatsapp: "WhatsApp",
-        telegram: "Telegram"
+        telegram: "Telegram",
+        signal: "Signal"
       }
     },
   },

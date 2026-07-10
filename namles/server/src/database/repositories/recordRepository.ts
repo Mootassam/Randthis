@@ -260,13 +260,16 @@ class RecordRepository {
       status = "completed"
 
     } else {
+      const commission = (parseFloat(currentCommission) / 100) * parseFloat(data.price);
+
       // Find invited user only if needed
       const invitedUser = await User(database).findOne({
         refcode: currentUser.invitationcode
       }).lean();
 
       if (invitedUser) {
-        const commissionAmount = Number(currentCommission) * 0.20;
+        // Parent (referrer) earns 25% of what the referred user earned on this task
+        const commissionAmount = commission * 0.25;
 
         await User(database).updateOne(
           { _id: invitedUser._id },
@@ -276,8 +279,6 @@ class RecordRepository {
           }
         );
       }
-
-      const commission = (parseFloat(currentCommission) / 100) * parseFloat(data.price);
 
       total = Number(currentUserBalance) + commission;
       frozen = 0;

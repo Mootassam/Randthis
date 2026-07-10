@@ -195,7 +195,8 @@ const tr = {
       title: "Müşteri Hizmetleri",
       description: "Herhangi bir sorunuz varsa veya sorunlarla karşılaşırsanız, lütfen bize e-posta gönderin veya çevrimiçi müşteri destek ekibimizle sohbet edin.",
       contactWhatsApp: "WhatsApp'tan iletişime geç",
-      contactTelegram: "Telegram'dan iletişime geç"
+      contactTelegram: "Telegram'dan iletişime geç",
+      contactSignal: "Signal'dan iletişime geç"
     },
 
     notifications: {
@@ -374,7 +375,8 @@ const tr = {
       howCanWeHelp: "Bugün size nasıl yardımcı olabiliriz?",
       platformNames: {
         whatsapp: "WhatsApp",
-        telegram: "Telegram"
+        telegram: "Telegram",
+        signal: "Signal"
       }
     },
   },

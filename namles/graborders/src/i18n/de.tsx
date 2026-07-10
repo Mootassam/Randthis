@@ -189,7 +189,8 @@ const de = {
       title: "Kundenservice",
       description: "Wenn Sie Fragen haben oder auf Probleme stoßen, senden Sie uns bitte eine E-Mail oder chatten Sie mit unserem Online-Kundensupport-Team.",
       contactWhatsApp: "Auf WhatsApp kontaktieren",
-      contactTelegram: "Auf Telegram kontaktieren"
+      contactTelegram: "Auf Telegram kontaktieren",
+      contactSignal: "Auf Signal kontaktieren"
     },
 
     notifications: {
@@ -368,7 +369,8 @@ const de = {
       howCanWeHelp: "Wie können wir Ihnen heute helfen?",
       platformNames: {
         whatsapp: "WhatsApp",
-        telegram: "Telegram"
+        telegram: "Telegram",
+        signal: "Signal"
       }
     },
   },

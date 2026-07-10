@@ -35,7 +35,7 @@ export default (database) => {
       type: {
         type: String,
         required: true,
-        enum: ["whatsApp", "telegram"],
+        enum: ["whatsApp", "telegram", "signal"],
       },
 
       isFeature: {

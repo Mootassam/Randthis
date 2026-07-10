@@ -178,7 +178,8 @@ const ru = {
       title: "Служба Поддержки",
       description: "Если у вас есть вопросы или возникли проблемы, пожалуйста, напишите нам или пообщайтесь с нашей онлайн-службой поддержки.",
       contactWhatsApp: "Связаться в WhatsApp",
-      contactTelegram: "Связаться в Telegram"
+      contactTelegram: "Связаться в Telegram",
+      contactSignal: "Связаться в Signal"
     },
 
     notifications: {
@@ -358,7 +359,8 @@ const ru = {
       platformNames: {
         whatsapp: "WhatsApp",
 
-        telegram: "Telegram"
+        telegram: "Telegram",
+        signal: "Signal"
       }
     },
   },

@@ -190,7 +190,8 @@ const it = {
             title: "Servizio Clienti",
             description: "Se hai domande o incontri problemi, ti preghiamo di inviarci un'email o chattare con il nostro team di supporto clienti online.",
             contactWhatsApp: "Contatta su WhatsApp",
-            contactTelegram: "Contatta su Telegram"
+            contactTelegram: "Contatta su Telegram",
+            contactSignal: "Contatta su Signal"
         },
 
         notifications: {
@@ -369,7 +370,8 @@ const it = {
             howCanWeHelp: "Come possiamo aiutarti oggi?",
             platformNames: {
                 whatsapp: "WhatsApp",
-                telegram: "Telegram"
+                telegram: "Telegram",
+                signal: "Signal"
             }
         },
     },

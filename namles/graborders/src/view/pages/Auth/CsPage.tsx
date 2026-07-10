@@ -38,6 +38,9 @@ function CsPage() {
     } else if (cs.type.toLowerCase() === 'telegram') {
       // Telegram URL
       window.open(`https://t.me/${number}`, '_blank');
+    } else if (cs.type.toLowerCase() === 'signal') {
+      // Signal URL (requires a leading + before the country code)
+      window.open(`https://signal.me/#p/+${number}`, '_blank');
     }
 
     closeModal();
@@ -57,6 +60,12 @@ function CsPage() {
           <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.197l-1.84 8.576c-.129.578-.466.723-.945.449l-2.61-1.92-1.26 1.214c-.139.139-.257.257-.537.257l.188-2.668 4.838-4.371c.211-.188-.046-.292-.327-.104l-5.978 3.767-2.576-.803c-.551-.172-.562-.551.117-.813l10.017-3.858c.458-.165.858.112.709.813z" />
         </svg>
       );
+    } else if (platform === 'signal') {
+      return (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.121.552 4.114 1.519 5.845L0 24l6.335-1.482A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818A9.8 9.8 0 016.9 20.4l-.363-.217-3.756.879.897-3.66-.238-.376A9.79 9.79 0 012.182 12C2.182 6.583 6.583 2.182 12 2.182S21.818 6.583 21.818 12 17.417 21.818 12 21.818z" />
+        </svg>
+      );
     }
     return (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -71,6 +80,8 @@ function CsPage() {
       return i18n('pages.csPage.platformNames.whatsapp');
     } else if (platform === 'telegram') {
       return i18n('pages.csPage.platformNames.telegram');
+    } else if (platform === 'signal') {
+      return i18n('pages.csPage.platformNames.signal');
     }
     return type;
   };
@@ -359,6 +370,10 @@ function CsPage() {
           border-color: #0088cc;
         }
 
+        .contact-option.signal:hover {
+          border-color: #3a76f0;
+        }
+
         .contact-avatar {
           flex-shrink: 0;
         }
@@ -419,6 +434,10 @@ function CsPage() {
 
         .contact-option.telegram:hover .contact-arrow {
           color: #0088cc;
+        }
+
+        .contact-option.signal:hover .contact-arrow {
+          color: #3a76f0;
         }
 
         @keyframes modalAppear {
