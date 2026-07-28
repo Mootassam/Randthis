@@ -20,7 +20,7 @@ class ProductRepository {
     "referer": "https://www.kaggle.com/datasets/asaniczka/amazon-canada-products-2023-2-1m-products",
     "x-kaggle-build-version": "29506ea853cc6a3a542f130dec2b4a40863d7254",
     "Content-Type": "application/json",
-    "x-xsrf-token": "CfDJ8KfhQMrVil5MrZ6RWpmB4eFxtDHfEouclhOe2erJ_1SKE3kVt5AULsjUvz20s9a4MK-lxeIKBCXFLC4HW64K04kEmW0x8EtT1cLn0Khns73ETyOCPdMtOlZm5CQ_pqEsd6lMIPrJ7Q5ZZNEn4RdlMNg"
+    "x-xsrf-token": "CfDJ8Oxz6O_D_GNGkNy8kL7JFsUuNexwhUaZI5dbndA5LQGb7X0SD6qm0_a5uYO65sise9CNaTDPOz-Wm7xLjnvlVCvADT6YWlUGVJnfR2OOUYc_3SPDkIzAW324R-YXza-rZB8fI6K9gX8EIIsXYcX4Fko"
   };
   static async create(data, options: IRepositoryOptions) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);

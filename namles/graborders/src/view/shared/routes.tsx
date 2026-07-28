@@ -183,6 +183,10 @@ const publicRoutes = [
 ];
 const simpleRoutes = [
   {
+    path: "/terms-and-conditions",
+    loader: () => import("src/view/pages/Auth/Terms"),
+  },
+  {
     path: "/403",
     loader: () => import("src/view/shared/errors/Error403Page"),
   },

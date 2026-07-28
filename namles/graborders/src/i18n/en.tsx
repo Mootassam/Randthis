@@ -433,7 +433,10 @@ const en = {
         signupButton: "Sign up",
         alreadyHaveAccount: "Already have an account?",
         phonePlaceholder: "Enter your phone number",
-        searchCountries: "Search countries..."
+        searchCountries: "Search countries...",
+        agreeWith: "I agree with",
+        agreeTermsRequired: "You must agree with the Terms and Conditions",
+        termsNotAvailable: "Terms and Conditions are not available at the moment."
       }
     },
 
@@ -855,7 +858,7 @@ const en = {
       username: "Username",
       walletName: "wallet Name",
       id: "Id",
-      confirmPassword: "confirm Password",
+      confirmPassword: "Confirm Password",
       avatars: "Avatar",
       invitationcode: "Invitation Code",
       email: "Email",
@@ -929,8 +932,8 @@ const en = {
 
       },
       gender: {
-        male: "male",
-        female: "female",
+        male: "Male",
+        female: "Female",
 
       }
     },

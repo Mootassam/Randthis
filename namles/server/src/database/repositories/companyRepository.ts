@@ -47,6 +47,11 @@ class CompanyRepository {
     return item.number;
   }
 
+  static async findPublicTc(options) {
+    const record = await Company(options.database).findOne();
+    return record ? record.tc : null;
+  }
+
   static async update(id, data, options: IRepositoryOptions) {
     const currentTenant = MongooseRepository.getCurrentTenant(options);
 

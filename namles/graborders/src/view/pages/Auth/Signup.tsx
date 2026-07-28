@@ -40,6 +40,9 @@ const schema = yup.object().shape({
     required: true,
   }),
   rememberMe: yupFormSchemas.boolean(i18n("user.fields.rememberMe")),
+  agreeTerms: yup
+    .bool()
+    .oneOf([true], i18n("pages.auth.signup.agreeTermsRequired")),
 });
 
 function Signup() {
@@ -61,6 +64,7 @@ function Signup() {
     invitationcode: "",
     gender: '',
     rememberMe: true,
+    agreeTerms: false,
   });
 
   // ✅ Fetch countries + IP country detection
@@ -302,6 +306,29 @@ function Signup() {
               className="auth__input"
               externalErrorMessage={externalErrorMessage}
             />
+
+            <div className="terms__row">
+              <label className="terms__checkbox">
+                <input type="checkbox" name="agreeTerms" ref={form.register} />
+                <span className="terms__text">
+                  {i18n('pages.auth.signup.agreeWith')}{' '}
+                  <Link
+                    to="/terms-and-conditions"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="terms__link"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {i18n('pages.actions.tc')}
+                  </Link>
+                </span>
+              </label>
+              {form.errors?.agreeTerms && (
+                <div className="terms__error">
+                  {form.errors.agreeTerms.message}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="auth__bottom">
@@ -520,6 +547,44 @@ function Signup() {
 
 .dropdown-list::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* Terms and Conditions */
+.terms__row {
+  margin-top: 0.5rem;
+}
+
+.terms__checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.terms__checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  accent-color: #007bff;
+  cursor: pointer;
+}
+
+.terms__text {
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.terms__link {
+  color: #007bff;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.terms__error {
+  margin-top: 4px;
+  color: #dc3545;
+  font-size: 0.8rem;
 }
 
 /* Responsive Design */

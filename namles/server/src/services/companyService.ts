@@ -38,6 +38,10 @@ export default class CompanyService {
     return record;
   }
 
+  async findPublicTc() {
+    return CompanyRepository.findPublicTc(this.options);
+  }
+
   async update(id, data) {
     const session = await MongooseRepository.createSession(
       this.options.database

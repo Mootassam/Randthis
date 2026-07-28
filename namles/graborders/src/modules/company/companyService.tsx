@@ -96,6 +96,12 @@ export default class CompanyService {
     return response.data;
   }
 
+  static async findPublicTc() {
+    const response = await authAxios.get(`/company/public/tc`);
+
+    return response.data;
+  }
+
   static async listAutocomplete(query, limit) {
     const params = {
       query,
