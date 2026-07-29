@@ -297,6 +297,12 @@ function Signup() {
                 label: i18n(`user.enumerators.gender.${value}`),
               }))}
               required
+              styles={{
+                valueContainer: (provided) => ({
+                  ...provided,
+                  paddingLeft: 20,
+                }),
+              }}
             />
 
             <InputFormItem
@@ -432,7 +438,7 @@ function Signup() {
 .phone-input {
   border: none !important;
   border-radius: 0 6px 6px 0 !important;
-  padding-left: 12px !important;
+  padding-left: 20px !important;
   height: 100% !important;
   box-shadow: none !important;
 }

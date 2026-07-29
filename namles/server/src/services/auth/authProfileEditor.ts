@@ -2,7 +2,6 @@ import assert from "assert";
 import UserRepository from "../../database/repositories/userRepository";
 import MongooseRepository from "../../database/repositories/mongooseRepository";
 import { IServiceOptions } from "../IServiceOptions";
-import Error400 from "../../errors/Error400";
 
 export default class AuthProfileEditor {
   options: IServiceOptions;
@@ -49,14 +48,6 @@ export default class AuthProfileEditor {
       this.session = await MongooseRepository.createSession(
         this.options.database
       );
-
-      const currentUser = MongooseRepository.getCurrentUser(this.options);
-      if (currentUser.withdrawPassword !== data.withdrawPassword) {
-        throw new Error400(
-          this.options.language,
-          "validation.inValidWithdrawPassword"
-        );
-      }
 
       await UserRepository.updateProfile(
         this.options.currentUser.id,

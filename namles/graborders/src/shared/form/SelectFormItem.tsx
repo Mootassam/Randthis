@@ -136,6 +136,8 @@ function SelectFormItem(props) {
         }),
       };
 
+  const mergedStyles = { ...controlStyles, ...props.styles };
+
   return (
     <div className="form-group">
       {Boolean(label) && (
@@ -162,7 +164,7 @@ function SelectFormItem(props) {
         isMulti={mode === 'multiple'}
         placeholder={placeholder || ''}
         isClearable={isClearable}
-        styles={controlStyles}
+        styles={mergedStyles}
         loadingMessage={() => i18n('autocomplete.loading')}
         noOptionsMessage={() =>
           i18n('autocomplete.noOptions')
@@ -195,6 +197,7 @@ SelectFormItem.propTypes = {
   mode: PropTypes.string,
   isClearable: PropTypes.bool,
   placeholder: PropTypes.string,
+  styles: PropTypes.object,
 };
 
 export default SelectFormItem;
