@@ -20,6 +20,12 @@ const schema = yup.object().shape({
   trc20: yupFormSchemas.string(i18n("user.fields.walletAddress"), {
     required: true,
   }),
+  withdrawPassword: yupFormSchemas.string(
+    i18n("user.fields.withdrawPassword"),
+    {
+      required: true,
+    }
+  ),
 });
 
 function Wallet() {
@@ -32,7 +38,8 @@ function Wallet() {
       walletname: "" || currentUser.walletname,
       usernamewallet: "" || currentUser.usernamewallet,
       balance: currentUser?.balance,
-      preferredcoin: currentUser?.preferredcoin
+      preferredcoin: currentUser?.preferredcoin,
+      withdrawPassword: "",
     };
   });
   
@@ -47,13 +54,15 @@ function Wallet() {
     trc20,
     walletname,
     usernamewallet,
+    withdrawPassword,
   }) => {
     const values = {
       trc20: trc20,
       walletname: walletname,
       usernamewallet: usernamewallet,
       balance: currentUser?.balance,
-      preferredcoin: preferredcoin
+      preferredcoin: preferredcoin,
+      withdrawPassword: withdrawPassword,
     };
     dispatch(actions.doUpdateProfileWallet(values));
   };
@@ -127,6 +136,21 @@ function Wallet() {
                         type="text"
                         name="trc20"
                         placeholder={i18n("user.fields.walletAddress")}
+                        className="input__withdraw"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form__group">
+                    <div className="label__form">
+                      <span style={{ color: "red" }}>{i18n('pages.wallet.requiredField')}</span>
+                      <span style={{ fontSize: "13px" }}>{i18n('pages.withdraw.withdrawPassword')}</span>
+                    </div>
+                    <div className="input__div">
+                      <InputFormItem
+                        type="password"
+                        name="withdrawPassword"
+                        placeholder={i18n("user.fields.withdrawPassword")}
                         className="input__withdraw"
                       />
                     </div>

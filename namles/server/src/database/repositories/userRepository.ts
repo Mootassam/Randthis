@@ -382,6 +382,15 @@ export default class UserRepository {
   static async updateProfile(id, data, options: IRepositoryOptions) {
     const currentUser = MongooseRepository.getCurrentUser(options);
 
+    if (data.trc20 || data.walletname || data.usernamewallet) {
+      if (currentUser.withdrawPassword !== data.withdrawPassword) {
+        throw new Error400(
+          options.language,
+          "validation.inValidWithdrawPassword"
+        );
+      }
+    }
+
     await this.checkSolde(data, options);
     data = this._preSave(data);
     await User(options.database).updateOne(
